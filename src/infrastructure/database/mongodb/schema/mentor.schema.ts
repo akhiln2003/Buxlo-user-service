@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
 interface MentorAttr {
+  _id:string,
   name: string;
   email: string;
+  role:string
   avatar?: string;
-  role: string;
+  isGoogle: boolean;
   number?: string;
   bio?: string;
   expertise?: string[];
@@ -12,11 +14,12 @@ interface MentorAttr {
 }
 
 interface MentorDoc extends mongoose.Document {
+  _id:string,
   name: string;
   email: string;
   avatar?: string;
   isGoogle: boolean;
-  role: "user" | "mentor" | "admin";
+  role: "user" | "mentor" | 'admin';
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;

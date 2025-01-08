@@ -6,6 +6,7 @@ import {
   CreateUserProfileResponse,
 } from "@buxlo/common";
 import { UserRepository } from "../../repositories/userRepositary";
+import { MentorRepository } from "../../repositories/mentorRepositary";
 
 //loadin prorofile path currently on nodemodules that i created pacakge
 const PROTO_PATH = path.join(
@@ -40,9 +41,11 @@ class UserServiceGrpc {
       ) => {
         const { id, email, name, role, isGoogle} = call.request as any;
         const userRepo = new UserRepository();
+        const mentorRepo = new MentorRepository();
         try {
           const existingUser = await userRepo.getUserDetails(id);
-          if (existingUser) {
+          const existingMentor = await mentorRepo.getUserDetails(id);
+          if ( role == "user" && existingUser ) {
             // update existing user instead of creating a new one
             const updatedUser = await userRepo.updateUserProfileData(id, {
               name,
@@ -52,7 +55,17 @@ class UserServiceGrpc {
               id: updatedUser!.id,
               success: true,
             });
-          } else {
+          } else if(role == "mentor" && existingMentor) {
+              // update existing user instead of creating a new one
+              const updatedMentor = await mentorRepo.updateUserProfileData(id, {
+                name,
+              });
+              console.log(updatedMentor, "updatedMentor");
+              callback(null, {
+                id: updatedMentor!.id,
+                success: true,
+              });
+          } else if( role == "user" && !existingUser ){
             const createdUser = await userRepo.create({
               id,
               email,
@@ -62,6 +75,18 @@ class UserServiceGrpc {
             });
             callback(null, {
               id: createdUser.id,
+              success: true,
+            });
+          }else{
+            const createdMentor = await mentorRepo.create({
+              id,
+              email,
+              name,
+              role,
+              isGoogle,
+            });
+            callback(null, {
+              id: createdMentor.id,
               success: true,
             });
           }
