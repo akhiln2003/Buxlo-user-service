@@ -39,28 +39,26 @@ class UserServiceGrpc {
         >,
         callback: grpc.sendUnaryData<CreateUserProfileResponse>
       ) => {
-        const { id, email, name, role, isGoogle} = call.request as any;
+        const { id, email, name, role, isGoogle , avatar} = call.request as any;
         const userRepo = new UserRepository();
         const mentorRepo = new MentorRepository();
         try {
           const existingUser = await userRepo.getUserDetails(id);
-          const existingMentor = await mentorRepo.getUserDetails(id);
+          const existingMentor = await mentorRepo.getMentorDetails(id);
           if ( role == "user" && existingUser ) {
             // update existing user instead of creating a new one
             const updatedUser = await userRepo.updateUserProfileData(id, {
               name,
             });
-            console.log(updatedUser, "updatedUser");
             callback(null, {
               id: updatedUser!.id,
               success: true,
             });
           } else if(role == "mentor" && existingMentor) {
               // update existing user instead of creating a new one
-              const updatedMentor = await mentorRepo.updateUserProfileData(id, {
+              const updatedMentor = await mentorRepo.updateMentorProfileData(id, {
                 name,
               });
-              console.log(updatedMentor, "updatedMentor");
               callback(null, {
                 id: updatedMentor!.id,
                 success: true,
@@ -72,6 +70,7 @@ class UserServiceGrpc {
               name,
               role,
               isGoogle,
+              avatar
             });
             callback(null, {
               id: createdUser.id,
@@ -84,6 +83,7 @@ class UserServiceGrpc {
               name,
               role,
               isGoogle,
+              avatar
             });
             callback(null, {
               id: createdMentor.id,

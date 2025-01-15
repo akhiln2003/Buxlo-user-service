@@ -1,3 +1,4 @@
+import { errorHandler } from "@buxlo/common";
 import { Iserver } from "./domain/interfaces/Iserver";
 import {
   connectDB,
@@ -5,6 +6,8 @@ import {
 } from "./infrastructure/database/mongodb/connection";
 import { grpcService } from "./infrastructure/rpc/grpc/server";
 import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
+import { mentorRoutes } from "./presentation/routes/mentorRouts";
+import { userRoutes } from "./presentation/routes/userRouts";
 
 export class App {
   constructor(private server: Iserver) {}
@@ -21,13 +24,12 @@ export class App {
     this.server.registerMiddleware(loggerMiddleware);
   }
   private registerRoutes(): void {
-    // this.server.registerRoutes("/api/auth/user", userRoutes);
-    // this.server.registerRoutes("/api/auth/mentor", mentorRoutes);
-    // this.server.registerRoutes("/api/auth/admin", adminRoutes);
+    this.server.registerRoutes("/api/user/mentor", mentorRoutes);
+    this.server.registerRoutes("/api/user/user", userRoutes );
   }
 
   private registerErrorHandler(): void {
-    // this.server.registerErrorHandler(errorHandler as any);
+    this.server.registerErrorHandler(errorHandler as any);
   }
 
   async start(port: number): Promise<void> {

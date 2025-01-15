@@ -1,8 +1,8 @@
+import { IupdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
 import { Mentor } from "../entities/mentor";
 
-export interface IuserRepository{
-    updateUserProfile(userId: string): Promise<Mentor | null>;
-    getUserDetails(userId: string): Promise<Mentor | null>;
-
-    updateUserProfileData(userId: string, data: { name?: string, avatar?: string }): Promise<Mentor | null>;
+export interface ImentorRepository{
+    updateMentorProfile(userId: string , query:IupdateData): Promise<Mentor | null>;
+    getMentorDetails(userId: string): Promise<Mentor | null>;
+    updateMentorProfileData(userId: string, data: { name?: string, avatar?: string }): Promise<Mentor | null>;
 }
