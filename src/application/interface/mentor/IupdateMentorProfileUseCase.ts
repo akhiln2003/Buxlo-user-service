@@ -1,7 +1,7 @@
 import { Mentor } from "../../../domain/entities/mentor";
 
 
-export interface IupdateData {
+export interface ImentorUpdateData {
   name?:string,
   bio?:string,
   expertise?:string
@@ -11,5 +11,5 @@ export interface IupdateData {
 
 
 export interface IupdateMentorProfileUseCase {
-  execute(id: string , updatedData:IupdateData , file: any): Promise<any | Mentor>;
+  execute(id: string , updatedData:ImentorUpdateData , file: any , currentProfileImage: string | undefined): Promise<any | Mentor>;
 }

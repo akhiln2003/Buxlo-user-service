@@ -31,7 +31,7 @@ export class S3Service implements Is3Service {
   }
 
   async uploadImageToBucket(bufferCode: Buffer, type: string, key: string) {
-    try {      
+    try {
       const params = {
         Bucket: this.bucketName,
         Key: key,
@@ -39,17 +39,17 @@ export class S3Service implements Is3Service {
         ContentType: type,
       };
       const command = new PutObjectCommand(params);
-      const data = await this.s3.send(command);      
+      const data = await this.s3.send(command);
       return data;
-    } catch (error) {   
-      console.error("error from s3 service " , error);
-           
+    } catch (error) {
+      console.error("error from s3 service ", error);
+
       return error;
     }
   }
 
   async getImageFromBucket(key: string) {
-    try {      
+    try {
       const imageUrl = await getSignedUrl(
         this.s3,
         new GetObjectCommand({
@@ -57,9 +57,11 @@ export class S3Service implements Is3Service {
           Key: key,
         }),
         { expiresIn: 60 }
-      );      
+      );
       return imageUrl;
     } catch (error) {
+      console.error(error);
+
       return error;
     }
   }
@@ -71,6 +73,7 @@ export class S3Service implements Is3Service {
         Key: key,
       };
       const data = await this.s3.send(new DeleteObjectCommand(deleteParams));
+
       return data;
     } catch (error) {
       return error;

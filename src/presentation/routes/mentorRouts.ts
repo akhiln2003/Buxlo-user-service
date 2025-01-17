@@ -4,6 +4,7 @@ import { FetchMentorProfileController } from "../controllers/mentor/fetchMentorP
 import { UpdateMentorProfileController } from "../controllers/mentor/updateMentorProfileController";
 import multer from "multer";
 import { FetchMentorProfileImageController } from "../controllers/mentor/fetchMentorProfileImageController";
+import { DeleteMentorProfileImageController } from "../controllers/mentor/deleteMentorProfileImageController";
 
 const router = Router();
 const diContainer = new DIContainer();
@@ -24,6 +25,10 @@ const fetchProfileImageController = new FetchMentorProfileImageController(
   diContainer.fetchProfileImageUseCase()
 );
 
+const deleteProfileImageController = new DeleteMentorProfileImageController(
+  diContainer.deleteMentorProfileImageUseCase()
+);
+
 /////////////////////////////////////
 
 // i wand to add middleware for validate endpoints
@@ -34,6 +39,10 @@ router.put(
   upload.single("newProfileImage"),
   updateprofileController.update
 );
-router.get("/fetchprofileimage/:key" , fetchProfileImageController.fetchImage);
+router.get("/fetchprofileimage/:key", fetchProfileImageController.fetchImage);
+router.delete(
+  "/deleteprofileimage/:id/:key",
+  deleteProfileImageController.deleteImage
+);
 
 export { router as mentorRoutes };

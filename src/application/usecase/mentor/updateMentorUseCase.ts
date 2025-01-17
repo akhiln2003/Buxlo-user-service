@@ -1,12 +1,12 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import {
-  IupdateData,
+  ImentorUpdateData,
   IupdateMentorProfileUseCase,
 } from "../../interface/mentor/IupdateMentorProfileUseCase";
 import sharp from "sharp";
+import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 
 export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
   constructor(
@@ -15,34 +15,38 @@ export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
   ) {}
   async execute(
     id: string,
-    updatedData: IupdateData,
-    file: any
+    updatedData: ImentorUpdateData,
+    file: any,
+    currentProfileImage: string | undefined
   ): Promise<any | Mentor> {
     try {
       if (file) {
-        const randomImageName = Math.random()+Date.now();
+        if (currentProfileImage) {
+          await this.s3Service.deleteImageFromBucket(
+            `mentorProfiles/${currentProfileImage}`
+          );
+        }
+        const randomImageName = Math.random() + Date.now();
 
         // rezize image
         const buffer = await sharp(file.buffer)
           .resize({ height: 300, width: 300, fit: "cover" })
           .toBuffer();
 
-        const data = await this.s3Service.uploadImageToBucket(
+        const response = await this.s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
           `mentorProfiles/${randomImageName}`
-        );        
-        if (data.$metadata.httpStatusCode == 200) {          
+        );
+        if (response.$metadata.httpStatusCode == 200) {
           updatedData = {
             ...updatedData,
             avatar: `${randomImageName}`,
-          };          
-        }
-        else{          
+          };
+        } else {
           throw new BadRequest("Profile upload faild please try again laiter");
         }
       }
-
       const data = await this.mentorRepositary.updateMentorProfile(
         id,
         updatedData

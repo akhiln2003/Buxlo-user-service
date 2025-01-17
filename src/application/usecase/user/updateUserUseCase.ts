@@ -1,10 +1,9 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { Mentor } from "../../../domain/entities/mentor";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IupdateData } from "../../interface/mentor/IupdateMentorProfileUseCase";
 import sharp from "sharp";
-import { IupdateUserProfileUseCase } from "../../interface/user/IupdateUserProfileUseCase";
+import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
+import { User } from "../../../domain/entities/user";
+import { IupdateUserProfileUseCase, IuserUpdateData } from "../../interface/user/IupdateUserProfileUseCase";
 
 export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   constructor(
@@ -13,11 +12,17 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   ) {}
   async execute(
     id: string,
-    updatedData: IupdateData,
-    file: any
-  ): Promise<any | Mentor> {
+    updatedData: IuserUpdateData,
+    file: any,
+    currentProfileImage: string | undefined
+  ): Promise<any | User> {
     try {
       if (file) {
+        if (currentProfileImage) {
+          await this.s3Service.deleteImageFromBucket(
+            `userProfiles/${currentProfileImage}`
+          );
+        }
         const randomImageName = Math.random() + Date.now();
 
         // rezize image
@@ -25,12 +30,12 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
           .resize({ height: 300, width: 300, fit: "cover" })
           .toBuffer();
 
-        const data = await this.s3Service.uploadImageToBucket(
+        const response = await this.s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
-          `mentorProfiles/${randomImageName}`
+          `userProfiles/${randomImageName}`
         );
-        if (data.$metadata.httpStatusCode == 200) {
+        if (response.$metadata.httpStatusCode == 200) {
           updatedData = {
             ...updatedData,
             avatar: `${randomImageName}`,
@@ -39,8 +44,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
           throw new BadRequest("Profile upload faild please try again laiter");
         }
       }
-
-      const data = await this.userRepositary.updateUserProfileData(
+      const data = await this.userRepositary.updateUserProfile(
         id,
         updatedData
       );

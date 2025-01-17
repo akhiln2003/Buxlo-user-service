@@ -1,15 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { IfetchMentorProfileImageUseCase } from "../../../application/interface/common/fetchMentorProfileImageUseCase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
+import { IfetchProfileImageUseCase } from "../../../application/interface/common/fetchMentorProfileImageUseCase";
 
 export class FetchMentorProfileImageController {
-  constructor(
-    private fetchMentorProfileImageUseCase: IfetchMentorProfileImageUseCase
-  ) {}
+  constructor(private fetchProfileImageUseCase: IfetchProfileImageUseCase) {}
   fetchImage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { key } = req.params;
-      const imageUrl = await this.fetchMentorProfileImageUseCase.execute(
+      const imageUrl = await this.fetchProfileImageUseCase.execute(
         `mentorProfiles/${key}`
       );
       res.status(HttpStatusCode.OK).json({ imageUrl });

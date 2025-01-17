@@ -8,6 +8,7 @@ export class FetchMentorProfileUseCase implements IfetchMentorProfileUseCase {
     try {
       const data = await this.mentorRepositary.getMentorDetails(id);
       return data;
+      
     } catch (error) {
       return {
         error: error,

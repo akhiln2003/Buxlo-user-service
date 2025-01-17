@@ -1,3 +1,4 @@
+import { IuserUpdateData } from "../../application/interface/user/IupdateUserProfileUseCase";
 import { User } from "../../domain/entities/user";
 import { IuserRepository } from "../../domain/interfaces/Iuserrepository";
 import { UserProfile } from "../database/mongodb/schema/user.schema";
@@ -9,14 +10,14 @@ export class UserRepository implements IuserRepository {
     name,
     role,
     isGoogle,
-    avatar
+    avatar,
   }: {
     id: string;
     email: string;
     name: string;
     role: string;
     isGoogle: boolean;
-    avatar: string
+    avatar: string;
   }): Promise<User> {
     try {
       const newUser = UserProfile.build({
@@ -25,7 +26,7 @@ export class UserRepository implements IuserRepository {
         email,
         role,
         isGoogle,
-        avatar
+        avatar,
       });
       return await newUser.save();
     } catch (error: any) {
@@ -33,13 +34,19 @@ export class UserRepository implements IuserRepository {
       throw new Error(`db error: ${error.message}`);
     }
   }
-  async updateUserProfile(userId: string): Promise<User | null> {
+  async updateUserProfile(
+    userId: string,
+    query: IuserUpdateData
+  ): Promise<User | null> {
     try {
       const updatedProfile = await UserProfile.findOneAndUpdate(
         { _id: userId },
-        { role: "mentor" },
+        {
+          $set: query,
+        },
         { new: true }
       );
+
       return updatedProfile;
     } catch (error: any) {
       // customLogger.error(`db error: ${error.message}`);
@@ -47,14 +54,16 @@ export class UserRepository implements IuserRepository {
     }
   }
   async getUserDetails(userId: string): Promise<User | null> {
-    try {
-      const userDetails = await UserProfile.findById(userId).lean();
-      return userDetails;
-    } catch (error: any) {
-      // customLogger.error(`db error to fetch user ${userId}: ${error.message}`);
-      throw new Error(`db error to fetch user: ${error.message}`);
+      try {
+        const userDetails = await UserProfile.findById(userId);
+        return userDetails;
+      } catch (error: any) {
+        console.error(error);
+  
+        // customLogger.error(`db error to fetch user ${userId}: ${error.message}`);
+        throw new Error(`db error to fetch user: ${error.message}`);
+      }
     }
-  }
 
   async updateUserProfileData(
     userId: string,
@@ -69,6 +78,22 @@ export class UserRepository implements IuserRepository {
       return updatedUser as User | null;
     } catch (error: any) {
       // customLogger.error(`db error to update user ${userId}: ${error.message}`);
+      throw new Error(`db error to update user: ${error.message}`);
+    }
+  }
+
+  async deleteUserProfileData(
+    userId: string,
+    data: { avatar?: string }
+  ): Promise<User | null> {
+    try {
+      const updatedUser = await UserProfile.findByIdAndUpdate(
+        userId,
+        { $unset: data },
+        { new: true }
+      );
+      return updatedUser;
+    } catch (error: any) {
       throw new Error(`db error to update user: ${error.message}`);
     }
   }

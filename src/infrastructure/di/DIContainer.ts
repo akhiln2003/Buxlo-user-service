@@ -1,4 +1,5 @@
-import { FetchProfileImageUseCase } from "../../application/usecase/common/fetchMentorProfileImageUseCase";
+import { DeleteMentorProfileImageUseCase } from "../../application/usecase/mentor/DeleteMentorProfileImageUseCase";
+import { FetchProfileImageUseCase } from "../../application/usecase/common/fetchProfileImageUseCase";
 import { FetchMentorProfileUseCase } from "../../application/usecase/mentor/FetchMentorProfileUseCase";
 import { UpdateMentorProfileUseCase } from "../../application/usecase/mentor/updateMentorUseCase";
 import { FetchUserProfileUseCase } from "../../application/usecase/user/FetchUserProfileUseCase";
@@ -7,6 +8,7 @@ import { Is3Service } from "../@types/Is3Service";
 import { MentorRepository } from "../repositories/mentorRepositary";
 import { UserRepository } from "../repositories/userRepositary";
 import { S3Service } from "../server/s3-client";
+import { DeleteUserProfileImageUseCase } from "../../application/usecase/user/DeleteUserProfileImageUseCase";
 
 export class DIContainer{
     private _userRepository:UserRepository;
@@ -35,5 +37,13 @@ export class DIContainer{
 
     fetchProfileImageUseCase(){
         return new FetchProfileImageUseCase( this._s3Service);
+    }
+
+    deleteMentorProfileImageUseCase(){
+        return new DeleteMentorProfileImageUseCase(this._mentorRepository ,this._s3Service);
+    }
+
+    deleteUserProfileImageUseCase(){
+        return new DeleteUserProfileImageUseCase(this._userRepository ,this._s3Service);
     }
 }
