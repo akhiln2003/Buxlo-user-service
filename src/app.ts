@@ -8,6 +8,7 @@ import { grpcService } from "./infrastructure/rpc/grpc/server";
 import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
 import { mentorRoutes } from "./presentation/routes/mentorRouts";
 import { userRoutes } from "./presentation/routes/userRouts";
+import { commonRoutes } from "./presentation/routes/commonRouts";
 
 export class App {
   constructor(private server: Iserver) {}
@@ -26,6 +27,7 @@ export class App {
   private registerRoutes(): void {
     this.server.registerRoutes("/api/user/mentor", mentorRoutes);
     this.server.registerRoutes("/api/user/user", userRoutes );
+    this.server.registerRoutes("/api/user/common" , commonRoutes)
   }
 
   private registerErrorHandler(): void {

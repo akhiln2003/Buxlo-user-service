@@ -9,41 +9,59 @@ import { MentorRepository } from "../repositories/mentorRepositary";
 import { UserRepository } from "../repositories/userRepositary";
 import { S3Service } from "../server/s3-client";
 import { DeleteUserProfileImageUseCase } from "../../application/usecase/user/DeleteUserProfileImageUseCase";
+import { NodeMailerService } from "../server/nodeMailerService";
+import { SendContactUsEmailUseCase } from "../../application/usecase/common/constactUsEmailUseCase";
+import { IsendContactUsEmailUseCase } from "../../application/interface/common/IemailService";
 
-export class DIContainer{
-    private _userRepository:UserRepository;
-    private _mentorRepository:MentorRepository;
-    private _s3Service: Is3Service;
-
-    constructor( ){
-        this._userRepository = new UserRepository();
-        this._mentorRepository = new MentorRepository();
-        this._s3Service = new S3Service();
-    }
+export class DIContainer {
+  private _userRepository: UserRepository;
+  private _mentorRepository: MentorRepository;
+  private _s3Service: Is3Service;
+  private _nodeMailerService: NodeMailerService;
 
 
-    fetchUserProfileUseCase(){
-        return new FetchUserProfileUseCase(this._userRepository);
-    }
-    fetchMentorProfileUseCase(){
-        return new FetchMentorProfileUseCase(this._mentorRepository);
-    }
-    updateMentorProfileUseCase(){
-        return new UpdateMentorProfileUseCase(this._mentorRepository , this._s3Service);
-    }
-    updateUserProfileUseCase(){
-        return new UpdateUserProfileUseCase(this._userRepository , this._s3Service);
-    }
+  constructor() {
+    this._userRepository = new UserRepository();
+    this._mentorRepository = new MentorRepository();
+    this._s3Service = new S3Service();
+    this._nodeMailerService = new NodeMailerService();
+  }
 
-    fetchProfileImageUseCase(){
-        return new FetchProfileImageUseCase( this._s3Service);
-    }
+  fetchUserProfileUseCase() {
+    return new FetchUserProfileUseCase(this._userRepository);
+  }
+  fetchMentorProfileUseCase() {
+    return new FetchMentorProfileUseCase(this._mentorRepository);
+  }
+  updateMentorProfileUseCase() {
+    return new UpdateMentorProfileUseCase(
+      this._mentorRepository,
+      this._s3Service
+    );
+  }
+  updateUserProfileUseCase() {
+    return new UpdateUserProfileUseCase(this._userRepository, this._s3Service);
+  }
 
-    deleteMentorProfileImageUseCase(){
-        return new DeleteMentorProfileImageUseCase(this._mentorRepository ,this._s3Service);
-    }
+  fetchProfileImageUseCase() {
+    return new FetchProfileImageUseCase(this._s3Service);
+  }
 
-    deleteUserProfileImageUseCase(){
-        return new DeleteUserProfileImageUseCase(this._userRepository ,this._s3Service);
-    }
+  deleteMentorProfileImageUseCase() {
+    return new DeleteMentorProfileImageUseCase(
+      this._mentorRepository,
+      this._s3Service
+    );
+  }
+
+  deleteUserProfileImageUseCase() {
+    return new DeleteUserProfileImageUseCase(
+      this._userRepository,
+      this._s3Service
+    );
+  }
+
+  sendContactUsEmailUseCase(): IsendContactUsEmailUseCase {
+    return new SendContactUsEmailUseCase(this._nodeMailerService);
+  }
 }
