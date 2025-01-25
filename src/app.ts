@@ -9,6 +9,7 @@ import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
 import { mentorRoutes } from "./presentation/routes/mentorRouts";
 import { userRoutes } from "./presentation/routes/userRouts";
 import { commonRoutes } from "./presentation/routes/commonRouts";
+import { adminRoutes } from "./presentation/routes/adminRouts";
 
 export class App {
   constructor(private server: Iserver) {}
@@ -26,8 +27,9 @@ export class App {
   }
   private registerRoutes(): void {
     this.server.registerRoutes("/api/user/mentor", mentorRoutes);
-    this.server.registerRoutes("/api/user/user", userRoutes );
-    this.server.registerRoutes("/api/user/common" , commonRoutes)
+    this.server.registerRoutes("/api/user/user", userRoutes);
+    this.server.registerRoutes("/api/user/admin", adminRoutes);
+    this.server.registerRoutes("/api/user/common", commonRoutes);
   }
 
   private registerErrorHandler(): void {

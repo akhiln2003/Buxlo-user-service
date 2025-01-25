@@ -38,6 +38,7 @@ export class S3Service implements Is3Service {
         Body: bufferCode,
         ContentType: type,
       };
+
       const command = new PutObjectCommand(params);
       const data = await this.s3.send(command);
       return data;

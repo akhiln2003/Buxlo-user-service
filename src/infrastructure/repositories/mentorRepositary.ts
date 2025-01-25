@@ -6,7 +6,7 @@ import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
 export class MentorRepository implements ImentorRepository {
   async create({
     id,
-    email,
+    email,  
     name,
     role,
     isGoogle,

@@ -1,28 +1,30 @@
 import mongoose from "mongoose";
 
 interface MentorAttr {
-  _id:string,
+  _id: string;
   name: string;
   email: string;
-  role:string
+  role: string;
   avatar?: string;
   isGoogle: boolean;
   number?: string;
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
+  verified:boolean
 }
 
 interface MentorDoc extends mongoose.Document {
-  _id:string,
+  _id: string;
   name: string;
   email: string;
   avatar?: string;
   isGoogle: boolean;
-  role: "user" | "mentor" | 'admin';
+  role: "mentor" | "admin";
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
+  verified:boolean
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +66,11 @@ const mentorSchema = new mongoose.Schema(
     yearsOfExperience: {
       type: Number,
     },
+    verified: {
+      type: Boolean,
+      default: false,
+      required:true
+    },
   },
   {
     toJSON: {
@@ -82,6 +89,9 @@ mentorSchema.statics.build = (attrs: MentorAttr) => {
   return new MentorProfile(attrs); // Return a new Mentor instance
 };
 
-const MentorProfile = mongoose.model<MentorDoc, MentorModel>("Mento", mentorSchema);
+const MentorProfile = mongoose.model<MentorDoc, MentorModel>(
+  "Mento",
+  mentorSchema
+);
 
 export { MentorProfile };

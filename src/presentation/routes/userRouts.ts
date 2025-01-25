@@ -44,4 +44,6 @@ router.delete(
   deleteProfileImageController.deleteImage
 );
 
+// router.post('/kycverify' , upload.single('image'),)
+
 export { router as userRoutes };
