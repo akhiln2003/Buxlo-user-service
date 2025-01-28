@@ -5,7 +5,6 @@ interface AdvAttr {
   image: string;
   title: string;
   description: string;
-  isDelete?:boolean
 }
 
 interface AdvDoc extends mongoose.Document {
@@ -13,7 +12,6 @@ interface AdvDoc extends mongoose.Document {
   image: string;
   title: string;
   description: string;
-  isDelete:boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -37,11 +35,6 @@ const advSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isDelete:{
-      type:Boolean,
-      required: true,
-      default:false
-    }
   },
   {
     toJSON: {

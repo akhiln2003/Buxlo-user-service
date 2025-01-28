@@ -1,11 +1,11 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { User } from "../../../domain/entities/user";
-import { IdeleteAdvImageUseCase } from "../../interface/admin/IdeleteAdvImageUsecase";
 import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
+import { IdeleteAdvUseCase } from "../../interface/admin/IdeleteAdvUsecase";
 
-export class DeleteAdvImageUseCase
-  implements IdeleteAdvImageUseCase{
+export class DeleteAdvUseCase
+  implements IdeleteAdvUseCase{
   constructor(
     private advRepositary: IadvRepository,
     private s3Service: Is3Service

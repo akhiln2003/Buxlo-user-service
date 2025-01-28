@@ -5,7 +5,7 @@ import {
   IcreateAdvUsecase,
 } from "../../interface/admin/IcreateAdvUsecase";
 import { Adv } from "../../../domain/entities/adv";
-import { BadRequest, InternalServerError } from "@buxlo/common";
+import { BadRequest } from "@buxlo/common";
 import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
 
 export class CreateAdvUsecase implements IcreateAdvUsecase {
@@ -42,7 +42,7 @@ export class CreateAdvUsecase implements IcreateAdvUsecase {
             image: `${randomImageName}`,
           };
         } else {
-          throw new BadRequest("Profile upload faild please try again laiter");
+          throw new BadRequest("Faild to upload image please try again laiter");
         }
       }
 
@@ -50,7 +50,7 @@ export class CreateAdvUsecase implements IcreateAdvUsecase {
       return data;
     } catch (error) {
       console.error(error);
-      throw new InternalServerError();
+      throw new BadRequest("Faild to upload image please try again laiter");
     }
   }
 }

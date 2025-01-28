@@ -18,9 +18,10 @@ import { AdvRepository } from "../repositories/advRepositary";
 import { TrustedUsRepository } from "../repositories/trustedUsRepositary";
 import { FetchtrustedUsUseCase } from "../../application/usecase/admin/fetchtrustedUsUseCase";
 import { FetchS3ImageUseCase } from "../../application/usecase/common/fetchS3ImageUseCase";
-import { DeleteAdvImageUseCase } from "../../application/usecase/admin/DeleteAdvImageUseCase";
 import { DeleteTrustedUsUseCase } from "../../application/usecase/admin/DeleteTrustedUsUseCase";
 import { FetchAdvUseCase } from "../../application/usecase/admin/fetchAdvUseCase";
+import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdvUseCase";
+import { EditAdvUseCase } from "../../application/usecase/admin/EditAdvUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
@@ -83,8 +84,11 @@ export class DIContainer {
     );
   }
 
-  deleteAdvImageUseCase() {
-    return new DeleteAdvImageUseCase(this._advRepository, this._s3Service);
+  deleteAdvUseCase() {
+    return new DeleteAdvUseCase(this._advRepository, this._s3Service);
+  }
+  editAdvUseCase(){
+    return new EditAdvUseCase(this._advRepository, this._s3Service);
   }
 
   deleteTrustedUsUseCase() {
@@ -107,4 +111,5 @@ export class DIContainer {
   sendContactUsEmailUseCase(): IsendContactUsEmailUseCase {
     return new SendContactUsEmailUseCase(this._nodeMailerService);
   }
+
 }

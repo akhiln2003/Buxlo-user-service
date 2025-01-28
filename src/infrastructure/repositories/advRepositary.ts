@@ -35,7 +35,25 @@ export class AdvRepository implements IadvRepository {
     } catch (error: any) {
       console.error(error);
 
-      throw new Error(`db error to fetch user: ${error.message}`);
+      throw new Error(`db error to delete user: ${error.message}`);
+    }
+  }
+  async update(
+    id: string,
+    data: { title?: string; description?: string; image?: string }
+  ): Promise<Adv | any> {
+    try {
+      
+      const updatedData = await AdvSchema.findByIdAndUpdate(
+        id,
+        { $set: data },
+        { new: true }
+      );
+      return updatedData;
+    } catch (error: any) {
+      console.error(error);
+
+      throw new Error(`db error to edit user: ${error.message}`);
     }
   }
 }

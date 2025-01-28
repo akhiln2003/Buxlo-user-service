@@ -4,7 +4,6 @@ export interface IcreateAdvData {
    image: string,
    title: string,
    description: string,
-   isDelete?:boolean,
    id?: string,
 }
 

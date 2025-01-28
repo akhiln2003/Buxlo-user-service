@@ -7,9 +7,12 @@ export class CreateAdvController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-
       const { data } = req.body;
       const file = req.file;
+
+      delete data.id;
+      delete data.currentImage;
+
       
       const responseData = await this.createAdvUsecase.execute(data, file);
 

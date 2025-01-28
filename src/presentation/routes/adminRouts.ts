@@ -9,6 +9,7 @@ import { DdeleteAdvImageController } from "../controllers/admin/deleteAdvImageCo
 import { CreateAdvController } from "../controllers/admin/createAdvController";
 import { FetchAdvController } from "../controllers/admin/fetchAdvController";
 import { FetchAdvImageController } from "../controllers/admin/fetchAdvImageController";
+import { EditAdvController } from "../controllers/admin/editAdvController";
 
 
 const router = Router();
@@ -48,9 +49,12 @@ const deleteTrustedUsImageController = new DeleteTrustedUsImageController(
 );
 
 const deleteAdvImageController = new DdeleteAdvImageController(
-  diContainer.deleteAdvImageUseCase()
+  diContainer.deleteAdvUseCase()
 );
 
+const editAdvController = new EditAdvController(
+  diContainer.editAdvUseCase()
+);
 
 /////////////////////////////////////
 
@@ -69,6 +73,7 @@ router.delete(
   "/deletetrustedusimage/:id/:key",
   deleteTrustedUsImageController.deleteImage
 );
+router.post("/editadv" , upload.single("image") ,  editAdvController.edit );
 
 
 
