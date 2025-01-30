@@ -11,7 +11,12 @@ interface MentorAttr {
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
-  verified:boolean
+  verified?: "verified"| "applicationPending" | "verificationPending";
+  aadhaarFrontImage?:string;
+  aadhaarBackImage?:string
+  aadhaarName?:string;
+  aadhaarNumber?:string;
+
 }
 
 interface MentorDoc extends mongoose.Document {
@@ -24,7 +29,11 @@ interface MentorDoc extends mongoose.Document {
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
-  verified:boolean
+  verified: "verified"| "applicationPending" | "verificationPending";
+  aadhaarFrontImage?:string;
+  aadhaarBackImage?:string
+  aadhaarName?:string;
+  aadhaarNumber?:string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,7 +64,7 @@ const mentorSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["user", "mentor", "admin"],
+      enum: [ "mentor", "admin"],
     },
     bio: {
       type: String,
@@ -67,9 +76,22 @@ const mentorSchema = new mongoose.Schema(
       type: Number,
     },
     verified: {
-      type: Boolean,
-      default: false,
-      required:true
+      type: String,
+      enum: [ "verified", "applicationPending" , "verificationPending"],
+      default: "applicationPending",
+      required: true,
+    },
+    aadhaarFrontImage: {
+      type: String,
+    },
+    aadhaarBackImage: {
+      type: String,
+    },
+    aadhaarName: {
+      type: String,
+    },
+    aadhaarNumber: {
+      type: String,
     },
   },
   {

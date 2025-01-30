@@ -22,6 +22,8 @@ import { DeleteTrustedUsUseCase } from "../../application/usecase/admin/DeleteTr
 import { FetchAdvUseCase } from "../../application/usecase/admin/fetchAdvUseCase";
 import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdvUseCase";
 import { EditAdvUseCase } from "../../application/usecase/admin/EditAdvUseCase";
+import { ImentorVerifyprofileUseCase } from "../../application/interface/mentor/ImentorVerifyprofileUseCase";
+import { MentorVerifyprofileUseCase } from "../../application/usecase/mentor/MentorVerifyprofileUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
@@ -87,7 +89,7 @@ export class DIContainer {
   deleteAdvUseCase() {
     return new DeleteAdvUseCase(this._advRepository, this._s3Service);
   }
-  editAdvUseCase(){
+  editAdvUseCase() {
     return new EditAdvUseCase(this._advRepository, this._s3Service);
   }
 
@@ -112,4 +114,7 @@ export class DIContainer {
     return new SendContactUsEmailUseCase(this._nodeMailerService);
   }
 
+  mentorVerifyprofileUseCase(): ImentorVerifyprofileUseCase {
+    return new MentorVerifyprofileUseCase( this._mentorRepository , this._s3Service);
+  }
 }

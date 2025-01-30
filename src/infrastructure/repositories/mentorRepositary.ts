@@ -6,7 +6,7 @@ import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
 export class MentorRepository implements ImentorRepository {
   async create({
     id,
-    email,  
+    email,
     name,
     role,
     isGoogle,
@@ -93,6 +93,27 @@ export class MentorRepository implements ImentorRepository {
         { new: true }
       );
       return updatedUser;
+    } catch (error: any) {
+      throw new Error(`db error to update user: ${error.message}`);
+    }
+  }
+
+  async kycVerification(
+    id: string,
+    data: {
+      aadhaarFrontImage: string;
+      aadhaarBackImage: string;
+      aadhaarName: string;
+      aadhaarNumber: string;
+    }
+  ): Promise<Mentor | null> {
+    try {
+      const updatedUser = await MentorProfile.findByIdAndUpdate(
+        id,
+        { $set: data },
+        { new: true }
+      );
+      return updatedUser as Mentor | null;
     } catch (error: any) {
       throw new Error(`db error to update user: ${error.message}`);
     }
