@@ -6,9 +6,11 @@ export class FetchAdvController {
   constructor(private fetchAdvUseCase: IfetchAdvUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const data = await this.fetchAdvUseCase.execute();
+      const { page } = req.query;
+
+        const responesData = await this.fetchAdvUseCase.execute(Number(page));
       
-      res.status(HttpStatusCode.OK).json({ data });
+      res.status(HttpStatusCode.OK).json({ ...responesData });
     } catch (error) {
       next(error);
     }

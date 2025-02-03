@@ -21,10 +21,16 @@ export class TrustedUsRepository implements ItrustedUsRepository {
     }
   }
 
-  async getTrustedUsDetails(): Promise<TrustedUs[] | null> {
+  async getTrustedUsDetails(page:number): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
     try {
-      const userDetails = await TrustedUsSchema.find();
-      return userDetails;
+      const limit = 5; // Number of users per page
+      const skip = (page - 1) * limit;
+
+      const totalCount = await TrustedUsSchema.countDocuments();
+      const totalPages = Math.ceil(totalCount / limit);
+      const trustedUs = await TrustedUsSchema.find().sort({_id:-1}).skip(skip).limit(limit);
+
+      return { trustedUs , totalPages };
     } catch (error: any) {
       console.error(error);
 

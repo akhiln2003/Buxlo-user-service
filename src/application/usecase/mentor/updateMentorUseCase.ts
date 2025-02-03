@@ -36,7 +36,7 @@ export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
         const response = await this.s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
-          `mentorProfiles/${randomImageName}`
+          `MentorProfiles/${randomImageName}`
         );
         if (response.$metadata.httpStatusCode == 200) {
           updatedData = {

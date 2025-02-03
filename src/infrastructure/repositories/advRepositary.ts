@@ -18,10 +18,16 @@ export class AdvRepository implements IadvRepository {
     }
   }
 
-  async getAdvDetails(): Promise<Adv[] | null> {
+  async getAdvDetails(page: number): Promise<{ advs: Adv[]; totalPages: number } | null> {
     try {
-      const adv = await AdvSchema.find();
-      return adv;
+      const limit = 5; // Number of users per page
+      const skip = (page - 1) * limit;
+
+      const totalCount = await AdvSchema.countDocuments();
+      const totalPages = Math.ceil(totalCount / limit);
+      const advs = await AdvSchema.find().sort({_id:-1}).skip(skip).limit(limit);
+
+      return { advs, totalPages };
     } catch (error: any) {
       console.error(error);
 
@@ -43,7 +49,6 @@ export class AdvRepository implements IadvRepository {
     data: { title?: string; description?: string; image?: string }
   ): Promise<Adv | any> {
     try {
-      
       const updatedData = await AdvSchema.findByIdAndUpdate(
         id,
         { $set: data },

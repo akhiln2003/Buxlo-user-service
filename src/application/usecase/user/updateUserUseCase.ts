@@ -20,7 +20,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
       if (file) {
         if (currentProfileImage) {
           await this.s3Service.deleteImageFromBucket(
-            `userProfiles/${currentProfileImage}`
+            `UserProfiles/${currentProfileImage}`
           );
         }
         const randomImageName = Math.random() + Date.now();

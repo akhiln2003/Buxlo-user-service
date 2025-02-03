@@ -6,9 +6,10 @@ export class FetchtrustedusController {
   constructor(private fetchtrustedUsUseCase: IfetchtrustedUsUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const data = await this.fetchtrustedUsUseCase.execute();
+      const { page } = req.query;
+        const responseData = await this.fetchtrustedUsUseCase.execute(Number(page));
       
-      res.status(HttpStatusCode.OK).json({ data });
+      res.status(HttpStatusCode.OK).json({ ...responseData });
     } catch (error) {
       next(error);
     }

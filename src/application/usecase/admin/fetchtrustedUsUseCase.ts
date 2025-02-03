@@ -5,7 +5,7 @@ import { IfetchtrustedUsUseCase } from "../../interface/admin/IfetchtrustedUsUse
 export class FetchtrustedUsUseCase implements IfetchtrustedUsUseCase {
   constructor(private trustedUsRepository: ItrustedUsRepository) {}
 
-  async execute(): Promise<TrustedUs[] | null> {
-    return await this.trustedUsRepository.getTrustedUsDetails();
+  async execute(page:number): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
+    return await this.trustedUsRepository.getTrustedUsDetails(page);
   }
 }

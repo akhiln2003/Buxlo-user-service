@@ -112,7 +112,7 @@ mentorSchema.statics.build = (attrs: MentorAttr) => {
 };
 
 const MentorProfile = mongoose.model<MentorDoc, MentorModel>(
-  "Mento",
+  "Mentor",
   mentorSchema
 );
 
