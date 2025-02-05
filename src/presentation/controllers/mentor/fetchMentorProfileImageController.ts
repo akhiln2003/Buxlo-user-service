@@ -8,7 +8,7 @@ export class FetchMentorProfileImageController {
     try {
       const { key } = req.params;
       const imageUrl = await this.fetchProfileImageUseCase.execute(
-        `mentorProfiles/${key}`
+        `MentorProfiles/${key}`
       );
       res.status(HttpStatusCode.OK).json({ imageUrl });
     } catch (error) {

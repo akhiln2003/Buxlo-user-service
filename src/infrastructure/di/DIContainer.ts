@@ -24,6 +24,10 @@ import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdvUseCa
 import { EditAdvUseCase } from "../../application/usecase/admin/EditAdvUseCase";
 import { ImentorVerifyprofileUseCase } from "../../application/interface/mentor/ImentorVerifyprofileUseCase";
 import { MentorVerifyprofileUseCase } from "../../application/usecase/mentor/MentorVerifyprofileUseCase";
+import { IadminVerifyprofileUseCase } from "../../application/interface/admin/IadminVerifyprofileUseCase";
+import { AdminVerifyprofileUseCase } from "../../application/usecase/admin/AdminVerifyprofileUseCase";
+import { IadminFetchVerifyProfilesUseCase } from "../../application/interface/admin/IadminFetchVerifyProfiles";
+import { AdminFetchVerifyProfilesUseCase } from "../../application/usecase/admin/AdminFetchVerifyProfilesUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
@@ -115,6 +119,18 @@ export class DIContainer {
   }
 
   mentorVerifyprofileUseCase(): ImentorVerifyprofileUseCase {
-    return new MentorVerifyprofileUseCase( this._mentorRepository , this._s3Service);
+    return new MentorVerifyprofileUseCase(
+      this._mentorRepository,
+      this._s3Service
+    );
   }
+
+  adminFetchVerifyProfilesUseCase(): IadminFetchVerifyProfilesUseCase {
+    return new AdminFetchVerifyProfilesUseCase(this._mentorRepository);
+  }
+
+  adminVerifyprofileUseCase(): IadminVerifyprofileUseCase {
+    return new AdminVerifyprofileUseCase(this._mentorRepository , this._s3Service);
+  }
+ 
 }

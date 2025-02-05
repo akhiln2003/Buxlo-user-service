@@ -15,7 +15,7 @@ export interface ImentorRepository {
     userId: string,
     data: { avatar?: string }
   ): Promise<Mentor | null>;
-  kycVerification(
+  applyProfileVerification(
     id: string,
     data: {
       aadhaarFrontImage: string;
@@ -24,4 +24,19 @@ export interface ImentorRepository {
       aadhaarNumber: string;
     }
   ): Promise<Mentor | null>;
+  verifyProfile(
+    id: string,
+    verified: "verified" | "applicationPending",
+    unsetData?: {
+      aadhaarFrontImage: string;
+      aadhaarBackImage: string;
+      aadhaarName: string;
+      aadhaarNumber: string;
+    }
+  ): Promise<Mentor | null>;
+  find(
+    page: number,
+    verified:"verified" | "applicationPending" | "all" | "verificationPending",
+    searchData?: string | undefined,
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

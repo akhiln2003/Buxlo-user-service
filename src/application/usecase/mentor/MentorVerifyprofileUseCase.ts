@@ -72,7 +72,7 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
         throw new BadRequest("Faild to upload image please try again laiter");
       }
 
-      const data = await this.mentorRepository.kycVerification(id, query);
+      const data = await this.mentorRepository.applyProfileVerification(id, query);
 
       return data;
     } catch (error) {

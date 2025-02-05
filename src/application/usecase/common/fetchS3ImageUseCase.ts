@@ -11,11 +11,11 @@ export class FetchS3ImageUseCase implements IfetchS3ImageUseCase {
         keys.map((key) => this.s3Service.getImageFromBucket(key))
       );
 
-      return imageUrls; 
+      return imageUrls;
     } catch (error) {
       console.error("Error fetching images:", error);
 
-      throw new BadRequest("Failed to get profile images");
+      throw new BadRequest("Failed to get images");
     }
   }
 }

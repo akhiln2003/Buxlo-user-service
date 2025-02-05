@@ -10,7 +10,7 @@ export class FetchUserProfileImageController {
     try {
       const { key } = req.params;
       const imageUrl = await this.fetchUserProfileImageUseCase.execute(
-        `userProfiles/${key}`
+        `UserProfiles/${key}`
       );
       res.status(HttpStatusCode.OK).json({ imageUrl });
     } catch (error) {
