@@ -27,8 +27,12 @@ export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
         }
 
         const deletePromises = [
-          this.s3Service.deleteImageFromBucket(unsetData.aadhaarFrontImage),
-          this.s3Service.deleteImageFromBucket(unsetData.aadhaarBackImage),
+          this.s3Service.deleteImageFromBucket(
+            `Kyc/${unsetData.aadhaarFrontImage}`
+          ),
+          this.s3Service.deleteImageFromBucket(
+            `Kyc/${unsetData.aadhaarBackImage}`
+          ),
         ];
 
         await Promise.all(deletePromises);
