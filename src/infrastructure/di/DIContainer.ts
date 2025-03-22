@@ -1,5 +1,4 @@
 import { DeleteMentorProfileImageUseCase } from "../../application/usecase/mentor/DeleteMentorProfileImageUseCase";
-import { FetchProfileImageUseCase } from "../../application/usecase/common/fetchProfileImageUseCase";
 import { FetchMentorProfileUseCase } from "../../application/usecase/mentor/FetchMentorProfileUseCase";
 import { UpdateMentorProfileUseCase } from "../../application/usecase/mentor/updateMentorUseCase";
 import { FetchUserProfileUseCase } from "../../application/usecase/user/FetchUserProfileUseCase";
@@ -7,9 +6,9 @@ import { UpdateUserProfileUseCase } from "../../application/usecase/user/updateU
 import { Is3Service } from "../@types/Is3Service";
 import { MentorRepository } from "../repositories/mentorRepositary";
 import { UserRepository } from "../repositories/userRepositary";
-import { S3Service } from "../server/s3-client";
+import { S3Service } from "../external-services/s3-client";
 import { DeleteUserProfileImageUseCase } from "../../application/usecase/user/DeleteUserProfileImageUseCase";
-import { NodeMailerService } from "../server/nodeMailerService";
+import { NodeMailerService } from "../external-services/nodeMailerService";
 import { SendContactUsEmailUseCase } from "../../application/usecase/common/constactUsEmailUseCase";
 import { IsendContactUsEmailUseCase } from "../../application/interface/common/IemailService";
 import { CreateTurstedUsUsecase } from "../../application/usecase/admin/CreateTurstedUsUsecase";
@@ -28,6 +27,10 @@ import { IadminVerifyprofileUseCase } from "../../application/interface/admin/Ia
 import { AdminVerifyprofileUseCase } from "../../application/usecase/admin/AdminVerifyprofileUseCase";
 import { IadminFetchVerifyProfilesUseCase } from "../../application/interface/admin/IadminFetchVerifyProfiles";
 import { AdminFetchVerifyProfilesUseCase } from "../../application/usecase/admin/AdminFetchVerifyProfilesUseCase";
+import { UserUpdatedProducer } from "../MessageBroker/kafka/producer/userUpdateProducer";
+import { messageBroker } from "../MessageBroker/config";
+import { IfetchMentorsUseCase } from "../../application/interface/user/IfetchMentorsUseCase";
+import { FetchMentorsUseCase } from "../../application/usecase/user/fetchMentorsUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
@@ -36,6 +39,7 @@ export class DIContainer {
   private _nodeMailerService: NodeMailerService;
   private _advRepository: AdvRepository;
   private _trustedUsRepository: TrustedUsRepository;
+  private _userUpdatedProducer: UserUpdatedProducer;
 
   constructor() {
     this._userRepository = new UserRepository();
@@ -44,6 +48,9 @@ export class DIContainer {
     this._nodeMailerService = new NodeMailerService();
     this._advRepository = new AdvRepository();
     this._trustedUsRepository = new TrustedUsRepository();
+    this._userUpdatedProducer = new UserUpdatedProducer(
+      messageBroker.getKafkaClient().producer
+    );
   }
 
   fetchUserProfileUseCase() {
@@ -61,17 +68,19 @@ export class DIContainer {
   updateMentorProfileUseCase() {
     return new UpdateMentorProfileUseCase(
       this._mentorRepository,
-      this._s3Service
+      this._s3Service,
+      this._userUpdatedProducer
     );
   }
   updateUserProfileUseCase() {
-    return new UpdateUserProfileUseCase(this._userRepository, this._s3Service);
+    return new UpdateUserProfileUseCase(
+      this._userRepository,
+      this._s3Service,
+      this._userUpdatedProducer
+    );
   }
 
-  fetchProfileImageUseCase() {
-    return new FetchProfileImageUseCase(this._s3Service);
-  }
-
+  
   fetchS3ImageUseCase() {
     return new FetchS3ImageUseCase(this._s3Service);
   }
@@ -130,7 +139,13 @@ export class DIContainer {
   }
 
   adminVerifyprofileUseCase(): IadminVerifyprofileUseCase {
-    return new AdminVerifyprofileUseCase(this._mentorRepository , this._s3Service);
+    return new AdminVerifyprofileUseCase(
+      this._mentorRepository,
+      this._s3Service
+    );
   }
- 
+
+  fetchMentorsUseCase():IfetchMentorsUseCase{
+    return new FetchMentorsUseCase(this._mentorRepository);
+  }
 }

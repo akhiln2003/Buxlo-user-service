@@ -3,12 +3,17 @@ import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
 import { User } from "../../../domain/entities/user";
-import { IupdateUserProfileUseCase, IuserUpdateData } from "../../interface/user/IupdateUserProfileUseCase";
+import {
+  IupdateUserProfileUseCase,
+  IuserUpdateData,
+} from "../../interface/user/IupdateUserProfileUseCase";
+import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
 
 export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   constructor(
     private userRepositary: IuserRepository,
-    private s3Service: Is3Service
+    private s3Service: Is3Service,
+    private userUpdateProducer: UserUpdatedProducer
   ) {}
   async execute(
     id: string,
@@ -33,7 +38,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
         const response = await this.s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
-          `userProfiles/${randomImageName}`
+          `UserProfiles/${randomImageName}`
         );
         if (response.$metadata.httpStatusCode == 200) {
           updatedData = {
@@ -44,10 +49,8 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
           throw new BadRequest("Profile upload faild please try again laiter");
         }
       }
-      const data = await this.userRepositary.updateUserProfile(
-        id,
-        updatedData
-      );
+      const data = await this.userRepositary.updateUserProfile(id, updatedData);
+      this.userUpdateProducer.produce({ id, query: updatedData });
       return data;
     } catch (error) {
       console.error(error);

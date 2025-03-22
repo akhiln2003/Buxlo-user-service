@@ -6,70 +6,81 @@ import multer from "multer";
 import { FetchMentorProfileImageController } from "../controllers/mentor/fetchMentorProfileImageController";
 import { DeleteMentorProfileImageController } from "../controllers/mentor/deleteMentorProfileImageController";
 import { fetchprofileDto } from "../../zodSchemaDto/mentor/fetchprofile.Dto";
-import {  validateReqBody, validateReqParams } from "@buxlo/common";
-import { fetchprofileimageDto } from "../../zodSchemaDto/mentor/fetchprofileimage.Dto";
+import { validateReqBody, validateReqParams } from "@buxlo/common";
+import { fetchProfileImageDto } from "../../zodSchemaDto/common/fetchprofileimage.Dto";
 import { deleteprofileimageDto } from "../../zodSchemaDto/mentor/deleteprofileimage.Dto";
 import { MentorVerifyprofileController } from "../controllers/mentor/mentorVerifyprofileController";
 import { verifyProfileDto } from "../../zodSchemaDto/mentor/verifyprofile.Dto";
 
-const router = Router();
-const diContainer = new DIContainer();
+export class MentorRouter {
+  private router: Router;
+  private diContainer: DIContainer;
+  private upload = multer({ storage: multer.memoryStorage() });
 
-const upload = multer({ storage: multer.memoryStorage() });
+  private fetchprofileController!: FetchMentorProfileController;
+  private updateprofileController!: UpdateMentorProfileController;
+  private fetchProfileImageController!: FetchMentorProfileImageController;
+  private deleteProfileImageController!: DeleteMentorProfileImageController;
+  private mentorVerifyprofileController!: MentorVerifyprofileController;
 
-// Inject dependencies into the Controller
+  constructor() {
+    this.router = Router();
+    this.diContainer = new DIContainer();
+    this.initializeControllers();
+    this.initializeRoutes();
+  }
 
-const fetchprofileController = new FetchMentorProfileController(
-  diContainer.fetchMentorProfileUseCase()
-);
+  private initializeControllers(): void {
+    this.fetchprofileController = new FetchMentorProfileController(
+      this.diContainer.fetchMentorProfileUseCase()
+    );
+    this.updateprofileController = new UpdateMentorProfileController(
+      this.diContainer.updateMentorProfileUseCase()
+    );
+    this.fetchProfileImageController = new FetchMentorProfileImageController(
+      this.diContainer.fetchS3ImageUseCase()
+    );
+    this.deleteProfileImageController = new DeleteMentorProfileImageController(
+      this.diContainer.deleteMentorProfileImageUseCase()
+    );
+    this.mentorVerifyprofileController = new MentorVerifyprofileController(
+      this.diContainer.mentorVerifyprofileUseCase()
+    );
+  }
 
-const updateprofileController = new UpdateMentorProfileController(
-  diContainer.updateMentorProfileUseCase()
-);
+  private initializeRoutes(): void {
+    this.router.get(
+      "/fetchprofile/:id",
+      validateReqParams(fetchprofileDto),
+      this.fetchprofileController.fetchData
+    );
+    this.router.put(
+      "/updateprofile",
+      this.upload.single("newProfileImage"),
+      this.updateprofileController.update
+    );
+    this.router.post(
+      "/fetchprofileimage",
+      validateReqBody(fetchProfileImageDto),
+      this.fetchProfileImageController.fetchImage
+    );
+    this.router.delete(
+      "/deleteprofileimage/:id/:key",
+      validateReqParams(deleteprofileimageDto),
+      this.deleteProfileImageController.deleteImage
+    );
+    this.router.put(
+      "/verifyprofile",
+      this.upload.fields([
+        { name: "frontImage", maxCount: 1 },
+        { name: "backImage", maxCount: 1 },
+      ]),
+      validateReqBody(verifyProfileDto),
+      this.mentorVerifyprofileController.verify
+    );
+  }
 
-const fetchProfileImageController = new FetchMentorProfileImageController(
-  diContainer.fetchProfileImageUseCase()
-);
-
-const deleteProfileImageController = new DeleteMentorProfileImageController(
-  diContainer.deleteMentorProfileImageUseCase()
-);
-
-const mentorVerifyprofileController = new MentorVerifyprofileController(
-  diContainer.mentorVerifyprofileUseCase()
-);
-/////////////////////////////////////
-
-// i wand to add middleware for validate endpoints
-
-router.get(
-  "/fetchprofile/:id",
-  validateReqParams(fetchprofileDto),
-  fetchprofileController.fetchData
-);
-router.put(
-  "/updateprofile",
-  upload.single("newProfileImage"),
-  updateprofileController.update
-);
-router.get(
-  "/fetchprofileimage/:key",
-  validateReqParams(fetchprofileimageDto),
-  fetchProfileImageController.fetchImage
-);
-router.delete(
-  "/deleteprofileimage/:id/:key",
-  validateReqParams(deleteprofileimageDto),
-  deleteProfileImageController.deleteImage
-);
-router.put(
-  "/verifyprofile",
-  upload.fields([
-    { name: "frontImage", maxCount: 1 },
-    { name: "backImage", maxCount: 1 },
-  ]),
-  validateReqBody(verifyProfileDto),
-  mentorVerifyprofileController.verify
-);
-
-export { router as mentorRoutes };
+  public getRouter(): Router {
+    return this.router;
+  }
+}

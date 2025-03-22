@@ -36,7 +36,10 @@ export interface ImentorRepository {
   ): Promise<Mentor | null>;
   find(
     page: number,
-    verified:"verified" | "applicationPending" | "all" | "verificationPending",
-    searchData?: string | undefined,
+    verified: "verified" | "applicationPending" | "all" | "verificationPending",
+    searchData?: string | undefined
   ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
+  fetchAll( page: number,
+    availability: "true" | "false" | "all" ,
+    searchData?: string): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

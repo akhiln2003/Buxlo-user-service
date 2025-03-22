@@ -1,3 +1,4 @@
+import { InternalServerError } from "@buxlo/common";
 import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
 import { Mentor } from "../../domain/entities/mentor";
 import { ImentorRepository } from "../../domain/interfaces/ImentorRepository";
@@ -30,7 +31,6 @@ export class MentorRepository implements ImentorRepository {
       });
       return await newUser.save();
     } catch (error: any) {
-      //   customLogger.error(`db error: ${error.message }`);
       throw new Error(`db error: ${error.message}`);
     }
   }
@@ -41,15 +41,12 @@ export class MentorRepository implements ImentorRepository {
     try {
       const updatedProfile = await MentorProfile.findOneAndUpdate(
         { _id: userId },
-        {
-          $set: query,
-        },
+        { $set: query },
         { new: true }
       );
 
       return updatedProfile;
     } catch (error: any) {
-      // customLogger.error(`db error: ${error.message}`);
       throw new Error(`db error: ${error.message}`);
     }
   }
@@ -59,8 +56,6 @@ export class MentorRepository implements ImentorRepository {
       return mentorDetails;
     } catch (error: any) {
       console.error(error);
-
-      // customLogger.error(`db error to fetch user ${userId}: ${error.message}`);
       throw new Error(`db error to fetch user: ${error.message}`);
     }
   }
@@ -77,7 +72,6 @@ export class MentorRepository implements ImentorRepository {
       );
       return updatedUser as Mentor | null;
     } catch (error: any) {
-      // customLogger.error(`db error to update user ${userId}: ${error.message}`);
       throw new Error(`db error to update user: ${error.message}`);
     }
   }
@@ -130,10 +124,8 @@ export class MentorRepository implements ImentorRepository {
   ): Promise<Mentor | null> {
     try {
       const updateData: any = {};
-
       // Set verification status
       updateData.verified = verified;
-
       // If application is pending, prepare unset data
       if (verified === "applicationPending" && unsetData) {
         updateData.$unset = {};
@@ -150,7 +142,6 @@ export class MentorRepository implements ImentorRepository {
           updateData.$unset.aadhaarNumber = "";
         }
       }
-
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         id,
         {
@@ -159,7 +150,6 @@ export class MentorRepository implements ImentorRepository {
         },
         { new: true }
       );
-
       return updatedUser as Mentor | null;
     } catch (error: any) {
       throw new Error(`Database error while updating user: ${error.message}`);
@@ -171,11 +161,9 @@ export class MentorRepository implements ImentorRepository {
     verified: "verified" | "applicationPending" | "all" | "verificationPending",
     searchData?: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
-    const limit = 10;
-    const skip = (page - 1) * limit;
-
-    // Create search filter
-    const filter: any = {};
+    const limit = 10,
+      skip = (page - 1) * limit,
+      filter: any = {};
 
     // Apply search filter if searchData is provided
     if (searchData && searchData !== "undefined") {
@@ -184,19 +172,49 @@ export class MentorRepository implements ImentorRepository {
         { email: { $regex: searchData, $options: "i" } },
       ];
     }
-
     // Apply verified status filter if not "all"
     if (verified !== "all") {
       filter.verified = verified;
     }
-
     // Count total documents based on filter
     const totalCount = await MentorProfile.countDocuments(filter);
     const totalPages = Math.ceil(totalCount / limit);
-
-    // Fetch users with pagination
     const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
-
     return { datas, totalPages };
+  }
+  async fetchAll(
+    page: number,
+    availability: "true" | "false" | "all",
+    searchData?: string
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
+    try {
+      const limit = 10,
+        skip = (page - 1) * limit,
+        filter: any = {};
+      // Apply search filter if searchData is provided
+      if (searchData && searchData != "undefined") {
+        filter.$or = [
+          { name: { $regex: searchData, $options: "i" } },
+          { email: { $regex: searchData, $options: "i" } },
+        ];
+      }
+      // Apply verified status filter if not "all"
+      if (availability !== "all") {
+        filter.availability = Boolean(availability);
+      }
+
+      // Count total documents based on filter
+      const totalCount = await MentorProfile.countDocuments(filter);
+      const totalPages = Math.ceil(totalCount / limit);
+      // Fetch users with pagination
+
+      const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
+
+      return { datas, totalPages };
+    } catch (error: any) {
+      console.error("Error form fetch All mentors : ", error.message);
+
+      throw new InternalServerError();
+    }
   }
 }

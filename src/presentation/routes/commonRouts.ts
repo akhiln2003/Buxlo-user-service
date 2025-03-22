@@ -2,17 +2,30 @@ import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
 import { ContactUsController } from "../controllers/common/contactUsController";
 
-const router = Router();
-const diContainer = new DIContainer();
+export class CommonRouter {
+  private router: Router;
+  private diContainer: DIContainer;
 
-// Inject dependencies into the Controller
+  private contactUsController!: ContactUsController;
 
-const contactUsController = new ContactUsController(
-    diContainer.sendContactUsEmailUseCase()
-);
+  constructor() {
+    this.router = Router();
+    this.diContainer = new DIContainer();
+    this.initializeControllers();
+    this.initializeRoutes();
+  }
 
-/////////////////////////////////////
+  private initializeControllers(): void {
+    this.contactUsController = new ContactUsController(
+      this.diContainer.sendContactUsEmailUseCase()
+    );
+  }
 
-router.post("/contactus", contactUsController.contact);
+  private initializeRoutes(): void {
+    this.router.post("/contactus", this.contactUsController.contact);
+  }
 
-export { router as commonRoutes };
+  public getRouter(): Router {
+    return this.router;
+  }
+}

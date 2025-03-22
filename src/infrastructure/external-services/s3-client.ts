@@ -44,7 +44,6 @@ export class S3Service implements Is3Service {
       return data;
     } catch (error) {
       console.error("error from s3 service ", error);
-
       return error;
     }
   }
@@ -58,7 +57,7 @@ export class S3Service implements Is3Service {
           Key: key,
         }),
         { expiresIn: 60 }
-      );
+      );      
       return imageUrl;
     } catch (error) {
       console.error(error);

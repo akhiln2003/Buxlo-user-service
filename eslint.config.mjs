@@ -35,7 +35,7 @@ export default [
       "no-unused-vars": "warn",
 
       // Limit the number of lines in a file to 200 to encourage modularization
-      "max-lines": ["warn", 200],
+      "max-lines": ["warn", 250],
 
       // Prevent the use of 'eval()' due to security concerns and potential issues
       "no-eval": "error",

@@ -26,118 +26,135 @@ import { FetchVerifyProfileController } from "../controllers/admin/fetchVerifyPr
 import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarImagesController";
 import { fetchAadhaarImagesDto } from "../../zodSchemaDto/admin/fethAadhaarImagesDto";
 
-const router = Router();
+export class AdminRouter {
+  private router: Router;
+  private diContainer: DIContainer;
+  private upload = multer({ storage: multer.memoryStorage() });
 
-const upload = multer({ storage: multer.memoryStorage() });
+  private createAdvController!: CreateAdvController;
+  private fetchAdvController!: FetchAdvController;
+  private fetchAdvImageController!: FetchAdvImageController;
+  private createTrustedUsUsController!: CreateTrustedUsUsController;
+  private fetchtrustedusController!: FetchtrustedusController;
+  private fetchtrustedusImageController!: FetchtrustedusImageController;
+  private deleteTrustedUsImageController!: DeleteTrustedUsImageController;
+  private deleteAdvImageController!: DdeleteAdvImageController;
+  private editAdvController!: EditAdvController;
+  private fetchVerifyProfileController!: FetchVerifyProfileController;
+  private verifyprofileController!: VerifyprofileController;
+  private fethAadhaarImagesController!: FethAadhaarImagesController;
 
-const diContainer = new DIContainer();
+  constructor() {
+    this.router = Router();
+    this.diContainer = new DIContainer();
+    this.initializeControllers();
+    this.initializeRoutes();
+  }
 
-// Inject dependencies into the Controller
+  private initializeControllers(): void {
+    this.createAdvController = new CreateAdvController(
+      this.diContainer.createAdvUsecase()
+    );
+    this.fetchAdvController = new FetchAdvController(
+      this.diContainer.fetchAdvUseCase()
+    );
+    this.fetchAdvImageController = new FetchAdvImageController(
+      this.diContainer.fetchS3ImageUseCase()
+    );
+    this.createTrustedUsUsController = new CreateTrustedUsUsController(
+      this.diContainer.createTurstedUsUsecase()
+    );
+    this.fetchtrustedusController = new FetchtrustedusController(
+      this.diContainer.fetchtrustedUsUseCase()
+    );
+    this.fetchtrustedusImageController = new FetchtrustedusImageController(
+      this.diContainer.fetchS3ImageUseCase()
+    );
+    this.deleteTrustedUsImageController = new DeleteTrustedUsImageController(
+      this.diContainer.deleteTrustedUsUseCase()
+    );
+    this.deleteAdvImageController = new DdeleteAdvImageController(
+      this.diContainer.deleteAdvUseCase()
+    );
+    this.editAdvController = new EditAdvController(
+      this.diContainer.editAdvUseCase()
+    );
+    this.fetchVerifyProfileController = new FetchVerifyProfileController(
+      this.diContainer.adminFetchVerifyProfilesUseCase()
+    );
+    this.verifyprofileController = new VerifyprofileController(
+      this.diContainer.adminVerifyprofileUseCase()
+    );
+    this.fethAadhaarImagesController = new FethAadhaarImagesController(
+      this.diContainer.fetchS3ImageUseCase()
+    );
+  }
 
-const createAdvController = new CreateAdvController(
-  diContainer.createAdvUsecase()
-);
+  private initializeRoutes(): void {
+    this.router.post(
+      "/createadv",
+      validateReqBody(createadvDto),
+      this.upload.single("image"),
+      this.createAdvController.create
+    );
+    this.router.get(
+      "/fetchadv",
+      validateReqQueryParams(fetchtrustedusAndAdvDto),
+      this.fetchAdvController.fetchData
+    );
+    this.router.post(
+      "/fetchadvimage",
+      validateReqBody(fetchTrustedUsAndAdvImageDto),
+      this.fetchAdvImageController.fetchImages
+    );
+    this.router.delete(
+      "/deleteadvimage/:id/:key",
+      validateReqParams(deleteAdvAndTrustedUsimageDto),
+      this.deleteAdvImageController.deleteImage
+    );
+    this.router.post(
+      "/createtrustedus",
+      this.upload.single("image"),
+      this.createTrustedUsUsController.create
+    );
+    this.router.get(
+      "/fetchtrustedus",
+      validateReqQueryParams(fetchtrustedusAndAdvDto),
+      this.fetchtrustedusController.fetchData
+    );
+    this.router.post(
+      "/fetchtrustedusimage",
+      validateReqBody(fetchTrustedUsAndAdvImageDto),
+      this.fetchtrustedusImageController.fetchImages
+    );
+    this.router.delete(
+      "/deletetrustedusimage/:id/:key",
+      validateReqParams(deleteAdvAndTrustedUsimageDto),
+      this.deleteTrustedUsImageController.deleteImage
+    );
+    this.router.post(
+      "/editadv",
+      this.upload.single("image"),
+      this.editAdvController.edit
+    );
+    this.router.get(
+      "/fetchverifyprofiledata",
+      validateReqQueryParams(fetchverifyprofileDto),
+      this.fetchVerifyProfileController.fetch
+    );
+    this.router.post(
+      "/fetchaadhaarimages",
+      validateReqBody(fetchAadhaarImagesDto),
+      this.fethAadhaarImagesController.get
+    );
+    this.router.put(
+      "/verifyprofile",
+      validateReqBody(verifyProfileDto),
+      this.verifyprofileController.verify
+    );
+  }
 
-const fetchAdvController = new FetchAdvController(
-  diContainer.fetchAdvUseCase()
-);
-
-const fetchAdvImageController = new FetchAdvImageController(
-  diContainer.fetchS3ImageUseCase()
-);
-
-const createTrustedUsUsController = new CreateTrustedUsUsController(
-  diContainer.createTurstedUsUsecase()
-);
-
-const fetchtrustedusController = new FetchtrustedusController(
-  diContainer.fetchtrustedUsUseCase()
-);
-
-const fetchtrustedusImageController = new FetchtrustedusImageController(
-  diContainer.fetchS3ImageUseCase()
-);
-
-const deleteTrustedUsImageController = new DeleteTrustedUsImageController(
-  diContainer.deleteTrustedUsUseCase()
-);
-
-const deleteAdvImageController = new DdeleteAdvImageController(
-  diContainer.deleteAdvUseCase()
-);
-
-const editAdvController = new EditAdvController(diContainer.editAdvUseCase());
-
-const fetchVerifyProfileController = new FetchVerifyProfileController(
-  diContainer.adminFetchVerifyProfilesUseCase()
-);
-
-const verifyprofileController = new VerifyprofileController(
-  diContainer.adminVerifyprofileUseCase()
-);
-
-const fethAadhaarImagesController = new FethAadhaarImagesController(
-  diContainer.fetchS3ImageUseCase()
-);
-
-/////////////////////////////////////
-
-router.post(
-  "/createadv",
-  validateReqBody(createadvDto),
-  upload.single("image"),
-  createAdvController.create
-);
-router.get(
-  "/fetchadv",
-  validateReqQueryParams(fetchtrustedusAndAdvDto),
-  fetchAdvController.fetchData
-);
-router.post(
-  "/fetchadvimage",
-  validateReqBody(fetchTrustedUsAndAdvImageDto),
-  fetchAdvImageController.fetchImages
-);
-router.delete(
-  "/deleteadvimage/:id/:key",
-  validateReqParams(deleteAdvAndTrustedUsimageDto),
-  deleteAdvImageController.deleteImage
-);
-router.post(
-  "/createtrustedus",
-  upload.single("image"),
-  createTrustedUsUsController.create
-);
-router.get(
-  "/fetchtrustedus",
-  validateReqQueryParams(fetchtrustedusAndAdvDto),
-  fetchtrustedusController.fetchData
-);
-router.post(
-  "/fetchtrustedusimage",
-  validateReqBody(fetchTrustedUsAndAdvImageDto),
-  fetchtrustedusImageController.fetchImages
-);
-router.delete(
-  "/deletetrustedusimage/:id/:key",
-  validateReqParams(deleteAdvAndTrustedUsimageDto),
-  deleteTrustedUsImageController.deleteImage
-);
-router.post("/editadv", upload.single("image"), editAdvController.edit);
-router.get(
-  "/fetchverifyprofiledata",
-  validateReqQueryParams(fetchverifyprofileDto),
-  fetchVerifyProfileController.fetch
-);
-router.post(
-  "/fetchaadhaarimages",
-  validateReqBody(fetchAadhaarImagesDto),
-  fethAadhaarImagesController.get
-);
-router.put(
-  "/verifyprofile",
-  validateReqBody(verifyProfileDto),
-  verifyprofileController.verify
-);
-
-export { router as adminRoutes };
+  public getRouter(): Router {
+    return this.router;
+  }
+}

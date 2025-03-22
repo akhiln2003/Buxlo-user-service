@@ -6,26 +6,33 @@ import {
 } from "./infrastructure/database/mongodb/connection";
 import { grpcService } from "./infrastructure/rpc/grpc/server";
 import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
-import { mentorRoutes } from "./presentation/routes/mentorRouts";
-import { userRoutes } from "./presentation/routes/userRouts";
-import { commonRoutes } from "./presentation/routes/commonRouts";
-import { adminRoutes } from "./presentation/routes/adminRouts";
+import { MentorRouter } from "./presentation/routes/mentorRouts";
+import { UserRouter } from "./presentation/routes/userRouts";
+import { CommonRouter } from "./presentation/routes/commonRouts";
+import { AdminRouter } from "./presentation/routes/adminRouts";
+import { messageBroker } from "./infrastructure/MessageBroker/config";
 
 export class App {
   constructor(private server: Iserver) {}
 
   async initialize(): Promise<void> {
+    await this.connectDB();
+    await this.connectGrpc();
+    await this.connectKafka();
     this.registerMiddleware();
     this.registerRoutes();
     this.registerErrorHandler();
-    await this.connectDB();
-    await this.connectGrpc();
   }
 
   private registerMiddleware(): void {
     this.server.registerMiddleware(loggerMiddleware);
   }
   private registerRoutes(): void {
+    const userRoutes = new UserRouter().getRouter();
+    const mentorRoutes = new MentorRouter().getRouter();
+    const adminRoutes = new AdminRouter().getRouter();
+    const commonRoutes = new CommonRouter().getRouter();
+
     this.server.registerRoutes("/api/user/mentor", mentorRoutes);
     this.server.registerRoutes("/api/user/user", userRoutes);
     this.server.registerRoutes("/api/user/admin", adminRoutes);
@@ -42,6 +49,7 @@ export class App {
 
   async shutdown(): Promise<void> {
     await disconnectDB();
+    await messageBroker.disconnect();
     console.log("Shut dow server");
   }
   private async connectDB() {
@@ -60,5 +68,9 @@ export class App {
     } catch (error) {
       console.error("Failed to start gRPC server:", error);
     }
+  }
+
+  private async connectKafka(): Promise<void> {
+    await messageBroker.connect();
   }
 }

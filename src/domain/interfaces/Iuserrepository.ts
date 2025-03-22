@@ -2,6 +2,7 @@ import { IuserUpdateData } from "../../application/interface/user/IupdateUserPro
 import { User } from "../entities/user";
 
 export interface IuserRepository {
+  create(user: User): Promise<User>;
   updateUserProfile(userId: string ,  query:IuserUpdateData): Promise<User | null>;
   getUserDetails(userId: string): Promise<User | null>;
   updateUserProfileData(

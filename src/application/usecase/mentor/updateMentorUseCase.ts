@@ -7,11 +7,13 @@ import {
 } from "../../interface/mentor/IupdateMentorProfileUseCase";
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
+import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
 
 export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
   constructor(
     private mentorRepositary: ImentorRepository,
-    private s3Service: Is3Service
+    private s3Service: Is3Service,
+    private userUpdateProducer: UserUpdatedProducer
   ) {}
   async execute(
     id: string,
@@ -51,6 +53,7 @@ export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
         id,
         updatedData
       );
+      this.userUpdateProducer.produce({id,query:updatedData});
       return data;
     } catch (error) {
       console.error(error);
