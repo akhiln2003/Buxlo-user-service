@@ -40,7 +40,7 @@ export class S3Service implements Is3Service {
       };
 
       const command = new PutObjectCommand(params);
-      const data = await this.s3.send(command);
+      const data = await this.s3.send(command);      
       return data;
     } catch (error) {
       console.error("error from s3 service ", error);
