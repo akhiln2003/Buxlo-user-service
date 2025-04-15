@@ -9,7 +9,6 @@ export class FetchMentorProfileImageController {
       const { keys } = req.body;
       const imageUrl = await this.fetchS3ImageUseCase.execute(keys);
       res.status(HttpStatusCode.OK).json({ imageUrl });
-      res.status(HttpStatusCode.OK).json({ imageUrl });
     } catch (error) {
       next(error);
     }
