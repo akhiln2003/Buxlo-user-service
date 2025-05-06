@@ -16,7 +16,7 @@ export class DeleteMentorProfileImageUseCase
       if (!key || !id) {
         throw new BadRequest();
       }
-      await this.s3Service.deleteImageFromBucket( `mentorProfiles/${key}`);
+      await this.s3Service.deleteImageFromBucket( `MentorProfiles/${key}`);
       const data = await this.mentorRepositary.deleteMentorProfileData(id, {
         avatar: key,
       });

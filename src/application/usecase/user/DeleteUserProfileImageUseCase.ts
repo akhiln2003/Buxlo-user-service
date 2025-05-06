@@ -16,7 +16,7 @@ export class DeleteUserProfileImageUseCase
       if (!key || !id) {
         throw new BadRequest();
       }
-      await this.s3Service.deleteImageFromBucket( `userProfiles/${key}`);
+      await this.s3Service.deleteImageFromBucket( `UserProfiles/${key}`);
       const data = await this.userRepositary.deleteUserProfileData(id, {
         avatar: key,
       });
