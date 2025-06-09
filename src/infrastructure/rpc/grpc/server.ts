@@ -109,7 +109,7 @@ class UserServiceGrpc {
             `0.0.0.0:${this.port}`,
             grpc.ServerCredentials.createInsecure(),
             () => {
-              console.log("Profile Service running on port 50051");
+              console.log("Grpc Service running on port 50051");
               resolve();
             }
           );
