@@ -15,7 +15,7 @@ import {
   validateReqParams,
   validateReqQueryParams,
 } from "@buxlo/common";
-import { createadvDto } from "../../zodSchemaDto/admin/createadvDto";
+// import { createadvDto } from "../../zodSchemaDto/admin/createadvDto";
 import { fetchTrustedUsAndAdvImageDto } from "../../zodSchemaDto/admin/fetchadvimageDto";
 import { fetchtrustedusAndAdvDto } from "../../zodSchemaDto/admin/fetchtrustedusAndAdvDto";
 import { verifyProfileDto } from "../../zodSchemaDto/admin/verifyProfileDto";
@@ -93,7 +93,7 @@ export class AdminRouter {
   private initializeRoutes(): void {
     this.router.post(
       "/createadv",
-      validateReqBody(createadvDto),
+      // validateReqBody(createadvDto),
       this.upload.single("image"),
       this.createAdvController.create
     );
@@ -152,6 +152,7 @@ export class AdminRouter {
       validateReqBody(verifyProfileDto),
       this.verifyprofileController.verify
     );
+    
   }
 
   public getRouter(): Router {

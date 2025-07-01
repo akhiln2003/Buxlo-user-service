@@ -6,11 +6,11 @@ export class FetchMentorsUseCase implements IfetchMentorsUseCase {
 
   async execute(
     page: number,
-    availability: "true" | "false" | "all",
+    select: "true" | "false" | "all",
     searchData?: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
-    try {            
-      return await this.mentorRepository.fetchAll(page,availability,searchData);
+    try {
+      return await this.mentorRepository.fetchAll(page, select, searchData);
     } catch (error) {
       console.error(error);
       return null;
