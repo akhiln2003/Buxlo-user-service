@@ -39,13 +39,13 @@ class UserServiceGrpc {
         >,
         callback: grpc.sendUnaryData<CreateUserProfileResponse>
       ) => {
-        const { id, email, name, role, isGoogle , avatar} = call.request as any;
+        const { id, email, name, role, isGoogle, avatar } = call.request as any;
         const userRepo = new UserRepository();
         const mentorRepo = new MentorRepository();
         try {
           const existingUser = await userRepo.getUserDetails(id);
           const existingMentor = await mentorRepo.getMentorDetails(id);
-          if ( role == "user" && existingUser ) {
+          if (role == "user" && existingUser) {
             // update existing user instead of creating a new one
             const updatedUser = await userRepo.updateUserProfileData(id, {
               name,
@@ -54,36 +54,38 @@ class UserServiceGrpc {
               id: updatedUser!.id,
               success: true,
             });
-          } else if(role == "mentor" && existingMentor) {
-              // update existing user instead of creating a new one
-              const updatedMentor = await mentorRepo.updateMentorProfileData(id, {
-                name,
-              });
-              callback(null, {
-                id: updatedMentor!.id,
-                success: true,
-              });
-          } else if( role == "user" && !existingUser ){
+          } else if (role == "mentor" && existingMentor) {
+            // update existing user instead of creating a new one
+            const updatedMentor = await mentorRepo.updateMentorProfileData(id, {
+              name,
+            });
+            callback(null, {
+              id: updatedMentor!.id,
+              success: true,
+            });
+          } else if (role == "user" && !existingUser) {
             const createdUser = await userRepo.create({
               id,
               email,
               name,
               role,
               isGoogle,
-              avatar
+              avatar,
             });
             callback(null, {
               id: createdUser.id,
               success: true,
             });
-          }else{
+          } else {
             const createdMentor = await mentorRepo.create({
               id,
               email,
               name,
               role,
               isGoogle,
-              avatar
+              avatar,
+              salary: 0,
+              yearsOfExperience: 0,
             });
             callback(null, {
               id: createdMentor.id,
@@ -106,13 +108,13 @@ class UserServiceGrpc {
     return new Promise((resolve, reject) => {
       try {
         this.server.bindAsync(
-            `0.0.0.0:${this.port}`,
-            grpc.ServerCredentials.createInsecure(),
-            () => {
-              console.log("Grpc Service running on port 50051");
-              resolve();
-            }
-          );
+          `0.0.0.0:${this.port}`,
+          grpc.ServerCredentials.createInsecure(),
+          () => {
+            console.log("Grpc Service running on port 50051");
+            resolve();
+          }
+        );
       } catch (error) {
         reject(error);
       }

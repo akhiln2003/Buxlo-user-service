@@ -12,6 +12,8 @@ export class MentorRepository implements ImentorRepository {
     role,
     isGoogle,
     avatar,
+    salary,
+    yearsOfExperience,
   }: {
     id: string;
     email: string;
@@ -19,6 +21,8 @@ export class MentorRepository implements ImentorRepository {
     role: string;
     isGoogle: boolean;
     avatar: string;
+    salary: number;
+    yearsOfExperience: number;
   }): Promise<Mentor> {
     try {
       const newUser = MentorProfile.build({
@@ -28,6 +32,8 @@ export class MentorRepository implements ImentorRepository {
         role,
         isGoogle,
         avatar,
+        salary,
+        yearsOfExperience,
       });
       return await newUser.save();
     } catch (error: any) {
@@ -184,36 +190,59 @@ export class MentorRepository implements ImentorRepository {
   }
   async fetchAll(
     page: number,
-    availability: "true" | "false" | "all",
-    searchData?: string
+    experience: string,
+    rating: string,
+    salary: string,
+    searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     try {
       const limit = 10,
         skip = (page - 1) * limit,
         filter: any = {};
-      // Apply search filter if searchData is provided
-      if (searchData && searchData != "undefined") {
+
+      // apply verified filter
+      filter.verified = "verified";
+      // Apply search filter
+      if (searchData) {
         filter.$or = [
-          { name: { $regex: searchData, $options: "i" } },
-          { email: { $regex: searchData, $options: "i" } },
+          { name: { $regex: `^${searchData}`, $options: "i" } },
+          { email: { $regex: `^${searchData}`, $options: "i" } },
         ];
       }
-      // Apply verified status filter if not "all"
-      if (availability !== "all") {
-        filter.availability = Boolean(availability);
+
+      // Apply experience filter
+      if (experience) {
+        if (experience.includes("-")) {
+          const [min, max] = experience.split("-").map(Number);
+          if (!isNaN(min) && !isNaN(max)) {
+            filter.yearsOfExperience = { $gte: min, $lte: max };
+          }
+        } else {
+          const min = Number(experience);
+          if (!isNaN(min)) {
+            filter.yearsOfExperience = { $gte: min };
+          }
+        }
       }
 
-      // Count total documents based on filter
+      // Apply rating filter
+      if (rating) {
+        filter.rating = rating;
+      }
+
+      // Apply salary filter
+      if (salary) {
+        const [min, max] = salary.split(",").map(Number);
+        if (!isNaN(min) && !isNaN(max)) {
+          filter.salary = { $gte: min, $lte: max };
+        }
+      }
       const totalCount = await MentorProfile.countDocuments(filter);
       const totalPages = Math.ceil(totalCount / limit);
-      // Fetch users with pagination
-
       const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
-
       return { datas, totalPages };
     } catch (error: any) {
       console.error("Error form fetch All mentors : ", error.message);
-
       throw new InternalServerError();
     }
   }

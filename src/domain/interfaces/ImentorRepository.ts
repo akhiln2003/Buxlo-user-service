@@ -39,7 +39,11 @@ export interface ImentorRepository {
     verified: "verified" | "applicationPending" | "all" | "verificationPending",
     searchData?: string | undefined
   ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
-  fetchAll( page: number,
-    availability: "true" | "false" | "all" ,
-    searchData?: string): Promise<{ datas: Mentor[]; totalPages: number } | null>;
+  fetchAll(
+    page: number,
+    experience: string,
+    rating: string,
+    salary: string,
+    searchData: string
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

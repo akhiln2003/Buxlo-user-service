@@ -6,10 +6,12 @@ export class FetchMentorsController {
   constructor(private fetchMentorsUseCase: IfetchMentorsUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { page, select, searchData } = req.query;
+      const { page, experience, rating, salary, searchData } = req.query;
       const responseData = await this.fetchMentorsUseCase.execute(
         Number(page),
-        String(select) as "all" | "true" | "false",
+        String(experience),
+        String(rating),
+        String(salary),
         String(searchData)
       );
       res.status(HttpStatusCode.OK).json({ ...responseData });

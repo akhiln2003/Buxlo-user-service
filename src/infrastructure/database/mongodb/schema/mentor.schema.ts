@@ -5,18 +5,18 @@ interface MentorAttr {
   name: string;
   email: string;
   role: string;
+  salary: number;
   avatar?: string;
   isGoogle: boolean;
   number?: string;
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
-  verified?: "verified"| "applicationPending" | "verificationPending";
-  aadhaarFrontImage?:string;
-  aadhaarBackImage?:string
-  aadhaarName?:string;
-  aadhaarNumber?:string;
-
+  verified?: "verified" | "applicationPending" | "verificationPending";
+  aadhaarFrontImage?: string;
+  aadhaarBackImage?: string;
+  aadhaarName?: string;
+  aadhaarNumber?: string;
 }
 
 interface MentorDoc extends mongoose.Document {
@@ -26,14 +26,15 @@ interface MentorDoc extends mongoose.Document {
   avatar?: string;
   isGoogle: boolean;
   role: "mentor" | "admin";
+  salary: number;
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
-  verified: "verified"| "applicationPending" | "verificationPending";
-  aadhaarFrontImage?:string;
-  aadhaarBackImage?:string
-  aadhaarName?:string;
-  aadhaarNumber?:string;
+  verified: "verified" | "applicationPending" | "verificationPending";
+  aadhaarFrontImage?: string;
+  aadhaarBackImage?: string;
+  aadhaarName?: string;
+  aadhaarNumber?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,7 +65,7 @@ const mentorSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: [ "mentor", "admin"],
+      enum: ["mentor", "admin"],
     },
     bio: {
       type: String,
@@ -75,9 +76,14 @@ const mentorSchema = new mongoose.Schema(
     yearsOfExperience: {
       type: Number,
     },
+    salary: {
+      type: Number,
+      require: true,
+      default: 0,
+    },
     verified: {
       type: String,
-      enum: [ "verified", "applicationPending" , "verificationPending"],
+      enum: ["verified", "applicationPending", "verificationPending"],
       default: "applicationPending",
       required: true,
     },
