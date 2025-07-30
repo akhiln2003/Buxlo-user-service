@@ -106,9 +106,9 @@ const mentorSchema = new mongoose.Schema(
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
-      },
+      }
     },
-    timestamps: true,
+    timestamps: true
   }
 );
 
