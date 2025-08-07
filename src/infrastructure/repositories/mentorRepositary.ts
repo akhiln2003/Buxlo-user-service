@@ -12,7 +12,6 @@ export class MentorRepository implements ImentorRepository {
     role,
     isGoogle,
     avatar,
-    salary,
     yearsOfExperience,
   }: {
     id: string;
@@ -21,7 +20,6 @@ export class MentorRepository implements ImentorRepository {
     role: string;
     isGoogle: boolean;
     avatar: string;
-    salary: number;
     yearsOfExperience: number;
   }): Promise<Mentor> {
     try {
@@ -32,7 +30,6 @@ export class MentorRepository implements ImentorRepository {
         role,
         isGoogle,
         avatar,
-        salary,
         yearsOfExperience,
       });
       return await newUser.save();
@@ -192,7 +189,6 @@ export class MentorRepository implements ImentorRepository {
     page: number,
     experience: string,
     rating: string,
-    salary: string,
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     try {
@@ -230,13 +226,7 @@ export class MentorRepository implements ImentorRepository {
         filter.rating = rating;
       }
 
-      // Apply salary filter
-      if (salary) {
-        const [min, max] = salary.split(",").map(Number);
-        if (!isNaN(min) && !isNaN(max)) {
-          filter.salary = { $gte: min, $lte: max };
-        }
-      }
+      
       const totalCount = await MentorProfile.countDocuments(filter);
       const totalPages = Math.ceil(totalCount / limit);
       const datas = await MentorProfile.find(filter).skip(skip).limit(limit);

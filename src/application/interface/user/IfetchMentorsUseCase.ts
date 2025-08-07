@@ -5,7 +5,6 @@ export interface IfetchMentorsUseCase {
     page: number,
     experience: string,
     raiting: string,
-    salary: string,
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

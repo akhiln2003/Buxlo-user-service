@@ -4,7 +4,6 @@ export class Mentor {
     public email: string,
     public role: string,
     public isGoogle: boolean,
-    public salary:number,
     public id?: string,
     public avatar?: string,
     public bio?: string,

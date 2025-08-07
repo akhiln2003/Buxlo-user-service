@@ -84,7 +84,6 @@ class UserServiceGrpc {
               role,
               isGoogle,
               avatar,
-              salary: 0,
               yearsOfExperience: 0,
             });
             callback(null, {

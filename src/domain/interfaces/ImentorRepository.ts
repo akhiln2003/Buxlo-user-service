@@ -43,7 +43,6 @@ export interface ImentorRepository {
     page: number,
     experience: string,
     rating: string,
-    salary: string,
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

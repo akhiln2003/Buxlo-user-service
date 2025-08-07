@@ -5,7 +5,6 @@ interface MentorAttr {
   name: string;
   email: string;
   role: string;
-  salary: number;
   avatar?: string;
   isGoogle: boolean;
   number?: string;
@@ -26,7 +25,6 @@ interface MentorDoc extends mongoose.Document {
   avatar?: string;
   isGoogle: boolean;
   role: "mentor" | "admin";
-  salary: number;
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
@@ -76,11 +74,6 @@ const mentorSchema = new mongoose.Schema(
     yearsOfExperience: {
       type: Number,
     },
-    salary: {
-      type: Number,
-      require: true,
-      default: 0,
-    },
     verified: {
       type: String,
       enum: ["verified", "applicationPending", "verificationPending"],
@@ -106,9 +99,9 @@ const mentorSchema = new mongoose.Schema(
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
-      }
+      },
     },
-    timestamps: true
+    timestamps: true,
   }
 );
 

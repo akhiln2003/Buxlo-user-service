@@ -8,7 +8,6 @@ export class FetchMentorsUseCase implements IfetchMentorsUseCase {
     page: number,
     experience: string,
     rating: string,
-    salary: string,
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     try {
@@ -16,7 +15,6 @@ export class FetchMentorsUseCase implements IfetchMentorsUseCase {
         page,
         experience,
         rating,
-        salary,
         searchData
       );
     } catch (error) {
