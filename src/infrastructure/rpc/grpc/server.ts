@@ -21,16 +21,16 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {});
 const userProto = (grpc.loadPackageDefinition(packageDefinition) as any).user;
 
 class UserServiceGrpc {
-  private server: grpc.Server;
-  private port: number;
+  private _server: grpc.Server;
+  private _port: number;
 
   constructor(port: number) {
-    this.server = new grpc.Server();
-    this.port = port;
-    this.initializeService();
+    this._server = new grpc.Server();
+    this._port = port;
+    this._initializeService();
   }
 
-  private initializeService() {
+  private _initializeService() {
     const userService = {
       CreateUserProfile: async (
         call: grpc.ServerUnaryCall<
@@ -100,14 +100,14 @@ class UserServiceGrpc {
         }
       },
     };
-    this.server.addService(userProto.UserService.service, userService);
+    this._server.addService(userProto.UserService.service, userService);
   }
 
   public start(): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        this.server.bindAsync(
-          `0.0.0.0:${this.port}`,
+        this._server.bindAsync(
+          `0.0.0.0:${this._port}`,
           grpc.ServerCredentials.createInsecure(),
           () => {
             console.log("Grpc Service running on port 50051");

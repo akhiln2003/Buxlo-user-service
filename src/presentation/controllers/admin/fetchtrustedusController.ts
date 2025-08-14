@@ -3,11 +3,11 @@ import { IfetchtrustedUsUseCase } from "../../../application/interface/admin/Ife
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchtrustedusController {
-  constructor(private fetchtrustedUsUseCase: IfetchtrustedUsUseCase) {}
+  constructor(private _fetchtrustedUsUseCase: IfetchtrustedUsUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page } = req.query;
-        const responseData = await this.fetchtrustedUsUseCase.execute(Number(page));
+        const responseData = await this._fetchtrustedUsUseCase.execute(Number(page));
       
       res.status(HttpStatusCode.OK).json({ ...responseData });
     } catch (error) {

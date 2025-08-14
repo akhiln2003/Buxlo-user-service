@@ -2,7 +2,7 @@ import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
 import { IfetchMentorsUseCase } from "../../interface/user/IfetchMentorsUseCase";
 export class FetchMentorsUseCase implements IfetchMentorsUseCase {
-  constructor(private mentorRepository: ImentorRepository) {}
+  constructor(private _mentorRepository: ImentorRepository) {}
 
   async execute(
     page: number,
@@ -11,7 +11,7 @@ export class FetchMentorsUseCase implements IfetchMentorsUseCase {
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     try {
-      return await this.mentorRepository.fetchAll(
+      return await this._mentorRepository.fetchAll(
         page,
         experience,
         rating,

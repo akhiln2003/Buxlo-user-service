@@ -11,9 +11,9 @@ import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka
 
 export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   constructor(
-    private userRepositary: IuserRepository,
-    private s3Service: Is3Service,
-    private userUpdateProducer: UserUpdatedProducer
+    private _userRepositary: IuserRepository,
+    private _s3Service: Is3Service,
+    private _userUpdateProducer: UserUpdatedProducer
   ) {}
   async execute(
     id: string,
@@ -24,7 +24,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
     try {
       if (file) {
         if (currentProfileImage) {
-          await this.s3Service.deleteImageFromBucket(
+          await this._s3Service.deleteImageFromBucket(
             `UserProfiles/${currentProfileImage}`
           );
         }
@@ -35,7 +35,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
           .resize({ height: 300, width: 300, fit: "cover" })
           .toBuffer();
 
-        const response = await this.s3Service.uploadImageToBucket(
+        const response = await this._s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
           `UserProfiles/${randomImageName}`
@@ -49,8 +49,11 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
           throw new BadRequest("Profile upload faild please try again laiter");
         }
       }
-      const data = await this.userRepositary.updateUserProfile(id, updatedData);
-      this.userUpdateProducer.produce({ id, query: updatedData });
+      const data = await this._userRepositary.updateUserProfile(
+        id,
+        updatedData
+      );
+      this._userUpdateProducer.produce({ id, query: updatedData });
       return data;
     } catch (error) {
       console.error(error);

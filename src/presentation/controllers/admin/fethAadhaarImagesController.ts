@@ -3,10 +3,10 @@ import { IfetchS3ImageUseCase } from "../../../application/interface/common/Ifet
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FethAadhaarImagesController {
-  constructor(private fetchS3ImageUseCase: IfetchS3ImageUseCase) {}
+  constructor(private _fetchS3ImageUseCase: IfetchS3ImageUseCase) {}
   get = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const imageUrl = await this.fetchS3ImageUseCase.execute(req.body);
+      const imageUrl = await this._fetchS3ImageUseCase.execute(req.body);
       res.status(HttpStatusCode.OK).json({ imageUrl });
     } catch (error) {
       next(error);

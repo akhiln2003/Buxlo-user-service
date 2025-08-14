@@ -7,8 +7,8 @@ import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 
 export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
   constructor(
-    private mentorRepository: ImentorRepository,
-    private s3Service: Is3Service
+    private _mentorRepository: ImentorRepository,
+    private _s3Service: Is3Service
   ) {}
 
   async execute(
@@ -19,7 +19,7 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
       aadhaarNumber: string;
       aadhaarFrontImage: string;
       aadhaarBackImage: string;
-      verified: "verified"| "applicationPending" | "verificationPending"
+      verified: "verified" | "applicationPending" | "verificationPending";
     }
   ): Promise<any | Mentor> {
     try {
@@ -48,12 +48,12 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
         })
         .toBuffer();
 
-      const friendImageResponse = await this.s3Service.uploadImageToBucket(
+      const friendImageResponse = await this._s3Service.uploadImageToBucket(
         backBuffer,
         files.backImage[0].mimetype,
         `Kyc/${randomBackImageName}`
       );
-      const backImageResponse = await this.s3Service.uploadImageToBucket(
+      const backImageResponse = await this._s3Service.uploadImageToBucket(
         friendBuffer,
         files.frontImage[0].mimetype,
         `Kyc/${randomFriendImageName}`
@@ -72,7 +72,10 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
         throw new BadRequest("Faild to upload image please try again laiter");
       }
 
-      const data = await this.mentorRepository.applyProfileVerification(id, query);
+      const data = await this._mentorRepository.applyProfileVerification(
+        id,
+        query
+      );
 
       return data;
     } catch (error) {

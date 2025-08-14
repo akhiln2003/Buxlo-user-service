@@ -10,61 +10,64 @@ import { validateReqBody } from "@buxlo/common";
 import { fetchProfileImageDto } from "../../zodSchemaDto/common/fetchprofileimage.Dto";
 
 export class UserRouter {
-  private router: Router;
-  private diContainer: DIContainer;
-  private upload = multer({ storage: multer.memoryStorage() });
+  private _router: Router;
+  private _diContainer: DIContainer;
+  private _upload = multer({ storage: multer.memoryStorage() });
 
-  private fetchprofileController!: FetchUserProfileController;
-  private updateprofileController!: UpdateUserProfileController;
-  private fetchProfileImageController!: FetchUserProfileImageController;
-  private deleteProfileImageController!: DeleteUserProfileImageController;
-  private fetchMentors!: FetchMentorsController;
+  private _fetchprofileController!: FetchUserProfileController;
+  private _updateprofileController!: UpdateUserProfileController;
+  private _fetchProfileImageController!: FetchUserProfileImageController;
+  private _deleteProfileImageController!: DeleteUserProfileImageController;
+  private _fetchMentors!: FetchMentorsController;
 
   constructor() {
-    this.router = Router();
-    this.diContainer = new DIContainer();
-    this.initializeControllers();
-    this.initializeRoutes();
+    this._router = Router();
+    this._diContainer = new DIContainer();
+    this._initializeControllers();
+    this._initializeRoutes();
   }
 
-  private initializeControllers(): void {
-    this.fetchprofileController = new FetchUserProfileController(
-      this.diContainer.fetchUserProfileUseCase()
+  private _initializeControllers(): void {
+    this._fetchprofileController = new FetchUserProfileController(
+      this._diContainer.fetchUserProfileUseCase()
     );
-    this.updateprofileController = new UpdateUserProfileController(
-      this.diContainer.updateUserProfileUseCase()
+    this._updateprofileController = new UpdateUserProfileController(
+      this._diContainer.updateUserProfileUseCase()
     );
-    this.fetchProfileImageController = new FetchUserProfileImageController(
-      this.diContainer.fetchS3ImageUseCase()
+    this._fetchProfileImageController = new FetchUserProfileImageController(
+      this._diContainer.fetchS3ImageUseCase()
     );
-    this.deleteProfileImageController = new DeleteUserProfileImageController(
-      this.diContainer.deleteUserProfileImageUseCase()
+    this._deleteProfileImageController = new DeleteUserProfileImageController(
+      this._diContainer.deleteUserProfileImageUseCase()
     );
-    this.fetchMentors = new FetchMentorsController(
-      this.diContainer.fetchMentorsUseCase()
+    this._fetchMentors = new FetchMentorsController(
+      this._diContainer.fetchMentorsUseCase()
     );
   }
 
-  private initializeRoutes(): void {
-    this.router.get("/fetchprofile/:id", this.fetchprofileController.fetchData);
-    this.router.put(
+  private _initializeRoutes(): void {
+    this._router.get(
+      "/fetchprofile/:id",
+      this._fetchprofileController.fetchData
+    );
+    this._router.put(
       "/updateprofile",
-      this.upload.single("newProfileImage"),
-      this.updateprofileController.update
+      this._upload.single("newProfileImage"),
+      this._updateprofileController.update
     );
-    this.router.post(
+    this._router.post(
       "/fetchprofileimage",
       validateReqBody(fetchProfileImageDto),
-      this.fetchProfileImageController.fetchImage
+      this._fetchProfileImageController.fetchImage
     );
-    this.router.delete(
+    this._router.delete(
       "/deleteprofileimage/:id/:key",
-      this.deleteProfileImageController.deleteImage
+      this._deleteProfileImageController.deleteImage
     );
-    this.router.get("/fetchmentors", this.fetchMentors.fetchData);
+    this._router.get("/fetchmentors", this._fetchMentors.fetchData);
   }
 
   public getRouter(): Router {
-    return this.router;
+    return this._router;
   }
 }

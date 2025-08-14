@@ -5,13 +5,13 @@ import { IadminFetchVerifyProfilesUseCase } from "../../interface/admin/IadminFe
 export class AdminFetchVerifyProfilesUseCase
   implements IadminFetchVerifyProfilesUseCase
 {
-  constructor(private mentorRepository: ImentorRepository) {}
+  constructor(private _mentorRepository: ImentorRepository) {}
 
   async execute(
     pageNum: number,
     searchData:string,
     verified:"verified" | "applicationPending" | "all" | "verificationPending"
   ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
-    return this.mentorRepository.find(pageNum , verified ,searchData );
+    return this._mentorRepository.find(pageNum , verified ,searchData );
   }
 }

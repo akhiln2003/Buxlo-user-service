@@ -3,13 +3,13 @@ import { ImentorVerifyprofileUseCase } from "../../../application/interface/ment
 
 export class MentorVerifyprofileController {
   constructor(
-    private mentorVerifyprofileUseCase: ImentorVerifyprofileUseCase
+    private _mentorVerifyprofileUseCase: ImentorVerifyprofileUseCase
   ) {}
   verify = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { data } = req.body;
 
-      const responseData = await this.mentorVerifyprofileUseCase.execute(
+      const responseData = await this._mentorVerifyprofileUseCase.execute(
         data.id,
         req.files,
         {

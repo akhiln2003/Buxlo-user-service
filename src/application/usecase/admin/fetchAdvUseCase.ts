@@ -3,11 +3,11 @@ import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
 import { IfetchAdvUseCase } from "../../interface/admin/IfetchAdvUseCase";
 
 export class FetchAdvUseCase implements IfetchAdvUseCase {
-  constructor(private advRepository: IadvRepository) {}
+  constructor(private _advRepository: IadvRepository) {}
 
   async execute(
     page: number
   ): Promise<{ advs: Adv[]; totalPages: number } | null> {
-    return await this.advRepository.getAdvDetails(page);
+    return await this._advRepository.getAdvDetails(page);
   }
 }

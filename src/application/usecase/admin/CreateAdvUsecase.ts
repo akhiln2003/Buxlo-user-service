@@ -10,8 +10,8 @@ import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
 
 export class CreateAdvUsecase implements IcreateAdvUsecase {
   constructor(
-    private s3Service: Is3Service,
-    private advRepository: IadvRepository
+    private _s3Service: Is3Service,
+    private _advRepository: IadvRepository
   ) {}
   async execute(newData: IcreateAdvData, file: any): Promise<Adv | any> {
     try {
@@ -29,8 +29,8 @@ export class CreateAdvUsecase implements IcreateAdvUsecase {
             fit: "fill",
           })
           .toBuffer();
-          
-        const response = await this.s3Service.uploadImageToBucket(
+
+        const response = await this._s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
           `Adv/${randomImageName}`
@@ -46,7 +46,7 @@ export class CreateAdvUsecase implements IcreateAdvUsecase {
         }
       }
 
-      const data = await this.advRepository.create(newData);
+      const data = await this._advRepository.create(newData);
       return data;
     } catch (error) {
       console.error(error);

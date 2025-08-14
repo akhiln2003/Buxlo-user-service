@@ -3,9 +3,9 @@ import { ItrustedUsRepository } from "../../../domain/interfaces/ItrustedUsRepos
 import { IfetchtrustedUsUseCase } from "../../interface/admin/IfetchtrustedUsUseCase";
 
 export class FetchtrustedUsUseCase implements IfetchtrustedUsUseCase {
-  constructor(private trustedUsRepository: ItrustedUsRepository) {}
+  constructor(private _trustedUsRepository: ItrustedUsRepository) {}
 
   async execute(page:number): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
-    return await this.trustedUsRepository.getTrustedUsDetails(page);
+    return await this._trustedUsRepository.getTrustedUsDetails(page);
   }
 }

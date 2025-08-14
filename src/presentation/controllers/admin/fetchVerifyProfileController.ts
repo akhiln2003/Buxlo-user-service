@@ -4,13 +4,13 @@ import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchVerifyProfileController {
   constructor(
-    private adminFetchVerifyProfilesUseCase: IadminFetchVerifyProfilesUseCase
+    private _adminFetchVerifyProfilesUseCase: IadminFetchVerifyProfilesUseCase
   ) {}
 
   fetch = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { page, searchData , verified } = req.query;
-      const responseData = await this.adminFetchVerifyProfilesUseCase.execute(
+      const { page, searchData, verified } = req.query;
+      const responseData = await this._adminFetchVerifyProfilesUseCase.execute(
         Number(page),
         String(searchData),
         String(verified)

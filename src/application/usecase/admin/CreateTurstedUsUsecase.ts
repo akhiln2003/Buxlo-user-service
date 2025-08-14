@@ -6,8 +6,8 @@ import sharp from "sharp";
 
 export class CreateTurstedUsUsecase implements IcreateTurstedUsUsecase {
   constructor(
-    private s3Service: Is3Service,
-    private trustedUsRepository: ItrustedUsRepository
+    private _s3Service: Is3Service,
+    private _trustedUsRepository: ItrustedUsRepository
   ) {}
   async execute(file: any): Promise<any> {
     try {
@@ -23,7 +23,7 @@ export class CreateTurstedUsUsecase implements IcreateTurstedUsUsecase {
           })
           .toBuffer();
 
-        const response = await this.s3Service.uploadImageToBucket(
+        const response = await this._s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
           `TrustedUs/${randomImageName}`
@@ -33,7 +33,7 @@ export class CreateTurstedUsUsecase implements IcreateTurstedUsUsecase {
           const newData = {
             image: `${randomImageName}`,
           };
-          const data = await this.trustedUsRepository.create(newData);
+          const data = await this._trustedUsRepository.create(newData);
           return data;
         } else {
           throw new BadRequest("Profile upload faild please try again laiter");

@@ -27,135 +27,134 @@ import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarIma
 import { fetchAadhaarImagesDto } from "../../zodSchemaDto/admin/fethAadhaarImagesDto";
 
 export class AdminRouter {
-  private router: Router;
-  private diContainer: DIContainer;
-  private upload = multer({ storage: multer.memoryStorage() });
+  private _router: Router;
+  private _diContainer: DIContainer;
+  private _upload = multer({ storage: multer.memoryStorage() });
 
-  private createAdvController!: CreateAdvController;
-  private fetchAdvController!: FetchAdvController;
-  private fetchAdvImageController!: FetchAdvImageController;
-  private createTrustedUsUsController!: CreateTrustedUsUsController;
-  private fetchtrustedusController!: FetchtrustedusController;
-  private fetchtrustedusImageController!: FetchtrustedusImageController;
-  private deleteTrustedUsImageController!: DeleteTrustedUsImageController;
-  private deleteAdvImageController!: DdeleteAdvImageController;
-  private editAdvController!: EditAdvController;
-  private fetchVerifyProfileController!: FetchVerifyProfileController;
-  private verifyprofileController!: VerifyprofileController;
-  private fethAadhaarImagesController!: FethAadhaarImagesController;
+  private _createAdvController!: CreateAdvController;
+  private _fetchAdvController!: FetchAdvController;
+  private _fetchAdvImageController!: FetchAdvImageController;
+  private _createTrustedUsUsController!: CreateTrustedUsUsController;
+  private _fetchtrustedusController!: FetchtrustedusController;
+  private _fetchtrustedusImageController!: FetchtrustedusImageController;
+  private _deleteTrustedUsImageController!: DeleteTrustedUsImageController;
+  private _deleteAdvImageController!: DdeleteAdvImageController;
+  private _editAdvController!: EditAdvController;
+  private _fetchVerifyProfileController!: FetchVerifyProfileController;
+  private _verifyprofileController!: VerifyprofileController;
+  private _fethAadhaarImagesController!: FethAadhaarImagesController;
 
   constructor() {
-    this.router = Router();
-    this.diContainer = new DIContainer();
-    this.initializeControllers();
-    this.initializeRoutes();
+    this._router = Router();
+    this._diContainer = new DIContainer();
+    this._initializeControllers();
+    this._initializeRoutes();
   }
 
-  private initializeControllers(): void {
-    this.createAdvController = new CreateAdvController(
-      this.diContainer.createAdvUsecase()
+  private _initializeControllers(): void {
+    this._createAdvController = new CreateAdvController(
+      this._diContainer.createAdvUsecase()
     );
-    this.fetchAdvController = new FetchAdvController(
-      this.diContainer.fetchAdvUseCase()
+    this._fetchAdvController = new FetchAdvController(
+      this._diContainer.fetchAdvUseCase()
     );
-    this.fetchAdvImageController = new FetchAdvImageController(
-      this.diContainer.fetchS3ImageUseCase()
+    this._fetchAdvImageController = new FetchAdvImageController(
+      this._diContainer.fetchS3ImageUseCase()
     );
-    this.createTrustedUsUsController = new CreateTrustedUsUsController(
-      this.diContainer.createTurstedUsUsecase()
+    this._createTrustedUsUsController = new CreateTrustedUsUsController(
+      this._diContainer.createTurstedUsUsecase()
     );
-    this.fetchtrustedusController = new FetchtrustedusController(
-      this.diContainer.fetchtrustedUsUseCase()
+    this._fetchtrustedusController = new FetchtrustedusController(
+      this._diContainer.fetchtrustedUsUseCase()
     );
-    this.fetchtrustedusImageController = new FetchtrustedusImageController(
-      this.diContainer.fetchS3ImageUseCase()
+    this._fetchtrustedusImageController = new FetchtrustedusImageController(
+      this._diContainer.fetchS3ImageUseCase()
     );
-    this.deleteTrustedUsImageController = new DeleteTrustedUsImageController(
-      this.diContainer.deleteTrustedUsUseCase()
+    this._deleteTrustedUsImageController = new DeleteTrustedUsImageController(
+      this._diContainer.deleteTrustedUsUseCase()
     );
-    this.deleteAdvImageController = new DdeleteAdvImageController(
-      this.diContainer.deleteAdvUseCase()
+    this._deleteAdvImageController = new DdeleteAdvImageController(
+      this._diContainer.deleteAdvUseCase()
     );
-    this.editAdvController = new EditAdvController(
-      this.diContainer.editAdvUseCase()
+    this._editAdvController = new EditAdvController(
+      this._diContainer.editAdvUseCase()
     );
-    this.fetchVerifyProfileController = new FetchVerifyProfileController(
-      this.diContainer.adminFetchVerifyProfilesUseCase()
+    this._fetchVerifyProfileController = new FetchVerifyProfileController(
+      this._diContainer.adminFetchVerifyProfilesUseCase()
     );
-    this.verifyprofileController = new VerifyprofileController(
-      this.diContainer.adminVerifyprofileUseCase()
+    this._verifyprofileController = new VerifyprofileController(
+      this._diContainer.adminVerifyprofileUseCase()
     );
-    this.fethAadhaarImagesController = new FethAadhaarImagesController(
-      this.diContainer.fetchS3ImageUseCase()
+    this._fethAadhaarImagesController = new FethAadhaarImagesController(
+      this._diContainer.fetchS3ImageUseCase()
     );
   }
 
-  private initializeRoutes(): void {
-    this.router.post(
+  private _initializeRoutes(): void {
+    this._router.post(
       "/createadv",
       // validateReqBody(createadvDto),
-      this.upload.single("image"),
-      this.createAdvController.create
+      this._upload.single("image"),
+      this._createAdvController.create
     );
-    this.router.get(
+    this._router.get(
       "/fetchadv",
       validateReqQueryParams(fetchtrustedusAndAdvDto),
-      this.fetchAdvController.fetchData
+      this._fetchAdvController.fetchData
     );
-    this.router.post(
+    this._router.post(
       "/fetchadvimage",
       validateReqBody(fetchTrustedUsAndAdvImageDto),
-      this.fetchAdvImageController.fetchImages
+      this._fetchAdvImageController.fetchImages
     );
-    this.router.delete(
+    this._router.delete(
       "/deleteadvimage/:id/:key",
       validateReqParams(deleteAdvAndTrustedUsimageDto),
-      this.deleteAdvImageController.deleteImage
+      this._deleteAdvImageController.deleteImage
     );
-    this.router.post(
+    this._router.post(
       "/createtrustedus",
-      this.upload.single("image"),
-      this.createTrustedUsUsController.create
+      this._upload.single("image"),
+      this._createTrustedUsUsController.create
     );
-    this.router.get(
+    this._router.get(
       "/fetchtrustedus",
       validateReqQueryParams(fetchtrustedusAndAdvDto),
-      this.fetchtrustedusController.fetchData
+      this._fetchtrustedusController.fetchData
     );
-    this.router.post(
+    this._router.post(
       "/fetchtrustedusimage",
       validateReqBody(fetchTrustedUsAndAdvImageDto),
-      this.fetchtrustedusImageController.fetchImages
+      this._fetchtrustedusImageController.fetchImages
     );
-    this.router.delete(
+    this._router.delete(
       "/deletetrustedusimage/:id/:key",
       validateReqParams(deleteAdvAndTrustedUsimageDto),
-      this.deleteTrustedUsImageController.deleteImage
+      this._deleteTrustedUsImageController.deleteImage
     );
-    this.router.post(
+    this._router.post(
       "/editadv",
-      this.upload.single("image"),
-      this.editAdvController.edit
+      this._upload.single("image"),
+      this._editAdvController.edit
     );
-    this.router.get(
+    this._router.get(
       "/fetchverifyprofiledata",
       validateReqQueryParams(fetchverifyprofileDto),
-      this.fetchVerifyProfileController.fetch
+      this._fetchVerifyProfileController.fetch
     );
-    this.router.post(
+    this._router.post(
       "/fetchaadhaarimages",
       validateReqBody(fetchAadhaarImagesDto),
-      this.fethAadhaarImagesController.get
+      this._fethAadhaarImagesController.get
     );
-    this.router.put(
+    this._router.put(
       "/verifyprofile",
       validateReqBody(verifyProfileDto),
-      this.verifyprofileController.verify
+      this._verifyprofileController.verify
     );
-    
   }
 
   public getRouter(): Router {
-    return this.router;
+    return this._router;
   }
 }

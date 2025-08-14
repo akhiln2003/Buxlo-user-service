@@ -3,12 +3,12 @@ import { IadminVerifyprofileUseCase } from "../../../application/interface/admin
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class VerifyprofileController {
-  constructor(private adminVerifyprofileUseCase: IadminVerifyprofileUseCase) {}
+  constructor(private _adminVerifyprofileUseCase: IadminVerifyprofileUseCase) {}
   verify = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id, verified, unsetData } = req.body;
 
-      const updatedData = await this.adminVerifyprofileUseCase.execute(
+      const updatedData = await this._adminVerifyprofileUseCase.execute(
         id,
         verified,
         unsetData

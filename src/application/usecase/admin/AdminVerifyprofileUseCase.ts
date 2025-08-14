@@ -6,8 +6,8 @@ import { IadminVerifyprofileUseCase } from "../../interface/admin/IadminVerifypr
 
 export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
   constructor(
-    private mentorRepository: ImentorRepository,
-    private s3Service: Is3Service
+    private _mentorRepository: ImentorRepository,
+    private _s3Service: Is3Service
   ) {}
 
   async execute(
@@ -27,10 +27,10 @@ export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
         }
 
         const deletePromises = [
-          this.s3Service.deleteImageFromBucket(
+          this._s3Service.deleteImageFromBucket(
             `Kyc/${unsetData.aadhaarFrontImage}`
           ),
-          this.s3Service.deleteImageFromBucket(
+          this._s3Service.deleteImageFromBucket(
             `Kyc/${unsetData.aadhaarBackImage}`
           ),
         ];
@@ -38,7 +38,7 @@ export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
         await Promise.all(deletePromises);
       }
 
-      return await this.mentorRepository.verifyProfile(
+      return await this._mentorRepository.verifyProfile(
         id,
         verified,
         unsetData || undefined

@@ -3,7 +3,7 @@ import { IcreateAdvUsecase } from "../../../application/interface/admin/IcreateA
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class CreateAdvController {
-  constructor(private createAdvUsecase: IcreateAdvUsecase) {}
+  constructor(private _createAdvUsecase: IcreateAdvUsecase) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -13,8 +13,7 @@ export class CreateAdvController {
       delete data.id;
       delete data.currentImage;
 
-      
-      const responseData = await this.createAdvUsecase.execute(data, file);
+      const responseData = await this._createAdvUsecase.execute(data, file);
 
       res.status(HttpStatusCode.OK).json({ responseData });
     } catch (error) {

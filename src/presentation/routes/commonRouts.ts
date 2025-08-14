@@ -3,29 +3,29 @@ import { DIContainer } from "../../infrastructure/di/DIContainer";
 import { ContactUsController } from "../controllers/common/contactUsController";
 
 export class CommonRouter {
-  private router: Router;
-  private diContainer: DIContainer;
+  private _router: Router;
+  private _diContainer: DIContainer;
 
-  private contactUsController!: ContactUsController;
+  private _contactUsController!: ContactUsController;
 
   constructor() {
-    this.router = Router();
-    this.diContainer = new DIContainer();
-    this.initializeControllers();
-    this.initializeRoutes();
+    this._router = Router();
+    this._diContainer = new DIContainer();
+    this._initializeControllers();
+    this._initializeRoutes();
   }
 
-  private initializeControllers(): void {
-    this.contactUsController = new ContactUsController(
-      this.diContainer.sendContactUsEmailUseCase()
+  private _initializeControllers(): void {
+    this._contactUsController = new ContactUsController(
+      this._diContainer.sendContactUsEmailUseCase()
     );
   }
 
-  private initializeRoutes(): void {
-    this.router.post("/contactus", this.contactUsController.contact);
+  private _initializeRoutes(): void {
+    this._router.post("/contactus", this._contactUsController.contact);
   }
 
   public getRouter(): Router {
-    return this.router;
+    return this._router;
   }
 }

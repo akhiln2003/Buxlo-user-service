@@ -13,74 +13,74 @@ import { MentorVerifyprofileController } from "../controllers/mentor/mentorVerif
 import { verifyProfileDto } from "../../zodSchemaDto/mentor/verifyprofile.Dto";
 
 export class MentorRouter {
-  private router: Router;
-  private diContainer: DIContainer;
-  private upload = multer({ storage: multer.memoryStorage() });
+  private _router: Router;
+  private _diContainer: DIContainer;
+  private _upload = multer({ storage: multer.memoryStorage() });
 
-  private fetchprofileController!: FetchMentorProfileController;
-  private updateprofileController!: UpdateMentorProfileController;
-  private fetchProfileImageController!: FetchMentorProfileImageController;
-  private deleteProfileImageController!: DeleteMentorProfileImageController;
-  private mentorVerifyprofileController!: MentorVerifyprofileController;
+  private _fetchprofileController!: FetchMentorProfileController;
+  private _updateprofileController!: UpdateMentorProfileController;
+  private _fetchProfileImageController!: FetchMentorProfileImageController;
+  private _deleteProfileImageController!: DeleteMentorProfileImageController;
+  private _mentorVerifyprofileController!: MentorVerifyprofileController;
 
   constructor() {
-    this.router = Router();
-    this.diContainer = new DIContainer();
-    this.initializeControllers();
-    this.initializeRoutes();
+    this._router = Router();
+    this._diContainer = new DIContainer();
+    this._initializeControllers();
+    this._initializeRoutes();
   }
 
-  private initializeControllers(): void {
-    this.fetchprofileController = new FetchMentorProfileController(
-      this.diContainer.fetchMentorProfileUseCase()
+  private _initializeControllers(): void {
+    this._fetchprofileController = new FetchMentorProfileController(
+      this._diContainer.fetchMentorProfileUseCase()
     );
-    this.updateprofileController = new UpdateMentorProfileController(
-      this.diContainer.updateMentorProfileUseCase()
+    this._updateprofileController = new UpdateMentorProfileController(
+      this._diContainer.updateMentorProfileUseCase()
     );
-    this.fetchProfileImageController = new FetchMentorProfileImageController(
-      this.diContainer.fetchS3ImageUseCase()
+    this._fetchProfileImageController = new FetchMentorProfileImageController(
+      this._diContainer.fetchS3ImageUseCase()
     );
-    this.deleteProfileImageController = new DeleteMentorProfileImageController(
-      this.diContainer.deleteMentorProfileImageUseCase()
+    this._deleteProfileImageController = new DeleteMentorProfileImageController(
+      this._diContainer.deleteMentorProfileImageUseCase()
     );
-    this.mentorVerifyprofileController = new MentorVerifyprofileController(
-      this.diContainer.mentorVerifyprofileUseCase()
+    this._mentorVerifyprofileController = new MentorVerifyprofileController(
+      this._diContainer.mentorVerifyprofileUseCase()
     );
   }
 
-  private initializeRoutes(): void {
-    this.router.get(
+  private _initializeRoutes(): void {
+    this._router.get(
       "/fetchprofile/:id",
       validateReqParams(fetchprofileDto),
-      this.fetchprofileController.fetchData
+      this._fetchprofileController.fetchData
     );
-    this.router.put(
+    this._router.put(
       "/updateprofile",
-      this.upload.single("newProfileImage"),
-      this.updateprofileController.update
+      this._upload.single("newProfileImage"),
+      this._updateprofileController.update
     );
-    this.router.post(
+    this._router.post(
       "/fetchprofileimage",
       validateReqBody(fetchProfileImageDto),
-      this.fetchProfileImageController.fetchImage
+      this._fetchProfileImageController.fetchImage
     );
-    this.router.delete(
+    this._router.delete(
       "/deleteprofileimage/:id/:key",
       validateReqParams(deleteprofileimageDto),
-      this.deleteProfileImageController.deleteImage
+      this._deleteProfileImageController.deleteImage
     );
-    this.router.put(
+    this._router.put(
       "/verifyprofile",
-      this.upload.fields([
+      this._upload.fields([
         { name: "frontImage", maxCount: 1 },
         { name: "backImage", maxCount: 1 },
       ]),
       validateReqBody(verifyProfileDto),
-      this.mentorVerifyprofileController.verify
+      this._mentorVerifyprofileController.verify
     );
   }
 
   public getRouter(): Router {
-    return this.router;
+    return this._router;
   }
 }

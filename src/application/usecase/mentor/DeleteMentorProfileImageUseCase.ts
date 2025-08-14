@@ -8,16 +8,16 @@ export class DeleteMentorProfileImageUseCase
   implements IdeleteMentorProfileImageUseCase
 {
   constructor(
-    private mentorRepositary: ImentorRepository,
-    private s3Service: Is3Service
+    private _mentorRepositary: ImentorRepository,
+    private _s3Service: Is3Service
   ) {}
   async execute(key: string, id: string): Promise<Mentor | any> {
     try {
       if (!key || !id) {
         throw new BadRequest();
       }
-      await this.s3Service.deleteImageFromBucket( `MentorProfiles/${key}`);
-      const data = await this.mentorRepositary.deleteMentorProfileData(id, {
+      await this._s3Service.deleteImageFromBucket( `MentorProfiles/${key}`);
+      const data = await this._mentorRepositary.deleteMentorProfileData(id, {
         avatar: key,
       });
 

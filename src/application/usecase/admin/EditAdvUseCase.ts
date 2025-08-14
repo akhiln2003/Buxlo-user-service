@@ -10,15 +10,15 @@ import sharp from "sharp";
 
 export class EditAdvUseCase implements IeditAdvUseCase {
   constructor(
-    private advRepositary: IadvRepository,
-    private s3Service: Is3Service
+    private _advRepositary: IadvRepository,
+    private _s3Service: Is3Service
   ) {}
 
   async execute(data: IqueryData, file: any): Promise<Adv | any> {
     try {
       if (file) {
         if (data.currentImage) {
-          await this.s3Service.deleteImageFromBucket(
+          await this._s3Service.deleteImageFromBucket(
             `Adv/${data.currentImage}`
           );
         }
@@ -32,7 +32,7 @@ export class EditAdvUseCase implements IeditAdvUseCase {
             fit: "fill",
           })
           .toBuffer();
-        const response = await this.s3Service.uploadImageToBucket(
+        const response = await this._s3Service.uploadImageToBucket(
           buffer,
           file.mimetype,
           `Adv/${randomImageName}`
@@ -65,7 +65,10 @@ export class EditAdvUseCase implements IeditAdvUseCase {
           query.image = data.image; // Assuming you're uploading a single image
         }
 
-        const updatedData = await this.advRepositary.update(data.id as string, query);
+        const updatedData = await this._advRepositary.update(
+          data.id as string,
+          query
+        );
 
         return updatedData;
       } else {

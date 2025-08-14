@@ -4,11 +4,11 @@ import { NotFountError } from "@buxlo/common";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchMentorProfileController {
-  constructor(private fetchMentorProfileUseCase: IfetchMentorProfileUseCase) {}
+  constructor(private _fetchMentorProfileUseCase: IfetchMentorProfileUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;      
-      const data = await this.fetchMentorProfileUseCase.execute(id);
+      const { id } = req.params;
+      const data = await this._fetchMentorProfileUseCase.execute(id);
       if (!data) {
         throw new NotFountError("This user is not valid");
       }
