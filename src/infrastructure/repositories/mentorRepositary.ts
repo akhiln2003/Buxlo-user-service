@@ -1,8 +1,11 @@
-import { InternalServerError } from "@buxlo/common";
+import { BadRequest, InternalServerError } from "@buxlo/common";
 import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
-import { Mentor } from "../../domain/entities/mentor";
 import { ImentorRepository } from "../../domain/interfaces/ImentorRepository";
 import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
+import {
+  MentorMapper,
+  MentorResponseDto,
+} from "../../zodSchemaDto/output/mentorResponse.dto";
 
 export class MentorRepository implements ImentorRepository {
   async create({
@@ -21,7 +24,7 @@ export class MentorRepository implements ImentorRepository {
     isGoogle: boolean;
     avatar: string;
     yearsOfExperience: number;
-  }): Promise<Mentor> {
+  }): Promise<MentorResponseDto> {
     try {
       const newUser = MentorProfile.build({
         _id: id,
@@ -32,15 +35,16 @@ export class MentorRepository implements ImentorRepository {
         avatar,
         yearsOfExperience,
       });
-      return await newUser.save();
+      const saved = await newUser.save();
+      return MentorMapper.toDto(saved);
     } catch (error: any) {
-      throw new Error(`db error: ${error.message}`);
+      throw new BadRequest(`Failed to create mentor: ${error.message}`);
     }
   }
   async updateMentorProfile(
     userId: string,
     query: ImentorUpdateData
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       const updatedProfile = await MentorProfile.findOneAndUpdate(
         { _id: userId },
@@ -48,50 +52,52 @@ export class MentorRepository implements ImentorRepository {
         { new: true }
       );
 
-      return updatedProfile;
+      return MentorMapper.toDto(updatedProfile);
     } catch (error: any) {
-      throw new Error(`db error: ${error.message}`);
+      throw new BadRequest(`Failed to update mentorProfile: ${error.message}`);
     }
   }
-  async getMentorDetails(userId: string): Promise<Mentor | null> {
+  async getMentorDetails(userId: string): Promise<MentorResponseDto | null> {
     try {
       const mentorDetails = await MentorProfile.findById(userId);
-      return mentorDetails;
+      return mentorDetails ? MentorMapper.toDto(mentorDetails) : null;
     } catch (error: any) {
-      console.error(error);
-      throw new Error(`db error to fetch user: ${error.message}`);
+      throw new BadRequest(`Failed to get mentorDetails: ${error.message}`);
     }
   }
 
   async updateMentorProfileData(
     userId: string,
     data: { name?: string; avatar?: string }
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         userId,
         { $set: data },
         { new: true }
       );
-      return updatedUser as Mentor | null;
+      return MentorMapper.toDto(updatedUser);
     } catch (error: any) {
-      throw new Error(`db error to update user: ${error.message}`);
+      throw new Error(`db error to update mentor: ${error.message}`);
     }
   }
 
   async deleteMentorProfileData(
     userId: string,
     data: { avatar?: string }
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         userId,
         { $unset: data },
         { new: true }
       );
-      return updatedUser;
+      if (!updatedUser) throw new BadRequest("Faild to delete mentor");
+      return MentorMapper.toDto(updatedUser);
     } catch (error: any) {
-      throw new Error(`db error to update user: ${error.message}`);
+      throw new BadRequest(
+        `Failed to delete mentorProfileData: ${error.message}`
+      );
     }
   }
 
@@ -103,16 +109,18 @@ export class MentorRepository implements ImentorRepository {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         id,
         { $set: data },
         { new: true }
       );
-      return updatedUser as Mentor | null;
+      return MentorMapper.toDto(updatedUser);
     } catch (error: any) {
-      throw new Error(`db error to update user: ${error.message}`);
+      throw new BadRequest(
+        `Failed to applyProfileVerification: ${error.message}`
+      );
     }
   }
   async verifyProfile(
@@ -124,12 +132,10 @@ export class MentorRepository implements ImentorRepository {
       aadhaarName?: string;
       aadhaarNumber?: string;
     }
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       const updateData: any = {};
-      // Set verification status
       updateData.verified = verified;
-      // If application is pending, prepare unset data
       if (verified === "applicationPending" && unsetData) {
         updateData.$unset = {};
         if (unsetData.aadhaarFrontImage) {
@@ -153,9 +159,9 @@ export class MentorRepository implements ImentorRepository {
         },
         { new: true }
       );
-      return updatedUser as Mentor | null;
+      return MentorMapper.toDto(updatedUser);
     } catch (error: any) {
-      throw new Error(`Database error while updating user: ${error.message}`);
+      throw new BadRequest(`Failed to verifyProfile: ${error.message}`);
     }
   }
 
@@ -163,26 +169,25 @@ export class MentorRepository implements ImentorRepository {
     page: number = 1,
     verified: "verified" | "applicationPending" | "all" | "verificationPending",
     searchData?: string
-  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
+  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
     const limit = 10,
       skip = (page - 1) * limit,
       filter: any = {};
 
-    // Apply search filter if searchData is provided
     if (searchData && searchData !== "undefined") {
       filter.$or = [
         { name: { $regex: searchData, $options: "i" } },
         { email: { $regex: searchData, $options: "i" } },
       ];
     }
-    // Apply verified status filter if not "all"
     if (verified !== "all") {
       filter.verified = verified;
     }
-    // Count total documents based on filter
     const totalCount = await MentorProfile.countDocuments(filter);
     const totalPages = Math.ceil(totalCount / limit);
-    const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
+    const mentors = await MentorProfile.find(filter).skip(skip).limit(limit);
+    const datas = mentors.map((mentor) => MentorMapper.toDto(mentor));
+
     return { datas, totalPages };
   }
   async fetchAll(
@@ -190,15 +195,13 @@ export class MentorRepository implements ImentorRepository {
     experience: string,
     rating: string,
     searchData: string
-  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
+  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
     try {
       const limit = 10,
         skip = (page - 1) * limit,
         filter: any = {};
 
-      // apply verified filter
       filter.verified = "verified";
-      // Apply search filter
       if (searchData) {
         filter.$or = [
           { name: { $regex: `^${searchData}`, $options: "i" } },
@@ -206,7 +209,6 @@ export class MentorRepository implements ImentorRepository {
         ];
       }
 
-      // Apply experience filter
       if (experience) {
         if (experience.includes("-")) {
           const [min, max] = experience.split("-").map(Number);
@@ -221,15 +223,15 @@ export class MentorRepository implements ImentorRepository {
         }
       }
 
-      // Apply rating filter
       if (rating) {
         filter.rating = rating;
       }
 
-      
       const totalCount = await MentorProfile.countDocuments(filter);
       const totalPages = Math.ceil(totalCount / limit);
-      const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
+      const mentors = await MentorProfile.find(filter).skip(skip).limit(limit);
+      const datas = mentors.map((mentor) => MentorMapper.toDto(mentor));
+
       return { datas, totalPages };
     } catch (error: any) {
       console.error("Error form fetch All mentors : ", error.message);

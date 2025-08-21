@@ -1,8 +1,8 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IdeleteMentorProfileImageUseCase } from "../../interface/common/IdeleteProfileImageUseCase";
-import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export class DeleteMentorProfileImageUseCase
   implements IdeleteMentorProfileImageUseCase
@@ -11,7 +11,7 @@ export class DeleteMentorProfileImageUseCase
     private _mentorRepositary: ImentorRepository,
     private _s3Service: Is3Service
   ) {}
-  async execute(key: string, id: string): Promise<Mentor | any> {
+  async execute(key: string, id: string): Promise<MentorResponseDto> {
     try {
       if (!key || !id) {
         throw new BadRequest();

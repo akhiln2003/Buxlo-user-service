@@ -1,8 +1,8 @@
 import { BadRequest } from "@buxlo/common";
-import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IadminVerifyprofileUseCase } from "../../interface/admin/IadminVerifyprofileUseCase";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
   constructor(
@@ -19,7 +19,7 @@ export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<Mentor | null> {
+  ): Promise<MentorResponseDto> {
     try {
       if (verified === "applicationPending") {
         if (!unsetData) {

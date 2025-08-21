@@ -1,4 +1,4 @@
-import { User } from "../../../domain/entities/user";
+import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
 
 export interface IuserUpdateData {
   name?: string;
@@ -11,5 +11,5 @@ export interface IupdateUserProfileUseCase {
     updatedData: IuserUpdateData,
     file: any,
     currentProfileImage: string | undefined
-  ): Promise<any | User>;
+  ): Promise<UserResponseDto>;
 }

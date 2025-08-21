@@ -1,5 +1,5 @@
-import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 import { IadminFetchVerifyProfilesUseCase } from "../../interface/admin/IadminFetchVerifyProfiles";
 
 export class AdminFetchVerifyProfilesUseCase
@@ -11,7 +11,7 @@ export class AdminFetchVerifyProfilesUseCase
     pageNum: number,
     searchData:string,
     verified:"verified" | "applicationPending" | "all" | "verificationPending"
-  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
+  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
     return this._mentorRepository.find(pageNum , verified ,searchData );
   }
 }

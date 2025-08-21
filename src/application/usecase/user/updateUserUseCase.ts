@@ -2,12 +2,12 @@ import { BadRequest, InternalServerError } from "@buxlo/common";
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
-import { User } from "../../../domain/entities/user";
 import {
   IupdateUserProfileUseCase,
   IuserUpdateData,
 } from "../../interface/user/IupdateUserProfileUseCase";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
+import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
 
 export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   constructor(
@@ -20,7 +20,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
     updatedData: IuserUpdateData,
     file: any,
     currentProfileImage: string | undefined
-  ): Promise<any | User> {
+  ): Promise<UserResponseDto> {
     try {
       if (file) {
         if (currentProfileImage) {

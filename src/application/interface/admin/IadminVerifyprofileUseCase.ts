@@ -1,4 +1,4 @@
-import { Mentor } from "../../../domain/entities/mentor";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export interface IadminVerifyprofileUseCase {
   execute(
@@ -10,5 +10,5 @@ export interface IadminVerifyprofileUseCase {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<Mentor | any>;
+  ): Promise<MentorResponseDto>;
 }

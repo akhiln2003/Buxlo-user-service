@@ -1,9 +1,9 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
 import { ImentorVerifyprofileUseCase } from "../../interface/mentor/ImentorVerifyprofileUseCase";
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
   constructor(
@@ -21,7 +21,7 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
       aadhaarBackImage: string;
       verified: "verified" | "applicationPending" | "verificationPending";
     }
-  ): Promise<any | Mentor> {
+  ): Promise<MentorResponseDto> {
     try {
       if (!files.frontImage || !files.backImage || !id || !query) {
         throw new BadRequest("Somthing when wrong please try again laiter");

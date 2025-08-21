@@ -5,12 +5,12 @@ import { UpdateMentorProfileController } from "../controllers/mentor/updateMento
 import multer from "multer";
 import { FetchMentorProfileImageController } from "../controllers/mentor/fetchMentorProfileImageController";
 import { DeleteMentorProfileImageController } from "../controllers/mentor/deleteMentorProfileImageController";
-import { fetchprofileDto } from "../../zodSchemaDto/mentor/fetchprofile.Dto";
+import { fetchprofileDto } from "../../zodSchemaDto/input/mentor/fetchprofile.Dto";
 import { validateReqBody, validateReqParams } from "@buxlo/common";
-import { fetchProfileImageDto } from "../../zodSchemaDto/common/fetchprofileimage.Dto";
-import { deleteprofileimageDto } from "../../zodSchemaDto/mentor/deleteprofileimage.Dto";
+import { fetchProfileImageDto } from "../../zodSchemaDto/input/common/fetchprofileimage.Dto";
+import { deleteprofileimageDto } from "../../zodSchemaDto/input/mentor/deleteprofileimage.Dto";
 import { MentorVerifyprofileController } from "../controllers/mentor/mentorVerifyprofileController";
-import { verifyProfileDto } from "../../zodSchemaDto/mentor/verifyprofile.Dto";
+import { verifyProfileDto } from "../../zodSchemaDto/input/mentor/verifyprofile.Dto";
 
 export class MentorRouter {
   private _router: Router;

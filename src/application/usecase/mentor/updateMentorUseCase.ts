@@ -1,5 +1,4 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { Mentor } from "../../../domain/entities/mentor";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
 import {
   ImentorUpdateData,
@@ -8,6 +7,7 @@ import {
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
   constructor(
@@ -20,7 +20,7 @@ export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
     updatedData: ImentorUpdateData,
     file: any,
     currentProfileImage: string | undefined
-  ): Promise<any | Mentor> {
+  ): Promise<MentorResponseDto> {
     try {
       if (file) {
         if (currentProfileImage) {

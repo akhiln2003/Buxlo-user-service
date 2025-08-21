@@ -1,4 +1,4 @@
-import { Mentor } from "../../../domain/entities/mentor";
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export interface ImentorVerifyprofileUseCase {
   execute(
@@ -12,5 +12,5 @@ export interface ImentorVerifyprofileUseCase {
       verified: "verified"| "applicationPending" | "verificationPending";
       
     }
-  ): Promise<any | Mentor>;
+  ): Promise<MentorResponseDto>;
 }

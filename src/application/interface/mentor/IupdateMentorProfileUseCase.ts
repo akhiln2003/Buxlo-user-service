@@ -1,15 +1,18 @@
-import { Mentor } from "../../../domain/entities/mentor";
-
+import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
 
 export interface ImentorUpdateData {
-  name?:string,
-  bio?:string,
-  expertise?:string
-  yearsOfExperience?:number
-  avatar?:string,
+  name?: string;
+  bio?: string;
+  expertise?: string;
+  yearsOfExperience?: number;
+  avatar?: string;
 }
 
-
 export interface IupdateMentorProfileUseCase {
-  execute(id: string , updatedData:ImentorUpdateData , file: any , currentProfileImage: string | undefined): Promise<any | Mentor>;
+  execute(
+    id: string,
+    updatedData: ImentorUpdateData,
+    file: any,
+    currentProfileImage: string | undefined
+  ): Promise<MentorResponseDto>;
 }

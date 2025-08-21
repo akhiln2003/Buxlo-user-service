@@ -2,7 +2,7 @@ import { BadRequest, InternalServerError } from "@buxlo/common";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IdeleteUserProfileImageUseCase } from "../../interface/common/IdeleteProfileImageUseCase";
 import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
-import { User } from "../../../domain/entities/user";
+import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
 
 export class DeleteUserProfileImageUseCase
   implements IdeleteUserProfileImageUseCase
@@ -11,7 +11,7 @@ export class DeleteUserProfileImageUseCase
     private _userRepositary: IuserRepository,
     private _s3Service: Is3Service
   ) {}
-  async execute(key: string, id: string): Promise<User | any> {
+  async execute(key: string, id: string): Promise<UserResponseDto> {
     try {
       if (!key || !id) {
         throw new BadRequest();

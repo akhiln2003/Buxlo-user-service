@@ -1,5 +1,5 @@
-import { User } from "../../../domain/entities/user";
+import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
 
 export interface IfetchUserProfileUseCase{
-    execute( id: string ): Promise<null|User>;
+    execute( id: string ): Promise<UserResponseDto>;
 }
