@@ -11,9 +11,14 @@ import { UserRouter } from "./presentation/routes/userRouts";
 import { CommonRouter } from "./presentation/routes/commonRouts";
 import { AdminRouter } from "./presentation/routes/adminRouts";
 import { messageBroker } from "./infrastructure/MessageBroker/config";
+import { grpcSubscriptionService } from "./infrastructure/rpc/grpc/subscriptionService";
+import { PremiumCron } from "./infrastructure/external-services/premiumCron";
 
 export class App {
-  constructor(private _server: Iserver) {}
+  private _premiumCron: PremiumCron;
+  constructor(private _server: Iserver) {
+    this._premiumCron = new PremiumCron();
+  }
 
   async initialize(): Promise<void> {
     await this._connectDB();
@@ -22,6 +27,7 @@ export class App {
     this._registerMiddleware();
     this._registerRoutes();
     this._registerErrorHandler();
+    this._startCrons();
   }
 
   private _registerMiddleware(): void {
@@ -64,6 +70,7 @@ export class App {
   private async _connectGrpc(): Promise<void> {
     try {
       await grpcService.start();
+      await grpcSubscriptionService.start();
       console.log("gRPC server started successfully.");
     } catch (error) {
       console.error("Failed to start gRPC server:", error);
@@ -72,5 +79,9 @@ export class App {
 
   private async _connectKafka(): Promise<void> {
     await messageBroker.connect();
+  }
+  
+  private _startCrons(): void {
+    this._premiumCron.start();
   }
 }

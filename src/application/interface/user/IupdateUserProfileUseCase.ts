@@ -1,4 +1,4 @@
-import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
+import { UserResponseDto } from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
 export interface IuserUpdateData {
   name?: string;

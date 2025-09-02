@@ -2,7 +2,10 @@ import { BadRequest } from "@buxlo/common";
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IadminVerifyprofileUseCase } from "../../interface/admin/IadminVerifyprofileUseCase";
-import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
+import {
+  MentorMapper,
+  MentorResponseDto,
+} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
 export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
   constructor(
@@ -38,11 +41,13 @@ export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
         await Promise.all(deletePromises);
       }
 
-      return await this._mentorRepository.verifyProfile(
+      const updatedMentor = await this._mentorRepository.verifyProfile(
         id,
         verified,
         unsetData || undefined
       );
+
+      return MentorMapper.toDto(updatedMentor);
     } catch (error) {
       console.error("Error during profile verification:", error);
       throw new BadRequest("Something went wrong, please try again later.");

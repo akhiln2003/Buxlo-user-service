@@ -1,20 +1,20 @@
 import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
-import { MentorResponseDto } from "../../zodSchemaDto/output/mentorResponse.dto";
+import { Mentor } from "../entities/mentor";
 
 export interface ImentorRepository {
   updateMentorProfile(
     userId: string,
     query: ImentorUpdateData
-  ): Promise<MentorResponseDto>;
-  getMentorDetails(userId: string): Promise<MentorResponseDto|null>;
+  ): Promise<Mentor>;
+  getMentorDetails(userId: string): Promise<Mentor | null>;
   updateMentorProfileData(
     userId: string,
     data: { name?: string; avatar?: string }
-  ): Promise<MentorResponseDto>;
+  ): Promise<Mentor>;
   deleteMentorProfileData(
     userId: string,
     data: { avatar?: string }
-  ): Promise<MentorResponseDto>;
+  ): Promise<Mentor>;
   applyProfileVerification(
     id: string,
     data: {
@@ -23,7 +23,7 @@ export interface ImentorRepository {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<MentorResponseDto>;
+  ): Promise<Mentor>;
   verifyProfile(
     id: string,
     verified: "verified" | "applicationPending",
@@ -33,16 +33,16 @@ export interface ImentorRepository {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<MentorResponseDto>;
+  ): Promise<Mentor>;
   find(
     page: number,
     verified: "verified" | "applicationPending" | "all" | "verificationPending",
     searchData?: string | undefined
-  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null>;
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
   fetchAll(
     page: number,
     experience: string,
     rating: string,
     searchData: string
-  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null>;
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
 }

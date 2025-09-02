@@ -1,21 +1,25 @@
 import mongoose from "mongoose";
 
 interface UserAttr {
-  _id:string,
+  _id: string;
   name: string;
   email: string;
-  role:string
+  role: string;
   avatar?: string;
   isGoogle: boolean;
+  premiumId?: string;
+  premiumEndDate?: Date;
 }
 
 interface UserDoc extends mongoose.Document {
-  _id:string,
+  _id: string;
   name: string;
   email: string;
   avatar?: string;
   isGoogle: boolean;
-  role: "user" | "mentor" | 'admin';
+  role: "user" | "mentor" | "admin";
+  premiumId?: string;
+  premiumEndDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,25 +33,31 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     email: {
       type: String,
-      require: true
+      require: true,
     },
     avatar: {
-      type: String
+      type: String,
     },
-    isGoogle:{
+    isGoogle: {
       type: Boolean,
       default: false,
-      required: true
+      required: true,
     },
     role: {
       type: String,
       required: true,
-      enum: ["user", "mentor" , "admin"],
-    }
+      enum: ["user", "mentor", "admin"],
+    },
+    premiumId: {
+      type: String,
+    },
+    premiumEndDate: {
+      type: Date,
+    },
   },
   {
     toJSON: {
@@ -55,9 +65,9 @@ const userSchema = new mongoose.Schema(
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
-      }
+      },
     },
-    timestamps: true
+    timestamps: true,
   }
 );
 

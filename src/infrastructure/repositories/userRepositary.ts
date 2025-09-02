@@ -1,11 +1,8 @@
 import { BadRequest } from "@buxlo/common";
 import { IuserUpdateData } from "../../application/interface/user/IupdateUserProfileUseCase";
 import { IuserRepository } from "../../domain/interfaces/Iuserrepository";
-import {
-  UserMapper,
-  UserResponseDto,
-} from "../../zodSchemaDto/output/userResponse.dto";
 import { UserProfile } from "../database/mongodb/schema/user.schema";
+import { User } from "../../domain/entities/user";
 
 export class UserRepository implements IuserRepository {
   async create({
@@ -22,7 +19,7 @@ export class UserRepository implements IuserRepository {
     role: string;
     isGoogle: boolean;
     avatar: string;
-  }): Promise<UserResponseDto> {
+  }): Promise<User> {
     try {
       const newUser = UserProfile.build({
         _id: id,
@@ -32,17 +29,15 @@ export class UserRepository implements IuserRepository {
         isGoogle,
         avatar,
       });
-      const saved = await newUser.save();
-      return UserMapper.toDto(saved);
+      return await newUser.save();
     } catch (error: any) {
-      //   customLogger.error(`db error: ${error.message }`);
       throw new BadRequest(`Failed to create user: ${error.message}`);
     }
   }
   async updateUserProfile(
     userId: string,
     query: IuserUpdateData
-  ): Promise<UserResponseDto> {
+  ): Promise<User> {
     try {
       const updatedProfile = await UserProfile.findOneAndUpdate(
         { _id: userId },
@@ -52,17 +47,15 @@ export class UserRepository implements IuserRepository {
         { new: true }
       );
       if (!updatedProfile) throw new BadRequest("User not found");
-      return UserMapper.toDto(updatedProfile);
+      return updatedProfile;
     } catch (error: any) {
-      // customLogger.error(`db error: ${error.message}`);
       throw new BadRequest(`Failed to update userProfile: ${error.message}`);
     }
   }
-  async getUserDetails(userId: string): Promise<UserResponseDto | null> {
+  async getUserDetails(userId: string): Promise<User | null> {
     try {
       const userDetails = await UserProfile.findById(userId);
-        return userDetails ? UserMapper.toDto(userDetails) : null;
-
+      return userDetails ? userDetails : null;
     } catch (error: any) {
       throw new BadRequest(`Failed to get userDetails: ${error.message}`);
     }
@@ -70,17 +63,23 @@ export class UserRepository implements IuserRepository {
 
   async updateUserProfileData(
     userId: string,
-    data: { name?: string; avatar?: string }
-  ): Promise<UserResponseDto> {
+    data: {
+      name?: string;
+      avatar?: string;
+      premiumId?: string;
+      premiumEndDate?: string;
+    }
+  ): Promise<User> {
     try {
       const updatedUser = await UserProfile.findByIdAndUpdate(
         userId,
         { $set: data },
         { new: true }
       );
-      return UserMapper.toDto(updatedUser);
+
+      if (!updatedUser) throw new BadRequest("Failed to update userDetails");
+      return updatedUser;
     } catch (error: any) {
-      // customLogger.error(`db error to update user ${userId}: ${error.message}`);
       throw new BadRequest(
         `Failed to update userProfileData: ${error.message}`
       );
@@ -90,14 +89,44 @@ export class UserRepository implements IuserRepository {
   async deleteUserProfileData(
     userId: string,
     data: { avatar?: string }
-  ): Promise<UserResponseDto> {
+  ): Promise<User> {
     try {
       const updatedUser = await UserProfile.findByIdAndUpdate(
         userId,
         { $unset: data },
         { new: true }
       );
-      return UserMapper.toDto(updatedUser);
+
+      if (!updatedUser) throw new BadRequest("Failed to delete userDetails");
+      return updatedUser;
+    } catch (error: any) {
+      throw new BadRequest(
+        `Failed to delete userProfileData: ${error.message}`
+      );
+    }
+  }
+
+  async findExpiredPremiumUsers(date: Date): Promise<User[]> {
+    try {
+      return await UserProfile.find({
+        premium: true,
+        premiumExpiry: { $lt: date },
+      });
+    } catch (error: any) {
+      throw new BadRequest(
+        `Failed to delete userProfileData: ${error.message}`
+      );
+    }
+  }
+  async updatePremiumStatus(userId: string): Promise<User> {
+    try {
+      const updatedUser = await UserProfile.findByIdAndUpdate(
+        userId,
+        { $unset: { premiumId: 1, premiumEndDate: 1 } },
+        { new: true }
+      );
+      if (!updatedUser) throw new BadRequest("Failed to remove premiumStatus");
+      return updatedUser;
     } catch (error: any) {
       throw new BadRequest(
         `Failed to delete userProfileData: ${error.message}`

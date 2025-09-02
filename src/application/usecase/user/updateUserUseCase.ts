@@ -7,7 +7,10 @@ import {
   IuserUpdateData,
 } from "../../interface/user/IupdateUserProfileUseCase";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
-import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
+import {
+  UserMapper,
+  UserResponseDto,
+} from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
 export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
   constructor(
@@ -54,7 +57,7 @@ export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
         updatedData
       );
       this._userUpdateProducer.produce({ id, query: updatedData });
-      return data;
+      return UserMapper.toDto(data);
     } catch (error) {
       console.error(error);
       throw new InternalServerError();

@@ -3,7 +3,7 @@ import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository"
 import { ImentorVerifyprofileUseCase } from "../../interface/mentor/ImentorVerifyprofileUseCase";
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
+import { MentorMapper, MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
 export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
   constructor(
@@ -77,7 +77,7 @@ export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
         query
       );
 
-      return data;
+      return MentorMapper.toDto(data);
     } catch (error) {
       console.error(error);
       throw new InternalServerError();

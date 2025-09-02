@@ -1,5 +1,8 @@
 import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
-import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
+import {
+  MentorMapper,
+  MentorResponseDto,
+} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 import { IfetchMentorsUseCase } from "../../interface/user/IfetchMentorsUseCase";
 export class FetchMentorsUseCase implements IfetchMentorsUseCase {
   constructor(private _mentorRepository: ImentorRepository) {}
@@ -11,12 +14,18 @@ export class FetchMentorsUseCase implements IfetchMentorsUseCase {
     searchData: string
   ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
     try {
-      return await this._mentorRepository.fetchAll(
+      const result = await this._mentorRepository.fetchAll(
         page,
         experience,
         rating,
         searchData
       );
+      if (!result) return null;
+
+      const mappedDatas: MentorResponseDto[] = result.datas.map((mentor) =>
+        MentorMapper.toDto(mentor)
+      );
+      return { datas: mappedDatas, totalPages: result.totalPages };
     } catch (error) {
       console.error(error);
       return null;

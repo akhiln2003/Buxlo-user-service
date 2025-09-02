@@ -1,20 +1,23 @@
 import { IuserUpdateData } from "../../application/interface/user/IupdateUserProfileUseCase";
-import { UserResponseDto } from "../../zodSchemaDto/output/userResponse.dto";
 import { User } from "../entities/user";
 
 export interface IuserRepository {
-  create(user: User): Promise<UserResponseDto>;
-  updateUserProfile(
-    userId: string,
-    query: IuserUpdateData
-  ): Promise<UserResponseDto>;
-  getUserDetails(userId: string): Promise<UserResponseDto | null>;
+  create(user: User): Promise<User>;
+  updateUserProfile(userId: string, query: IuserUpdateData): Promise<User>;
+  getUserDetails(userId: string): Promise<User | null>;
   updateUserProfileData(
     userId: string,
-    data: { name?: string; avatar?: string }
-  ): Promise<UserResponseDto>;
+    data: {
+      name?: string;
+      avatar?: string;
+      premiumId?: string;
+      premiumEndDate?: string;
+    }
+  ): Promise<User>;
   deleteUserProfileData(
     userId: string,
     data: { avatar?: string }
-  ): Promise<UserResponseDto>;
+  ): Promise<User>;
+  findExpiredPremiumUsers(date: Date): Promise<User[]>;
+  updatePremiumStatus(userId: string): Promise<User>;
 }

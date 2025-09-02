@@ -5,6 +5,8 @@ export class User {
     public role: string,
     public id?: string,
     public isGoogle?: boolean,
-    public avatar?: string
+    public avatar?: string,
+    public premiumId?: string,
+    public premiumEndDate?: Date
   ) {}
 }

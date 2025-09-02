@@ -7,7 +7,7 @@ import { FetchUserProfileImageController } from "../controllers/user/fetchUserPr
 import { DeleteUserProfileImageController } from "../controllers/user/deleteUserProfileImageController";
 import { FetchMentorsController } from "../controllers/user/fetchMentorsController";
 import { validateReqBody } from "@buxlo/common";
-import { fetchProfileImageDto } from "../../zodSchemaDto/input/common/fetchprofileimage.Dto";
+import { fetchProfileImageDto } from "../../domain/zodSchemaDto/input/common/fetchprofileimage.Dto";
 
 export class UserRouter {
   private _router: Router;

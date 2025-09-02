@@ -1,4 +1,4 @@
-import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
+import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
 export interface ImentorVerifyprofileUseCase {
   execute(
@@ -9,8 +9,7 @@ export interface ImentorVerifyprofileUseCase {
       aadhaarNumber: string;
       aadhaarFrontImage: string;
       aadhaarBackImage: string;
-      verified: "verified"| "applicationPending" | "verificationPending";
-      
+      verified: "verified" | "applicationPending" | "verificationPending";
     }
   ): Promise<MentorResponseDto>;
 }

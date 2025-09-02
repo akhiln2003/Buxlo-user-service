@@ -15,16 +15,15 @@ import {
   validateReqParams,
   validateReqQueryParams,
 } from "@buxlo/common";
-// import { createadvDto } from "../../zodSchemaDto/admin/createadvDto";
-import { fetchTrustedUsAndAdvImageDto } from "../../zodSchemaDto/input/admin/fetchadvimageDto";
-import { fetchtrustedusAndAdvDto } from "../../zodSchemaDto/input/admin/fetchtrustedusAndAdvDto";
-import { verifyProfileDto } from "../../zodSchemaDto/input/admin/verifyProfileDto";
-import { deleteAdvAndTrustedUsimageDto } from "../../zodSchemaDto/input/admin/deleteAdvAndTrustedUsimageDto";
+import { fetchTrustedUsAndAdvImageDto } from "../../domain/zodSchemaDto/input/admin/fetchadvimageDto";
+import { fetchtrustedusAndAdvDto } from "../../domain/zodSchemaDto/input/admin/fetchtrustedusAndAdvDto";
+import { verifyProfileDto } from "../../domain/zodSchemaDto/input/admin/verifyProfileDto";
+import { deleteAdvAndTrustedUsimageDto } from "../../domain/zodSchemaDto/input/admin/deleteAdvAndTrustedUsimageDto";
 import { VerifyprofileController } from "../controllers/admin/verifyprofileController";
-import { fetchverifyprofileDto } from "../../zodSchemaDto/input/admin/listverifyprofileDto";
+import { fetchverifyprofileDto } from "../../domain/zodSchemaDto/input/admin/listverifyprofileDto";
 import { FetchVerifyProfileController } from "../controllers/admin/fetchVerifyProfileController";
 import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarImagesController";
-import { fetchAadhaarImagesDto } from "../../zodSchemaDto/input/admin/fethAadhaarImagesDto";
+import { fetchAadhaarImagesDto } from "../../domain/zodSchemaDto/input/admin/fethAadhaarImagesDto";
 
 export class AdminRouter {
   private _router: Router;

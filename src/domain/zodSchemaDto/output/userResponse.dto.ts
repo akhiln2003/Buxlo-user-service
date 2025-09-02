@@ -10,6 +10,8 @@ export const UserResponseDto = z.object({
   role: z.enum(["user", "admin"]),
   createdAt: z.date(),
   updatedAt: z.date(),
+  premiumId: z.string().optional(),
+  premiumEndDate: z.date().optional(),
 });
 
 export type UserResponseDto = z.infer<typeof UserResponseDto>;
@@ -26,6 +28,10 @@ export class UserMapper {
       avatar: user.avatar,
       isGoogle: user.isGoogle,
       role: user.role,
+      premiumId: user.premiumId ?? undefined,
+      premiumEndDate: user.premiumEndDate
+        ? new Date(user.premiumEndDate)
+        : undefined,
       createdAt: new Date(user.createdAt),
       updatedAt: new Date(user.updatedAt),
     });

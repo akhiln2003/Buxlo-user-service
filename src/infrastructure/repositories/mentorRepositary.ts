@@ -2,10 +2,7 @@ import { BadRequest, InternalServerError } from "@buxlo/common";
 import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
 import { ImentorRepository } from "../../domain/interfaces/ImentorRepository";
 import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
-import {
-  MentorMapper,
-  MentorResponseDto,
-} from "../../zodSchemaDto/output/mentorResponse.dto";
+import { Mentor } from "../../domain/entities/mentor";
 
 export class MentorRepository implements ImentorRepository {
   async create({
@@ -24,7 +21,7 @@ export class MentorRepository implements ImentorRepository {
     isGoogle: boolean;
     avatar: string;
     yearsOfExperience: number;
-  }): Promise<MentorResponseDto> {
+  }): Promise<Mentor> {
     try {
       const newUser = MentorProfile.build({
         _id: id,
@@ -35,8 +32,7 @@ export class MentorRepository implements ImentorRepository {
         avatar,
         yearsOfExperience,
       });
-      const saved = await newUser.save();
-      return MentorMapper.toDto(saved);
+      return await newUser.save();
     } catch (error: any) {
       throw new BadRequest(`Failed to create mentor: ${error.message}`);
     }
@@ -44,23 +40,24 @@ export class MentorRepository implements ImentorRepository {
   async updateMentorProfile(
     userId: string,
     query: ImentorUpdateData
-  ): Promise<MentorResponseDto> {
+  ): Promise<Mentor> {
     try {
       const updatedProfile = await MentorProfile.findOneAndUpdate(
         { _id: userId },
         { $set: query },
         { new: true }
       );
-
-      return MentorMapper.toDto(updatedProfile);
+      if (!updatedProfile)
+        throw new BadRequest("Failed to update mentor profile");
+      return updatedProfile;
     } catch (error: any) {
       throw new BadRequest(`Failed to update mentorProfile: ${error.message}`);
     }
   }
-  async getMentorDetails(userId: string): Promise<MentorResponseDto | null> {
+  async getMentorDetails(userId: string): Promise<Mentor | null> {
     try {
       const mentorDetails = await MentorProfile.findById(userId);
-      return mentorDetails ? MentorMapper.toDto(mentorDetails) : null;
+      return mentorDetails ? mentorDetails : null;
     } catch (error: any) {
       throw new BadRequest(`Failed to get mentorDetails: ${error.message}`);
     }
@@ -69,14 +66,16 @@ export class MentorRepository implements ImentorRepository {
   async updateMentorProfileData(
     userId: string,
     data: { name?: string; avatar?: string }
-  ): Promise<MentorResponseDto> {
+  ): Promise<Mentor> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         userId,
         { $set: data },
         { new: true }
       );
-      return MentorMapper.toDto(updatedUser);
+      if (!updatedUser)
+        throw new BadRequest("Failed to update mentor profile data");
+      return updatedUser;
     } catch (error: any) {
       throw new Error(`db error to update mentor: ${error.message}`);
     }
@@ -85,7 +84,7 @@ export class MentorRepository implements ImentorRepository {
   async deleteMentorProfileData(
     userId: string,
     data: { avatar?: string }
-  ): Promise<MentorResponseDto> {
+  ): Promise<Mentor> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         userId,
@@ -93,7 +92,7 @@ export class MentorRepository implements ImentorRepository {
         { new: true }
       );
       if (!updatedUser) throw new BadRequest("Faild to delete mentor");
-      return MentorMapper.toDto(updatedUser);
+      return updatedUser;
     } catch (error: any) {
       throw new BadRequest(
         `Failed to delete mentorProfileData: ${error.message}`
@@ -109,14 +108,16 @@ export class MentorRepository implements ImentorRepository {
       aadhaarName: string;
       aadhaarNumber: string;
     }
-  ): Promise<MentorResponseDto> {
+  ): Promise<Mentor> {
     try {
       const updatedUser = await MentorProfile.findByIdAndUpdate(
         id,
         { $set: data },
         { new: true }
       );
-      return MentorMapper.toDto(updatedUser);
+      if (!updatedUser)
+        throw new BadRequest("Failed to apply profile verification");
+      return updatedUser;
     } catch (error: any) {
       throw new BadRequest(
         `Failed to applyProfileVerification: ${error.message}`
@@ -132,7 +133,7 @@ export class MentorRepository implements ImentorRepository {
       aadhaarName?: string;
       aadhaarNumber?: string;
     }
-  ): Promise<MentorResponseDto> {
+  ): Promise<Mentor> {
     try {
       const updateData: any = {};
       updateData.verified = verified;
@@ -159,7 +160,9 @@ export class MentorRepository implements ImentorRepository {
         },
         { new: true }
       );
-      return MentorMapper.toDto(updatedUser);
+
+      if (!updatedUser) throw new BadRequest("Failed to verifyProfile");
+      return updatedUser;
     } catch (error: any) {
       throw new BadRequest(`Failed to verifyProfile: ${error.message}`);
     }
@@ -169,7 +172,7 @@ export class MentorRepository implements ImentorRepository {
     page: number = 1,
     verified: "verified" | "applicationPending" | "all" | "verificationPending",
     searchData?: string
-  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     const limit = 10,
       skip = (page - 1) * limit,
       filter: any = {};
@@ -185,8 +188,7 @@ export class MentorRepository implements ImentorRepository {
     }
     const totalCount = await MentorProfile.countDocuments(filter);
     const totalPages = Math.ceil(totalCount / limit);
-    const mentors = await MentorProfile.find(filter).skip(skip).limit(limit);
-    const datas = mentors.map((mentor) => MentorMapper.toDto(mentor));
+    const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
 
     return { datas, totalPages };
   }
@@ -195,7 +197,7 @@ export class MentorRepository implements ImentorRepository {
     experience: string,
     rating: string,
     searchData: string
-  ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null> {
+  ): Promise<{ datas: Mentor[]; totalPages: number } | null> {
     try {
       const limit = 10,
         skip = (page - 1) * limit,
@@ -229,8 +231,7 @@ export class MentorRepository implements ImentorRepository {
 
       const totalCount = await MentorProfile.countDocuments(filter);
       const totalPages = Math.ceil(totalCount / limit);
-      const mentors = await MentorProfile.find(filter).skip(skip).limit(limit);
-      const datas = mentors.map((mentor) => MentorMapper.toDto(mentor));
+      const datas = await MentorProfile.find(filter).skip(skip).limit(limit);
 
       return { datas, totalPages };
     } catch (error: any) {

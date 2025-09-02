@@ -7,7 +7,7 @@ import {
 import sharp from "sharp";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
-import { MentorResponseDto } from "../../../zodSchemaDto/output/mentorResponse.dto";
+import { MentorMapper, MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
 export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
   constructor(
@@ -54,7 +54,7 @@ export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
         updatedData
       );
       this._userUpdateProducer.produce({ id, query: updatedData });
-      return data;
+      return MentorMapper.toDto(data);
     } catch (error) {
       console.error(error);
       throw new InternalServerError();

@@ -2,7 +2,10 @@ import { BadRequest, InternalServerError } from "@buxlo/common";
 import { Is3Service } from "../../../infrastructure/@types/Is3Service";
 import { IdeleteUserProfileImageUseCase } from "../../interface/common/IdeleteProfileImageUseCase";
 import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
-import { UserResponseDto } from "../../../zodSchemaDto/output/userResponse.dto";
+import {
+  UserMapper,
+  UserResponseDto,
+} from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
 export class DeleteUserProfileImageUseCase
   implements IdeleteUserProfileImageUseCase
@@ -21,7 +24,7 @@ export class DeleteUserProfileImageUseCase
         avatar: key,
       });
 
-      return data;
+      return UserMapper.toDto(data);
     } catch (error) {
       console.error("Error from deleteUserProfileUseCase : ", error);
 
