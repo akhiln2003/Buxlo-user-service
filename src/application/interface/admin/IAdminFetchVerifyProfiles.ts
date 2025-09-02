@@ -1,10 +1,9 @@
 import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export interface IfetchMentorsUseCase {
+export interface IAdminFetchVerifyProfilesUseCase {
   execute(
-    page: number,
-    experience: string,
-    raiting: string,
-    searchData: string
+    pageNum: number,
+    searchData: string,
+    verified: string
   ): Promise<{ datas: MentorResponseDto[]; totalPages: number } | null>;
 }

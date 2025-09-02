@@ -1,23 +1,26 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
+import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository";
 import {
-  ImentorUpdateData,
-  IupdateMentorProfileUseCase,
-} from "../../interface/mentor/IupdateMentorProfileUseCase";
+  IMentorUpdateData,
+  IUpdateMentorProfileUseCase,
+} from "../../interface/mentor/IUpdateMentorProfileUseCase";
 import sharp from "sharp";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
-import { MentorMapper, MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+import {
+  MentorMapper,
+  MentorResponseDto,
+} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export class UpdateMentorProfileUseCase implements IupdateMentorProfileUseCase {
+export class UpdateMentorProfileUseCase implements IUpdateMentorProfileUseCase {
   constructor(
-    private _mentorRepositary: ImentorRepository,
-    private _s3Service: Is3Service,
+    private _mentorRepositary: IMentorRepository,
+    private _s3Service: IS3Service,
     private _userUpdateProducer: UserUpdatedProducer
   ) {}
   async execute(
     id: string,
-    updatedData: ImentorUpdateData,
+    updatedData: IMentorUpdateData,
     file: any,
     currentProfileImage: string | undefined
   ): Promise<MentorResponseDto> {

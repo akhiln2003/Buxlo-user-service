@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { ImentorVerifyprofileUseCase } from "../../../application/interface/mentor/ImentorVerifyprofileUseCase";
+import { IMentorVerifyprofileUseCase } from "../../../application/interface/mentor/IMentorVerifyprofileUseCase";
 
 export class MentorVerifyprofileController {
   constructor(
-    private _mentorVerifyprofileUseCase: ImentorVerifyprofileUseCase
+    private _mentorVerifyprofileUseCase: IMentorVerifyprofileUseCase
   ) {}
   verify = async (req: Request, res: Response, next: NextFunction) => {
     try {

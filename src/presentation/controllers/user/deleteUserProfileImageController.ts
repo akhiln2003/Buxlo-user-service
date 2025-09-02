@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
-import { IdeleteUserProfileImageUseCase } from "../../../application/interface/common/IdeleteProfileImageUseCase";
+import { IDeleteUserProfileImageUseCase } from "../../../application/interface/common/IDeleteProfileImageUseCase";
 
 export class DeleteUserProfileImageController {
   constructor(
-    private _deleteProfileImageUseCase: IdeleteUserProfileImageUseCase
+    private _deleteProfileImageUseCase: IDeleteUserProfileImageUseCase
   ) {}
   deleteImage = async (req: Request, res: Response, next: NextFunction) => {
     try {

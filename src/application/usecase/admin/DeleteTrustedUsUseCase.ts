@@ -1,12 +1,12 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IdeleteTrustedUsUseCase } from "../../interface/admin/IdeleteTrustedUsUseCase";
-import { ItrustedUsRepository } from "../../../domain/interfaces/ItrustedUsRepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { IDeleteTrustedUsUseCase } from "../../interface/admin/IDeleteTrustedUsUseCase";
+import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepository";
 
-export class DeleteTrustedUsUseCase implements IdeleteTrustedUsUseCase {
+export class DeleteTrustedUsUseCase implements IDeleteTrustedUsUseCase {
   constructor(
-    private _trustedUsRepository: ItrustedUsRepository,
-    private _s3Service: Is3Service
+    private _trustedUsRepository: ITrustedUsRepository,
+    private _s3Service: IS3Service
   ) {}
   async execute(key: string, id: string): Promise<string | any> {
     try {

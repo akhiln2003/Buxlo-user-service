@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { IeditAdvUseCase } from "../../../application/interface/admin/IeditAdvUseCase";
+import { IEditAdvUseCase } from "../../../application/interface/admin/IEditAdvUseCase";
 
 export class EditAdvController {
-  constructor(private _editAdvUseCase: IeditAdvUseCase) {}
+  constructor(private _editAdvUseCase: IEditAdvUseCase) {}
 
   edit = async (req: Request, res: Response, next: NextFunction) => {
     try {

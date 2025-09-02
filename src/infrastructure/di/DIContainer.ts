@@ -3,14 +3,14 @@ import { FetchMentorProfileUseCase } from "../../application/usecase/mentor/Fetc
 import { UpdateMentorProfileUseCase } from "../../application/usecase/mentor/updateMentorUseCase";
 import { FetchUserProfileUseCase } from "../../application/usecase/user/FetchUserProfileUseCase";
 import { UpdateUserProfileUseCase } from "../../application/usecase/user/updateUserUseCase";
-import { Is3Service } from "../@types/Is3Service";
+import { IS3Service } from "../@types/IS3Service";
 import { MentorRepository } from "../repositories/mentorRepositary";
 import { UserRepository } from "../repositories/userRepositary";
 import { S3Service } from "../external-services/s3-client";
 import { DeleteUserProfileImageUseCase } from "../../application/usecase/user/DeleteUserProfileImageUseCase";
 import { NodeMailerService } from "../external-services/nodeMailerService";
 import { SendContactUsEmailUseCase } from "../../application/usecase/common/constactUsEmailUseCase";
-import { IsendContactUsEmailUseCase } from "../../application/interface/common/IemailService";
+import { ISendContactUsEmailUseCase } from "../../application/interface/common/IEmailService";
 import { CreateTurstedUsUsecase } from "../../application/usecase/admin/CreateTurstedUsUsecase";
 import { CreateAdvUsecase } from "../../application/usecase/admin/CreateAdvUsecase";
 import { AdvRepository } from "../repositories/advRepositary";
@@ -21,21 +21,21 @@ import { DeleteTrustedUsUseCase } from "../../application/usecase/admin/DeleteTr
 import { FetchAdvUseCase } from "../../application/usecase/admin/fetchAdvUseCase";
 import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdvUseCase";
 import { EditAdvUseCase } from "../../application/usecase/admin/EditAdvUseCase";
-import { ImentorVerifyprofileUseCase } from "../../application/interface/mentor/ImentorVerifyprofileUseCase";
+import { IMentorVerifyprofileUseCase } from "../../application/interface/mentor/IMentorVerifyprofileUseCase";
 import { MentorVerifyprofileUseCase } from "../../application/usecase/mentor/MentorVerifyprofileUseCase";
-import { IadminVerifyprofileUseCase } from "../../application/interface/admin/IadminVerifyprofileUseCase";
+import { IAdminVerifyprofileUseCase } from "../../application/interface/admin/IAdminVerifyprofileUseCase";
 import { AdminVerifyprofileUseCase } from "../../application/usecase/admin/AdminVerifyprofileUseCase";
-import { IadminFetchVerifyProfilesUseCase } from "../../application/interface/admin/IadminFetchVerifyProfiles";
+import { IAdminFetchVerifyProfilesUseCase } from "../../application/interface/admin/IAdminFetchVerifyProfiles";
 import { AdminFetchVerifyProfilesUseCase } from "../../application/usecase/admin/AdminFetchVerifyProfilesUseCase";
 import { UserUpdatedProducer } from "../MessageBroker/kafka/producer/userUpdateProducer";
 import { messageBroker } from "../MessageBroker/config";
-import { IfetchMentorsUseCase } from "../../application/interface/user/IfetchMentorsUseCase";
+import { IFetchMentorsUseCase } from "../../application/interface/user/IFetchMentorsUseCase";
 import { FetchMentorsUseCase } from "../../application/usecase/user/fetchMentorsUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
   private _mentorRepository: MentorRepository;
-  private _s3Service: Is3Service;
+  private _s3Service: IS3Service;
   private _nodeMailerService: NodeMailerService;
   private _advRepository: AdvRepository;
   private _trustedUsRepository: TrustedUsRepository;
@@ -80,7 +80,6 @@ export class DIContainer {
     );
   }
 
-  
   fetchS3ImageUseCase() {
     return new FetchS3ImageUseCase(this._s3Service);
   }
@@ -123,29 +122,29 @@ export class DIContainer {
     return new CreateAdvUsecase(this._s3Service, this._advRepository);
   }
 
-  sendContactUsEmailUseCase(): IsendContactUsEmailUseCase {
+  sendContactUsEmailUseCase(): ISendContactUsEmailUseCase {
     return new SendContactUsEmailUseCase(this._nodeMailerService);
   }
 
-  mentorVerifyprofileUseCase(): ImentorVerifyprofileUseCase {
+  mentorVerifyprofileUseCase(): IMentorVerifyprofileUseCase {
     return new MentorVerifyprofileUseCase(
       this._mentorRepository,
       this._s3Service
     );
   }
 
-  adminFetchVerifyProfilesUseCase(): IadminFetchVerifyProfilesUseCase {
+  adminFetchVerifyProfilesUseCase(): IAdminFetchVerifyProfilesUseCase {
     return new AdminFetchVerifyProfilesUseCase(this._mentorRepository);
   }
 
-  adminVerifyprofileUseCase(): IadminVerifyprofileUseCase {
+  adminVerifyprofileUseCase(): IAdminVerifyprofileUseCase {
     return new AdminVerifyprofileUseCase(
       this._mentorRepository,
       this._s3Service
     );
   }
 
-  fetchMentorsUseCase():IfetchMentorsUseCase{
+  fetchMentorsUseCase(): IFetchMentorsUseCase {
     return new FetchMentorsUseCase(this._mentorRepository);
   }
 }

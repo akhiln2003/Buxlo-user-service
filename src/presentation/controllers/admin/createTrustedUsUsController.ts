@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IcreateTurstedUsUsecase } from "../../../application/interface/admin/IcreateTurstedUsUsecase";
+import { ICreateTurstedUsUsecase } from "../../../application/interface/admin/ICreateTurstedUsUsecase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class CreateTrustedUsUsController {
-  constructor(private _createTurstedUsUsecase: IcreateTurstedUsUsecase) {}
+  constructor(private _createTurstedUsUsecase: ICreateTurstedUsUsecase) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {

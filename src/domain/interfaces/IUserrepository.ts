@@ -1,9 +1,9 @@
-import { IuserUpdateData } from "../../application/interface/user/IupdateUserProfileUseCase";
+import { IUserUpdateData } from "../../application/interface/user/IUpdateUserProfileUseCase";
 import { User } from "../entities/user";
 
-export interface IuserRepository {
+export interface IUserRepository {
   create(user: User): Promise<User>;
-  updateUserProfile(userId: string, query: IuserUpdateData): Promise<User>;
+  updateUserProfile(userId: string, query: IUserUpdateData): Promise<User>;
   getUserDetails(userId: string): Promise<User | null>;
   updateUserProfileData(
     userId: string,

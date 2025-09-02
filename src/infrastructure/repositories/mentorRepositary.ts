@@ -1,10 +1,10 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
-import { ImentorRepository } from "../../domain/interfaces/ImentorRepository";
+import { IMentorUpdateData } from "../../application/interface/mentor/IUpdateMentorProfileUseCase";
+import { IMentorRepository } from "../../domain/interfaces/IMentorRepository";
 import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
 import { Mentor } from "../../domain/entities/mentor";
 
-export class MentorRepository implements ImentorRepository {
+export class MentorRepository implements IMentorRepository {
   async create({
     id,
     email,
@@ -39,7 +39,7 @@ export class MentorRepository implements ImentorRepository {
   }
   async updateMentorProfile(
     userId: string,
-    query: ImentorUpdateData
+    query: IMentorUpdateData
   ): Promise<Mentor> {
     try {
       const updatedProfile = await MentorProfile.findOneAndUpdate(

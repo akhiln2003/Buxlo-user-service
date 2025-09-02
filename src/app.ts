@@ -1,5 +1,5 @@
 import { errorHandler } from "@buxlo/common";
-import { Iserver } from "./domain/interfaces/Iserver";
+import { IServer } from "./domain/interfaces/IServer";
 import {
   connectDB,
   disconnectDB,
@@ -16,7 +16,7 @@ import { PremiumCron } from "./infrastructure/external-services/premiumCron";
 
 export class App {
   private _premiumCron: PremiumCron;
-  constructor(private _server: Iserver) {
+  constructor(private _server: IServer) {
     this._premiumCron = new PremiumCron();
   }
 

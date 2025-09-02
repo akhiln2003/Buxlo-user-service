@@ -1,14 +1,17 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
-import { ImentorVerifyprofileUseCase } from "../../interface/mentor/ImentorVerifyprofileUseCase";
+import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository";
+import { IMentorVerifyprofileUseCase } from "../../interface/mentor/IMentorVerifyprofileUseCase";
 import sharp from "sharp";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { MentorMapper, MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import {
+  MentorMapper,
+  MentorResponseDto,
+} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export class MentorVerifyprofileUseCase implements ImentorVerifyprofileUseCase {
+export class MentorVerifyprofileUseCase implements IMentorVerifyprofileUseCase {
   constructor(
-    private _mentorRepository: ImentorRepository,
-    private _s3Service: Is3Service
+    private _mentorRepository: IMentorRepository,
+    private _s3Service: IS3Service
   ) {}
 
   async execute(

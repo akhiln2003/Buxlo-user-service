@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IfetchtrustedUsUseCase } from "../../../application/interface/admin/IfetchtrustedUsUseCase";
+import { IFetchtrustedUsUseCase } from "../../../application/interface/admin/IFetchtrustedUsUseCase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchtrustedusController {
-  constructor(private _fetchtrustedUsUseCase: IfetchtrustedUsUseCase) {}
+  constructor(private _fetchtrustedUsUseCase: IFetchtrustedUsUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page } = req.query;

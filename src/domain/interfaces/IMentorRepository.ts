@@ -1,10 +1,10 @@
-import { ImentorUpdateData } from "../../application/interface/mentor/IupdateMentorProfileUseCase";
+import { IMentorUpdateData } from "../../application/interface/mentor/IUpdateMentorProfileUseCase";
 import { Mentor } from "../entities/mentor";
 
-export interface ImentorRepository {
+export interface IMentorRepository {
   updateMentorProfile(
     userId: string,
-    query: ImentorUpdateData
+    query: IMentorUpdateData
   ): Promise<Mentor>;
   getMentorDetails(userId: string): Promise<Mentor | null>;
   updateMentorProfileData(

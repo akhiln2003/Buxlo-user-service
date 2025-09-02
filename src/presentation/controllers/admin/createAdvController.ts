@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IcreateAdvUsecase } from "../../../application/interface/admin/IcreateAdvUsecase";
+import { ICreateAdvUsecase } from "../../../application/interface/admin/ICreateAdvUsecase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class CreateAdvController {
-  constructor(private _createAdvUsecase: IcreateAdvUsecase) {}
+  constructor(private _createAdvUsecase: ICreateAdvUsecase) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {

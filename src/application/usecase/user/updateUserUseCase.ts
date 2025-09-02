@@ -1,26 +1,26 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import sharp from "sharp";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { IUserRepository } from "../../../domain/interfaces/IUserrepository";
 import {
-  IupdateUserProfileUseCase,
-  IuserUpdateData,
-} from "../../interface/user/IupdateUserProfileUseCase";
+  IUpdateUserProfileUseCase,
+  IUserUpdateData,
+} from "../../interface/user/IUpdateUserProfileUseCase";
 import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka/producer/userUpdateProducer";
 import {
   UserMapper,
   UserResponseDto,
 } from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
-export class UpdateUserProfileUseCase implements IupdateUserProfileUseCase {
+export class UpdateUserProfileUseCase implements IUpdateUserProfileUseCase {
   constructor(
-    private _userRepositary: IuserRepository,
-    private _s3Service: Is3Service,
+    private _userRepositary: IUserRepository,
+    private _s3Service: IS3Service,
     private _userUpdateProducer: UserUpdatedProducer
   ) {}
   async execute(
     id: string,
-    updatedData: IuserUpdateData,
+    updatedData: IUserUpdateData,
     file: any,
     currentProfileImage: string | undefined
   ): Promise<UserResponseDto> {

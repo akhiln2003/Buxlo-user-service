@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
-import { IdeleteAdvUseCase } from "../../../application/interface/admin/IdeleteAdvUsecase";
+import { IDeleteAdvUseCase } from "../../../application/interface/admin/IDeleteAdvUsecase";
 
 export class DdeleteAdvImageController {
-  constructor(private _deleteAdvImageUseCase: IdeleteAdvUseCase) {}
+  constructor(private _deleteAdvImageUseCase: IDeleteAdvUseCase) {}
   deleteImage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { key, id } = req.params;

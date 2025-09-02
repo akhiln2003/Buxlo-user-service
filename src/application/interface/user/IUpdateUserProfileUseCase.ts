@@ -1,14 +1,14 @@
 import { UserResponseDto } from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
-export interface IuserUpdateData {
+export interface IUserUpdateData {
   name?: string;
   avatar?: string;
 }
 
-export interface IupdateUserProfileUseCase {
+export interface IUpdateUserProfileUseCase {
   execute(
     id: string,
-    updatedData: IuserUpdateData,
+    updatedData: IUserUpdateData,
     file: any,
     currentProfileImage: string | undefined
   ): Promise<UserResponseDto>;

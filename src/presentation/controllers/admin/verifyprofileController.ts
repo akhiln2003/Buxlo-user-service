@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { IadminVerifyprofileUseCase } from "../../../application/interface/admin/IadminVerifyprofileUseCase";
+import { IAdminVerifyprofileUseCase } from "../../../application/interface/admin/IAdminVerifyprofileUseCase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class VerifyprofileController {
-  constructor(private _adminVerifyprofileUseCase: IadminVerifyprofileUseCase) {}
+  constructor(private _adminVerifyprofileUseCase: IAdminVerifyprofileUseCase) {}
   verify = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id, verified, unsetData } = req.body;

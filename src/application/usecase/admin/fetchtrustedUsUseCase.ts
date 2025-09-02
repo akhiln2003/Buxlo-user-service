@@ -1,11 +1,13 @@
 import { TrustedUs } from "../../../domain/entities/trustedUs";
-import { ItrustedUsRepository } from "../../../domain/interfaces/ItrustedUsRepository";
-import { IfetchtrustedUsUseCase } from "../../interface/admin/IfetchtrustedUsUseCase";
+import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepository";
+import { IFetchtrustedUsUseCase } from "../../interface/admin/IFetchtrustedUsUseCase";
 
-export class FetchtrustedUsUseCase implements IfetchtrustedUsUseCase {
-  constructor(private _trustedUsRepository: ItrustedUsRepository) {}
+export class FetchtrustedUsUseCase implements IFetchtrustedUsUseCase {
+  constructor(private _trustedUsRepository: ITrustedUsRepository) {}
 
-  async execute(page:number): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
+  async execute(
+    page: number
+  ): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
     return await this._trustedUsRepository.getTrustedUsDetails(page);
   }
 }

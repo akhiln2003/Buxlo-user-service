@@ -1,10 +1,10 @@
 import { BadRequest } from "@buxlo/common";
-import { IuserUpdateData } from "../../application/interface/user/IupdateUserProfileUseCase";
-import { IuserRepository } from "../../domain/interfaces/Iuserrepository";
+import { IUserUpdateData } from "../../application/interface/user/IUpdateUserProfileUseCase";
+import { IUserRepository } from "../../domain/interfaces/IUserrepository";
 import { UserProfile } from "../database/mongodb/schema/user.schema";
 import { User } from "../../domain/entities/user";
 
-export class UserRepository implements IuserRepository {
+export class UserRepository implements IUserRepository {
   async create({
     id,
     email,
@@ -36,7 +36,7 @@ export class UserRepository implements IuserRepository {
   }
   async updateUserProfile(
     userId: string,
-    query: IuserUpdateData
+    query: IUserUpdateData
   ): Promise<User> {
     try {
       const updatedProfile = await UserProfile.findOneAndUpdate(

@@ -1,6 +1,6 @@
 import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export interface ImentorVerifyprofileUseCase {
+export interface IMentorVerifyprofileUseCase {
   execute(
     id: string,
     files: any,

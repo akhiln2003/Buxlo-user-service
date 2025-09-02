@@ -1,16 +1,16 @@
 import { BadRequest } from "@buxlo/common";
-import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IadminVerifyprofileUseCase } from "../../interface/admin/IadminVerifyprofileUseCase";
+import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { IAdminVerifyprofileUseCase } from "../../interface/admin/IAdminVerifyprofileUseCase";
 import {
   MentorMapper,
   MentorResponseDto,
 } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export class AdminVerifyprofileUseCase implements IadminVerifyprofileUseCase {
+export class AdminVerifyprofileUseCase implements IAdminVerifyprofileUseCase {
   constructor(
-    private _mentorRepository: ImentorRepository,
-    private _s3Service: Is3Service
+    private _mentorRepository: IMentorRepository,
+    private _s3Service: IS3Service
   ) {}
 
   async execute(

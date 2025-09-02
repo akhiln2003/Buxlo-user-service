@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { NotFountError } from "@buxlo/common";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
-import { IfetchUserProfileUseCase } from "../../../application/interface/user/IfetchUserProfileUseCase";
+import { IFetchUserProfileUseCase } from "../../../application/interface/user/IFetchUserProfileUseCase";
 
 export class FetchUserProfileController {
-  constructor(private _fetchUserProfileUseCase: IfetchUserProfileUseCase) {}
+  constructor(private _fetchUserProfileUseCase: IFetchUserProfileUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;

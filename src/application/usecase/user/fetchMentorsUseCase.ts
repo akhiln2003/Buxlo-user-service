@@ -1,11 +1,11 @@
-import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
+import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository";
 import {
   MentorMapper,
   MentorResponseDto,
 } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
-import { IfetchMentorsUseCase } from "../../interface/user/IfetchMentorsUseCase";
-export class FetchMentorsUseCase implements IfetchMentorsUseCase {
-  constructor(private _mentorRepository: ImentorRepository) {}
+import { IFetchMentorsUseCase } from "../../interface/user/IFetchMentorsUseCase";
+export class FetchMentorsUseCase implements IFetchMentorsUseCase {
+  constructor(private _mentorRepository: IMentorRepository) {}
 
   async execute(
     page: number,

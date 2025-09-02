@@ -1,6 +1,6 @@
 import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export interface IadminVerifyprofileUseCase {
+export interface IAdminVerifyprofileUseCase {
   execute(
     id: string,
     verified: "verified" | "applicationPending",

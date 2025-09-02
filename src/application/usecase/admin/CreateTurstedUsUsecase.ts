@@ -1,13 +1,13 @@
 import { BadRequest } from "@buxlo/common";
-import { ItrustedUsRepository } from "../../../domain/interfaces/ItrustedUsRepository";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IcreateTurstedUsUsecase } from "../../interface/admin/IcreateTurstedUsUsecase";
+import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { ICreateTurstedUsUsecase } from "../../interface/admin/ICreateTurstedUsUsecase";
 import sharp from "sharp";
 
-export class CreateTurstedUsUsecase implements IcreateTurstedUsUsecase {
+export class CreateTurstedUsUsecase implements ICreateTurstedUsUsecase {
   constructor(
-    private _s3Service: Is3Service,
-    private _trustedUsRepository: ItrustedUsRepository
+    private _s3Service: IS3Service,
+    private _trustedUsRepository: ITrustedUsRepository
   ) {}
   async execute(file: any): Promise<any> {
     try {

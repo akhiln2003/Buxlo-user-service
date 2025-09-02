@@ -1,6 +1,6 @@
 import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
 
-export interface ImentorUpdateData {
+export interface IMentorUpdateData {
   name?: string;
   bio?: string;
   expertise?: string;
@@ -8,10 +8,10 @@ export interface ImentorUpdateData {
   avatar?: string;
 }
 
-export interface IupdateMentorProfileUseCase {
+export interface IUpdateMentorProfileUseCase {
   execute(
     id: string,
-    updatedData: ImentorUpdateData,
+    updatedData: IMentorUpdateData,
     file: any,
     currentProfileImage: string | undefined
   ): Promise<MentorResponseDto>;

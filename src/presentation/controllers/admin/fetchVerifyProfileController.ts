@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { IadminFetchVerifyProfilesUseCase } from "../../../application/interface/admin/IadminFetchVerifyProfiles";
+import { IAdminFetchVerifyProfilesUseCase } from "../../../application/interface/admin/IAdminFetchVerifyProfiles";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchVerifyProfileController {
   constructor(
-    private _adminFetchVerifyProfilesUseCase: IadminFetchVerifyProfilesUseCase
+    private _adminFetchVerifyProfilesUseCase: IAdminFetchVerifyProfilesUseCase
   ) {}
 
   fetch = async (req: Request, res: Response, next: NextFunction) => {

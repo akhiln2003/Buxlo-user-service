@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
+import { IUserRepository } from "../../../domain/interfaces/IUserrepository";
 
 export class CheckPremiumExpiryUseCase {
-  constructor(private userRepository: IuserRepository) {}
+  constructor(private userRepository: IUserRepository) {}
 
   async execute(): Promise<void> {
     const now = dayjs().toDate();

@@ -1,18 +1,18 @@
 import { BadRequest, InternalServerError } from "@buxlo/common";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IdeleteUserProfileImageUseCase } from "../../interface/common/IdeleteProfileImageUseCase";
-import { IuserRepository } from "../../../domain/interfaces/Iuserrepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { IDeleteUserProfileImageUseCase } from "../../interface/common/IDeleteProfileImageUseCase";
+import { IUserRepository } from "../../../domain/interfaces/IUserrepository";
 import {
   UserMapper,
   UserResponseDto,
 } from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
 export class DeleteUserProfileImageUseCase
-  implements IdeleteUserProfileImageUseCase
+  implements IDeleteUserProfileImageUseCase
 {
   constructor(
-    private _userRepositary: IuserRepository,
-    private _s3Service: Is3Service
+    private _userRepositary: IUserRepository,
+    private _s3Service: IS3Service
   ) {}
   async execute(key: string, id: string): Promise<UserResponseDto> {
     try {

@@ -1,14 +1,14 @@
 import { BadRequest } from "@buxlo/common";
 import {
-  IcontactUsEmailInput,
-  IemailService,
-  IsendContactUsEmailUseCase,
-} from "../../interface/common/IemailService";
+  IContactUsEmailInput,
+  IEmailService,
+  ISendContactUsEmailUseCase,
+} from "../../interface/common/IEmailService";
 
-export class SendContactUsEmailUseCase implements IsendContactUsEmailUseCase {
-  constructor(private _emailService: IemailService) {}
+export class SendContactUsEmailUseCase implements ISendContactUsEmailUseCase {
+  constructor(private _emailService: IEmailService) {}
 
-  async execute(input: IcontactUsEmailInput): Promise<void | boolean> {
+  async execute(input: IContactUsEmailInput): Promise<void | boolean> {
     try {
       const subject = input.subject;
       const body = input.message;

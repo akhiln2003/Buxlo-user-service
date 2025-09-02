@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { IfetchMentorProfileUseCase } from "../../../application/interface/mentor/IfetchMentorProfileUseCase";
+import { IFetchMentorProfileUseCase } from "../../../application/interface/mentor/IFetchMentorProfileUseCase";
 import { NotFountError } from "@buxlo/common";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class FetchMentorProfileController {
-  constructor(private _fetchMentorProfileUseCase: IfetchMentorProfileUseCase) {}
+  constructor(private _fetchMentorProfileUseCase: IFetchMentorProfileUseCase) {}
   fetchData = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;

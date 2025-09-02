@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
-import { IdeleteTrustedUsUseCase } from "../../../application/interface/admin/IdeleteTrustedUsUseCase";
+import { IDeleteTrustedUsUseCase } from "../../../application/interface/admin/IDeleteTrustedUsUseCase";
 
 export class DeleteTrustedUsImageController {
-  constructor(private _deleteTrustedUsUseCase: IdeleteTrustedUsUseCase) {}
+  constructor(private _deleteTrustedUsUseCase: IDeleteTrustedUsUseCase) {}
   deleteImage = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { key, id } = req.params;

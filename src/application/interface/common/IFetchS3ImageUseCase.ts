@@ -1,3 +1,3 @@
-export interface IfetchS3ImageUseCase {
+export interface IFetchS3ImageUseCase {
   execute(key: string[]): Promise<string[] | any>;
 }

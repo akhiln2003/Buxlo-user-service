@@ -1,14 +1,14 @@
-import { ImentorRepository } from "../../../domain/interfaces/ImentorRepository";
+import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository";
 import {
   MentorMapper,
   MentorResponseDto,
 } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
-import { IadminFetchVerifyProfilesUseCase } from "../../interface/admin/IadminFetchVerifyProfiles";
+import { IAdminFetchVerifyProfilesUseCase } from "../../interface/admin/IAdminFetchVerifyProfiles";
 
 export class AdminFetchVerifyProfilesUseCase
-  implements IadminFetchVerifyProfilesUseCase
+  implements IAdminFetchVerifyProfilesUseCase
 {
-  constructor(private _mentorRepository: ImentorRepository) {}
+  constructor(private _mentorRepository: IMentorRepository) {}
 
   async execute(
     pageNum: number,

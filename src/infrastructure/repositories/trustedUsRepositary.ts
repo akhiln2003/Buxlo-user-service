@@ -1,8 +1,8 @@
 import { TrustedUs } from "../../domain/entities/trustedUs";
-import { ItrustedUsRepository } from "../../domain/interfaces/ItrustedUsRepository";
+import { ITrustedUsRepository } from "../../domain/interfaces/ITrustedUsRepository";
 import { TrustedUsSchema } from "../database/mongodb/schema/trustedUs.schema";
 
-export class TrustedUsRepository implements ItrustedUsRepository {
+export class TrustedUsRepository implements ITrustedUsRepository {
   async create({
     id,
     image,
@@ -21,16 +21,21 @@ export class TrustedUsRepository implements ItrustedUsRepository {
     }
   }
 
-  async getTrustedUsDetails(page:number): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
+  async getTrustedUsDetails(
+    page: number
+  ): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
     try {
       const limit = 5; // Number of users per page
       const skip = (page - 1) * limit;
 
       const totalCount = await TrustedUsSchema.countDocuments();
       const totalPages = Math.ceil(totalCount / limit);
-      const trustedUs = await TrustedUsSchema.find().sort({_id:-1}).skip(skip).limit(limit);
+      const trustedUs = await TrustedUsSchema.find()
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(limit);
 
-      return { trustedUs , totalPages };
+      return { trustedUs, totalPages };
     } catch (error: any) {
       console.error(error);
 
@@ -40,7 +45,7 @@ export class TrustedUsRepository implements ItrustedUsRepository {
 
   async delete(id: string): Promise<void> {
     try {
-       await TrustedUsSchema.findByIdAndDelete(id);
+      await TrustedUsSchema.findByIdAndDelete(id);
     } catch (error: any) {
       console.error(error);
 

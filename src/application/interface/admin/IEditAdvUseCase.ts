@@ -1,6 +1,6 @@
 import { Adv } from "../../../domain/entities/adv";
 
-export interface IqueryData {
+export interface IQueryData {
   title?: string;
   description?: string;
   id?: string;
@@ -8,6 +8,6 @@ export interface IqueryData {
   image?:string;
 }
 
-export interface IeditAdvUseCase {
-  execute(data: IqueryData, file: any): Promise<Adv | any>;
+export interface IEditAdvUseCase {
+  execute(data: IQueryData, file: any): Promise<Adv | any>;
 }

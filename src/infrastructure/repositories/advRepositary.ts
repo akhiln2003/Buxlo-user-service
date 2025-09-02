@@ -1,9 +1,9 @@
 import { BadRequest } from "@buxlo/common";
 import { Adv } from "../../domain/entities/adv";
-import { IadvRepository } from "../../domain/interfaces/IadvRepository";
+import { IAdvRepository } from "../../domain/interfaces/IAdvRepository";
 import { AdvSchema } from "../database/mongodb/schema/adv.schema";
 
-export class AdvRepository implements IadvRepository {
+export class AdvRepository implements IAdvRepository {
   async create(adv: Adv): Promise<Adv> {
     try {
       const newAdv = AdvSchema.build({
@@ -18,14 +18,19 @@ export class AdvRepository implements IadvRepository {
     }
   }
 
-  async getAdvDetails(page: number): Promise<{ advs: Adv[]; totalPages: number } | null> {
+  async getAdvDetails(
+    page: number
+  ): Promise<{ advs: Adv[]; totalPages: number } | null> {
     try {
       const limit = 5; // Number of users per page
       const skip = (page - 1) * limit;
 
       const totalCount = await AdvSchema.countDocuments();
       const totalPages = Math.ceil(totalCount / limit);
-      const advs = await AdvSchema.find().sort({_id:-1}).skip(skip).limit(limit);
+      const advs = await AdvSchema.find()
+        .sort({ _id: -1 })
+        .skip(skip)
+        .limit(limit);
 
       return { advs, totalPages };
     } catch (error: any) {

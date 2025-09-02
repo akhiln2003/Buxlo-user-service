@@ -1,20 +1,20 @@
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
-import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
+import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
 import {
-  IeditAdvUseCase,
-  IqueryData,
-} from "../../interface/admin/IeditAdvUseCase";
+  IEditAdvUseCase,
+  IQueryData,
+} from "../../interface/admin/IEditAdvUseCase";
 import { Adv } from "../../../domain/entities/adv";
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import sharp from "sharp";
 
-export class EditAdvUseCase implements IeditAdvUseCase {
+export class EditAdvUseCase implements IEditAdvUseCase {
   constructor(
-    private _advRepositary: IadvRepository,
-    private _s3Service: Is3Service
+    private _advRepositary: IAdvRepository,
+    private _s3Service: IS3Service
   ) {}
 
-  async execute(data: IqueryData, file: any): Promise<Adv | any> {
+  async execute(data: IQueryData, file: any): Promise<Adv | any> {
     try {
       if (file) {
         if (data.currentImage) {

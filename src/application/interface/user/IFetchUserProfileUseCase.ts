@@ -1,5 +1,5 @@
 import { UserResponseDto } from "../../../domain/zodSchemaDto/output/userResponse.dto";
 
-export interface IfetchUserProfileUseCase {
+export interface IFetchUserProfileUseCase {
   execute(id: string): Promise<UserResponseDto>;
 }

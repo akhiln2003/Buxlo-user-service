@@ -1,9 +1,9 @@
 import { Adv } from "../../../domain/entities/adv";
-import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
-import { IfetchAdvUseCase } from "../../interface/admin/IfetchAdvUseCase";
+import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
+import { IFetchAdvUseCase } from "../../interface/admin/IFetchAdvUseCase";
 
-export class FetchAdvUseCase implements IfetchAdvUseCase {
-  constructor(private _advRepository: IadvRepository) {}
+export class FetchAdvUseCase implements IFetchAdvUseCase {
+  constructor(private _advRepository: IAdvRepository) {}
 
   async execute(
     page: number

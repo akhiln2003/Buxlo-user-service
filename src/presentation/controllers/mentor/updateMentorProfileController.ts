@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  ImentorUpdateData,
-  IupdateMentorProfileUseCase,
-} from "../../../application/interface/mentor/IupdateMentorProfileUseCase";
+  IMentorUpdateData,
+  IUpdateMentorProfileUseCase,
+} from "../../../application/interface/mentor/IUpdateMentorProfileUseCase";
 import HttpStatusCode from "@buxlo/common/build/common/httpStatusCode";
 
 export class UpdateMentorProfileController {
   constructor(
-    private _updateMentorProfileUseCase: IupdateMentorProfileUseCase
+    private _updateMentorProfileUseCase: IUpdateMentorProfileUseCase
   ) {}
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -16,7 +16,7 @@ export class UpdateMentorProfileController {
       const { file } = req;
       const data = await this._updateMentorProfileUseCase.execute(
         id,
-        updatedData as ImentorUpdateData,
+        updatedData as IMentorUpdateData,
         file,
         currentProfileImage
       );

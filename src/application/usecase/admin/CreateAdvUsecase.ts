@@ -1,19 +1,19 @@
 import sharp from "sharp";
-import { Is3Service } from "../../../infrastructure/@types/Is3Service";
+import { IS3Service } from "../../../infrastructure/@types/IS3Service";
 import {
-  IcreateAdvData,
-  IcreateAdvUsecase,
-} from "../../interface/admin/IcreateAdvUsecase";
+  ICreateAdvData,
+  ICreateAdvUsecase,
+} from "../../interface/admin/ICreateAdvUsecase";
 import { Adv } from "../../../domain/entities/adv";
 import { BadRequest } from "@buxlo/common";
-import { IadvRepository } from "../../../domain/interfaces/IadvRepository";
+import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
 
-export class CreateAdvUsecase implements IcreateAdvUsecase {
+export class CreateAdvUsecase implements ICreateAdvUsecase {
   constructor(
-    private _s3Service: Is3Service,
-    private _advRepository: IadvRepository
+    private _s3Service: IS3Service,
+    private _advRepository: IAdvRepository
   ) {}
-  async execute(newData: IcreateAdvData, file: any): Promise<Adv | any> {
+  async execute(newData: ICreateAdvData, file: any): Promise<Adv | any> {
     try {
       if (!file || !newData) {
         throw new BadRequest("Faild to create pleas try again");
