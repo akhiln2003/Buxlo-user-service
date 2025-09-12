@@ -1,4 +1,4 @@
-import { TrustedUs } from "../entities/trustedUs";
+import { TrustedUs } from "../entities/trustedUs.entity";
 
 export interface ITrustedUsRepository {
   create(adv: TrustedUs): Promise<TrustedUs>;

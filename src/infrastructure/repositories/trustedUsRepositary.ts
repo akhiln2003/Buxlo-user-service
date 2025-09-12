@@ -1,4 +1,4 @@
-import { TrustedUs } from "../../domain/entities/trustedUs";
+import { TrustedUs } from "../../domain/entities/trustedUs.entity";
 import { ITrustedUsRepository } from "../../domain/interfaces/ITrustedUsRepository";
 import { TrustedUsSchema } from "../database/mongodb/schema/trustedUs.schema";
 

@@ -1,4 +1,4 @@
-import { Adv } from "../entities/adv";
+import { Adv } from "../entities/adv.entites";
 
 export interface IAdvRepository {
   create(adv: Adv): Promise<Adv>;

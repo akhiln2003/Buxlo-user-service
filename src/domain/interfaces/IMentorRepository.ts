@@ -1,5 +1,5 @@
 import { IMentorUpdateData } from "../../application/interface/mentor/IUpdateMentorProfileUseCase";
-import { Mentor } from "../entities/mentor";
+import { Mentor } from "../entities/mentor.entity";
 
 export interface IMentorRepository {
   updateMentorProfile(

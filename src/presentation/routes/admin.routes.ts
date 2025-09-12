@@ -1,29 +1,29 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
 import multer from "multer";
-import { CreateTrustedUsUsController } from "../controllers/admin/createTrustedUsUsController";
-import { FetchtrustedusController } from "../controllers/admin/fetchtrustedusController";
-import { FetchtrustedusImageController } from "../controllers/admin/fetchtrustedusImageController";
-import { DeleteTrustedUsImageController } from "../controllers/admin/deleteTrustedUsImageController";
-import { DdeleteAdvImageController } from "../controllers/admin/deleteAdvImageController";
-import { CreateAdvController } from "../controllers/admin/createAdvController";
-import { FetchAdvController } from "../controllers/admin/fetchAdvController";
-import { FetchAdvImageController } from "../controllers/admin/fetchAdvImageController";
-import { EditAdvController } from "../controllers/admin/editAdvController";
+import { CreateTrustedUsUsController } from "../controllers/admin/createTrustedUsUs.controller";
+import { FetchtrustedusController } from "../controllers/admin/fetchtrustedus.controller";
+import { FetchtrustedusImageController } from "../controllers/admin/fetchtrustedusImage.controller";
+import { DeleteTrustedUsImageController } from "../controllers/admin/deleteTrustedUsImage.controller";
+import { DdeleteAdvImageController } from "../controllers/admin/deleteAdvImage.controller";
+import { CreateAdvController } from "../controllers/admin/createAdv.controller";
+import { FetchAdvController } from "../controllers/admin/fetchAdv.controller";
+import { FetchAdvImageController } from "../controllers/admin/fetchAdvImage.controller";
+import { EditAdvController } from "../controllers/admin/editAdv.controller";
 import {
   validateReqBody,
   validateReqParams,
   validateReqQueryParams,
 } from "@buxlo/common";
-import { fetchTrustedUsAndAdvImageDto } from "../../domain/zodSchemaDto/input/admin/fetchadvimageDto";
-import { fetchtrustedusAndAdvDto } from "../../domain/zodSchemaDto/input/admin/fetchtrustedusAndAdvDto";
-import { verifyProfileDto } from "../../domain/zodSchemaDto/input/admin/verifyProfileDto";
-import { deleteAdvAndTrustedUsimageDto } from "../../domain/zodSchemaDto/input/admin/deleteAdvAndTrustedUsimageDto";
-import { VerifyprofileController } from "../controllers/admin/verifyprofileController";
-import { fetchverifyprofileDto } from "../../domain/zodSchemaDto/input/admin/listverifyprofileDto";
-import { FetchVerifyProfileController } from "../controllers/admin/fetchVerifyProfileController";
-import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarImagesController";
-import { fetchAadhaarImagesDto } from "../../domain/zodSchemaDto/input/admin/fethAadhaarImagesDto";
+import { fetchTrustedUsAndAdvImageDto } from "../../domain/zodSchemaDto/input/admin/fetchadvimage.dto";
+import { fetchtrustedusAndAdvDto } from "../../domain/zodSchemaDto/input/admin/fetchtrustedusAndAdv.dto";
+import { verifyProfileDto } from "../../domain/zodSchemaDto/input/admin/verifyProfile.dto";
+import { deleteAdvAndTrustedUsimageDto } from "../../domain/zodSchemaDto/input/admin/deleteAdvAndTrustedUsimage.dto";
+import { VerifyprofileController } from "../controllers/admin/verifyprofile.controller";
+import { fetchverifyprofileDto } from "../../domain/zodSchemaDto/input/admin/listverifyprofile.dto";
+import { FetchVerifyProfileController } from "../controllers/admin/fetchVerifyProfile.controller";
+import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarImages.controller";
+import { fetchAadhaarImagesDto } from "../../domain/zodSchemaDto/input/admin/fethAadhaarImages.dto";
 
 export class AdminRouter {
   private _router: Router;

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
-import { ContactUsController } from "../controllers/common/contactUsController";
+import { ContactUsController } from "../controllers/common/contactUs.controller";
 
 export class CommonRouter {
   private _router: Router;

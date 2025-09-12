@@ -2,7 +2,7 @@ import { BadRequest, InternalServerError } from "@buxlo/common";
 import { IMentorUpdateData } from "../../application/interface/mentor/IUpdateMentorProfileUseCase";
 import { IMentorRepository } from "../../domain/interfaces/IMentorRepository";
 import { MentorProfile } from "../database/mongodb/schema/mentor.schema";
-import { Mentor } from "../../domain/entities/mentor";
+import { Mentor } from "../../domain/entities/mentor.entity";
 
 export class MentorRepository implements IMentorRepository {
   async create({

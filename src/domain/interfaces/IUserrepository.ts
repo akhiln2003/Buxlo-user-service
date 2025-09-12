@@ -1,5 +1,5 @@
 import { IUserUpdateData } from "../../application/interface/user/IUpdateUserProfileUseCase";
-import { User } from "../entities/user";
+import { User } from "../entities/user.entity";
 
 export interface IUserRepository {
   create(user: User): Promise<User>;

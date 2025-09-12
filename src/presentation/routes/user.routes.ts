@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
-import { FetchUserProfileController } from "../controllers/user/fetchUserProfileController";
+import { FetchUserProfileController } from "../controllers/user/fetchUserProfile.controller";
 import multer from "multer";
-import { UpdateUserProfileController } from "../controllers/user/updateUserProfileController";
-import { FetchUserProfileImageController } from "../controllers/user/fetchUserProfileImageController";
-import { DeleteUserProfileImageController } from "../controllers/user/deleteUserProfileImageController";
-import { FetchMentorsController } from "../controllers/user/fetchMentorsController";
+import { UpdateUserProfileController } from "../controllers/user/updateUserProfile.controller";
+import { FetchUserProfileImageController } from "../controllers/user/fetchUserProfileImage.controller";
+import { DeleteUserProfileImageController } from "../controllers/user/deleteUserProfileImage.controller";
+import { FetchMentorsController } from "../controllers/user/fetchMentors.controller";
 import { validateReqBody } from "@buxlo/common";
-import { fetchProfileImageDto } from "../../domain/zodSchemaDto/input/common/fetchprofileimage.Dto";
+import { fetchProfileImageDto } from "../../domain/zodSchemaDto/input/common/fetchprofileimage.dto";
 
 export class UserRouter {
   private _router: Router;

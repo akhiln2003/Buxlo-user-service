@@ -6,10 +6,10 @@ import {
 } from "./infrastructure/database/mongodb/connection";
 import { grpcService } from "./infrastructure/rpc/grpc/server";
 import loggerMiddleware from "./presentation/middlewares/loggerMiddleware";
-import { MentorRouter } from "./presentation/routes/mentorRouts";
-import { UserRouter } from "./presentation/routes/userRouts";
-import { CommonRouter } from "./presentation/routes/commonRouts";
-import { AdminRouter } from "./presentation/routes/adminRouts";
+import { MentorRouter } from "./presentation/routes/mentor.routes";
+import { UserRouter } from "./presentation/routes/user.routes";
+import { CommonRouter } from "./presentation/routes/common.routes";
+import { AdminRouter } from "./presentation/routes/admin.routes";
 import { messageBroker } from "./infrastructure/MessageBroker/config";
 import { grpcSubscriptionService } from "./infrastructure/rpc/grpc/subscriptionService";
 import { PremiumCron } from "./infrastructure/external-services/premiumCron";

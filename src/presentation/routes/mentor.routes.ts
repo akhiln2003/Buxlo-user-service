@@ -1,16 +1,16 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
-import { FetchMentorProfileController } from "../controllers/mentor/fetchMentorProfileController";
-import { UpdateMentorProfileController } from "../controllers/mentor/updateMentorProfileController";
+import { FetchMentorProfileController } from "../controllers/mentor/fetchMentorProfile.controller";
+import { UpdateMentorProfileController } from "../controllers/mentor/updateMentorProfile.controller";
 import multer from "multer";
-import { FetchMentorProfileImageController } from "../controllers/mentor/fetchMentorProfileImageController";
-import { DeleteMentorProfileImageController } from "../controllers/mentor/deleteMentorProfileImageController";
-import { fetchprofileDto } from "../../domain/zodSchemaDto/input/mentor/fetchprofile.Dto";
+import { FetchMentorProfileImageController } from "../controllers/mentor/fetchMentorProfileImage.controller";
+import { DeleteMentorProfileImageController } from "../controllers/mentor/deleteMentorProfileImage.controller";
+import { fetchprofileDto } from "../../domain/zodSchemaDto/input/mentor/fetchprofile.dto";
 import { validateReqBody, validateReqParams } from "@buxlo/common";
-import { fetchProfileImageDto } from "../../domain/zodSchemaDto/input/common/fetchprofileimage.Dto";
-import { deleteprofileimageDto } from "../../domain/zodSchemaDto/input/mentor/deleteprofileimage.Dto";
-import { MentorVerifyprofileController } from "../controllers/mentor/mentorVerifyprofileController";
-import { verifyProfileDto } from "../../domain/zodSchemaDto/input/mentor/verifyprofile.Dto";
+import { fetchProfileImageDto } from "../../domain/zodSchemaDto/input/common/fetchprofileimage.dto";
+import { deleteprofileimageDto } from "../../domain/zodSchemaDto/input/mentor/deleteprofileimage.dto";
+import { MentorVerifyprofileController } from "../controllers/mentor/mentorVerifyprofile.controller";
+import { verifyProfileDto } from "../../domain/zodSchemaDto/input/mentor/verifyprofile.dto";
 
 export class MentorRouter {
   private _router: Router;

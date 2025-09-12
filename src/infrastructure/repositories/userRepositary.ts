@@ -2,7 +2,7 @@ import { BadRequest } from "@buxlo/common";
 import { IUserUpdateData } from "../../application/interface/user/IUpdateUserProfileUseCase";
 import { IUserRepository } from "../../domain/interfaces/IUserrepository";
 import { UserProfile } from "../database/mongodb/schema/user.schema";
-import { User } from "../../domain/entities/user";
+import { User } from "../../domain/entities/user.entity";
 
 export class UserRepository implements IUserRepository {
   async create({

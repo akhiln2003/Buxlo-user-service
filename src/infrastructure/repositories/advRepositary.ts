@@ -1,5 +1,5 @@
 import { BadRequest } from "@buxlo/common";
-import { Adv } from "../../domain/entities/adv";
+import { Adv } from "../../domain/entities/adv.entites";
 import { IAdvRepository } from "../../domain/interfaces/IAdvRepository";
 import { AdvSchema } from "../database/mongodb/schema/adv.schema";
 

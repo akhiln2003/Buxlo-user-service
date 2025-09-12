@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { UserRepository } from "../repositories/userRepositary";
-import { CheckPremiumExpiryUseCase } from "../../application/usecase/common/checkPremiumExpiry";
+import { CheckPremiumExpiryUseCase } from "../../application/usecase/common/checkPremiumExpiry.usecase";
 
 export class PremiumCron {
   private _checkPremiumExpiryUseCase: CheckPremiumExpiryUseCase;
