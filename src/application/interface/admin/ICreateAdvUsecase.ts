@@ -1,4 +1,4 @@
-import { Adv } from "../../../domain/entities/adv";
+import { AdvResponseDto } from "../../../domain/zodSchemaDto/output/adbResponse.dto";
 
 export interface ICreateAdvData {
    image: string,
@@ -8,5 +8,5 @@ export interface ICreateAdvData {
 }
 
 export interface ICreateAdvUsecase {
-  execute(updatedData: ICreateAdvData, file: any): Promise<Adv | any>;
+  execute(updatedData: ICreateAdvData, file: any): Promise<AdvResponseDto>;
 }

@@ -11,7 +11,7 @@ interface MentorAttr {
   bio?: string;
   expertise?: string[];
   yearsOfExperience?: number;
-  verified?: "verified" | "applicationPending" | "verificationPending";
+  verified: "verified" | "applicationPending" | "verificationPending";
   aadhaarFrontImage?: string;
   aadhaarBackImage?: string;
   aadhaarName?: string;

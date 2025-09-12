@@ -46,7 +46,7 @@ export class App {
   }
 
   private _registerErrorHandler(): void {
-    this._server.registerErrorHandler(errorHandler as any);
+    this._server.registerErrorHandler(errorHandler);
   }
 
   async start(port: number): Promise<void> {
@@ -80,7 +80,7 @@ export class App {
   private async _connectKafka(): Promise<void> {
     await messageBroker.connect();
   }
-  
+
   private _startCrons(): void {
     this._premiumCron.start();
   }

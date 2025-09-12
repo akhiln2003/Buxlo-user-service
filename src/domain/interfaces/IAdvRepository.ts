@@ -5,9 +5,9 @@ export interface IAdvRepository {
   getAdvDetails(
     page: number
   ): Promise<{ advs: Adv[]; totalPages: number } | null>;
-  delete(id: string): Promise<void>;
+  delete(id: string): Promise<string>;
   update(
     id: string,
     data: { title?: string; description?: string; image?: string }
-  ): Promise<Adv | any>;
+  ): Promise<Adv>;
 }

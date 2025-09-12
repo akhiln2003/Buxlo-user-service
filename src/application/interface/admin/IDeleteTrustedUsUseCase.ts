@@ -1,4 +1,4 @@
 
 export interface IDeleteTrustedUsUseCase {
-    execute(key: string, id: string): Promise<string | any>;
+    execute(key: string, id: string): Promise<string>;
   }

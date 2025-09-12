@@ -8,8 +8,6 @@ export const UserResponseDto = z.object({
   avatar: z.string().optional(),
   isGoogle: z.boolean(),
   role: z.enum(["user", "admin"]),
-  createdAt: z.date(),
-  updatedAt: z.date(),
   premiumId: z.string().optional(),
   premiumEndDate: z.date().optional(),
 });
@@ -32,8 +30,6 @@ export class UserMapper {
       premiumEndDate: user.premiumEndDate
         ? new Date(user.premiumEndDate)
         : undefined,
-      createdAt: new Date(user.createdAt),
-      updatedAt: new Date(user.updatedAt),
     });
   }
 }

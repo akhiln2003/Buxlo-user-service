@@ -4,9 +4,12 @@ import {
   IEditAdvUseCase,
   IQueryData,
 } from "../../interface/admin/IEditAdvUseCase";
-import { Adv } from "../../../domain/entities/adv";
 import { BadRequest, InternalServerError } from "@buxlo/common";
 import sharp from "sharp";
+import {
+  AdvMapper,
+  AdvResponseDto,
+} from "../../../domain/zodSchemaDto/output/adbResponse.dto";
 
 export class EditAdvUseCase implements IEditAdvUseCase {
   constructor(
@@ -14,7 +17,7 @@ export class EditAdvUseCase implements IEditAdvUseCase {
     private _s3Service: IS3Service
   ) {}
 
-  async execute(data: IQueryData, file: any): Promise<Adv | any> {
+  async execute(data: IQueryData, file: any): Promise<AdvResponseDto> {
     try {
       if (file) {
         if (data.currentImage) {
@@ -70,7 +73,7 @@ export class EditAdvUseCase implements IEditAdvUseCase {
           query
         );
 
-        return updatedData;
+        return AdvMapper.toDto(updatedData);
       } else {
         throw new BadRequest("Somthing when rong please try again laiter");
       }

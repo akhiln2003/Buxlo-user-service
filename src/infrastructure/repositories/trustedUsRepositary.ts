@@ -43,9 +43,13 @@ export class TrustedUsRepository implements ITrustedUsRepository {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<string> {
     try {
-      await TrustedUsSchema.findByIdAndDelete(id);
+      const data = await TrustedUsSchema.findByIdAndDelete(id);
+
+      return data
+        ? "Successfully deleted trusted us logo image"
+        : "Faild to deleted trusted us logo image";
     } catch (error: any) {
       console.error(error);
 

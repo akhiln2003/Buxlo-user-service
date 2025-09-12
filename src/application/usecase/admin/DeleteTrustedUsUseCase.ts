@@ -8,15 +8,13 @@ export class DeleteTrustedUsUseCase implements IDeleteTrustedUsUseCase {
     private _trustedUsRepository: ITrustedUsRepository,
     private _s3Service: IS3Service
   ) {}
-  async execute(key: string, id: string): Promise<string | any> {
+  async execute(key: string, id: string): Promise<string> {
     try {
       if (!key || !id) {
         throw new BadRequest();
       }
       await this._s3Service.deleteImageFromBucket(`TrustedUs/${key}`);
-      await this._trustedUsRepository.delete(id);
-
-      return { data: "Successfully deleted trusted us logo image" };
+      return await this._trustedUsRepository.delete(id);
     } catch (error) {
       console.error("Error from deleteUserProfileUseCase : ", error);
 

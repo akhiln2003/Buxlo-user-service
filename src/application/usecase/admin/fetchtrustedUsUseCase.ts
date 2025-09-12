@@ -1,5 +1,8 @@
-import { TrustedUs } from "../../../domain/entities/trustedUs";
 import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepository";
+import {
+  TrustedUsMapper,
+  TrustedUsResponseDto,
+} from "../../../domain/zodSchemaDto/output/trustedUsResponse.dto";
 import { IFetchtrustedUsUseCase } from "../../interface/admin/IFetchtrustedUsUseCase";
 
 export class FetchtrustedUsUseCase implements IFetchtrustedUsUseCase {
@@ -7,7 +10,11 @@ export class FetchtrustedUsUseCase implements IFetchtrustedUsUseCase {
 
   async execute(
     page: number
-  ): Promise<{ trustedUs: TrustedUs[]; totalPages: number } | null> {
-    return await this._trustedUsRepository.getTrustedUsDetails(page);
+  ): Promise<{ trustedUs: TrustedUsResponseDto[]; totalPages: number } | null> {
+    const data = await this._trustedUsRepository.getTrustedUsDetails(page);
+    const trustedUs = data?.trustedUs
+      ? data.trustedUs.map((data) => TrustedUsMapper.toDto(data))
+      : [];
+    return { trustedUs, totalPages: data?.totalPages as number };
   }
 }

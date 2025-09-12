@@ -4,18 +4,24 @@ import {
   ICreateAdvData,
   ICreateAdvUsecase,
 } from "../../interface/admin/ICreateAdvUsecase";
-import { Adv } from "../../../domain/entities/adv";
 import { BadRequest } from "@buxlo/common";
 import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
+import {
+  AdvMapper,
+  AdvResponseDto,
+} from "../../../domain/zodSchemaDto/output/adbResponse.dto";
 
 export class CreateAdvUsecase implements ICreateAdvUsecase {
   constructor(
     private _s3Service: IS3Service,
     private _advRepository: IAdvRepository
   ) {}
-  async execute(newData: ICreateAdvData, file: any): Promise<Adv | any> {
+  async execute(
+    updatedData: ICreateAdvData,
+    file: any
+  ): Promise<AdvResponseDto> {
     try {
-      if (!file || !newData) {
+      if (!file || !updatedData) {
         throw new BadRequest("Faild to create pleas try again");
       }
       if (file) {
@@ -37,8 +43,8 @@ export class CreateAdvUsecase implements ICreateAdvUsecase {
         );
 
         if (response.$metadata.httpStatusCode == 200) {
-          newData = {
-            ...newData,
+          updatedData = {
+            ...updatedData,
             image: `${randomImageName}`,
           };
         } else {
@@ -46,8 +52,8 @@ export class CreateAdvUsecase implements ICreateAdvUsecase {
         }
       }
 
-      const data = await this._advRepository.create(newData);
-      return data;
+      const data = await this._advRepository.create(updatedData);
+      return AdvMapper.toDto(data);
     } catch (error) {
       console.error(error);
       throw new BadRequest("Faild to upload image please try again laiter");

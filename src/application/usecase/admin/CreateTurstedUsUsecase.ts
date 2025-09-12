@@ -3,13 +3,17 @@ import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepos
 import { IS3Service } from "../../../infrastructure/@types/IS3Service";
 import { ICreateTurstedUsUsecase } from "../../interface/admin/ICreateTurstedUsUsecase";
 import sharp from "sharp";
+import {
+  TrustedUsMapper,
+  TrustedUsResponseDto,
+} from "../../../domain/zodSchemaDto/output/trustedUsResponse.dto";
 
 export class CreateTurstedUsUsecase implements ICreateTurstedUsUsecase {
   constructor(
     private _s3Service: IS3Service,
     private _trustedUsRepository: ITrustedUsRepository
   ) {}
-  async execute(file: any): Promise<any> {
+  async execute(file: any): Promise<TrustedUsResponseDto> {
     try {
       if (file) {
         const randomImageName = Math.random() + Date.now();
@@ -34,7 +38,7 @@ export class CreateTurstedUsUsecase implements ICreateTurstedUsUsecase {
             image: `${randomImageName}`,
           };
           const data = await this._trustedUsRepository.create(newData);
-          return data;
+          return TrustedUsMapper.toDto(data);
         } else {
           throw new BadRequest("Profile upload faild please try again laiter");
         }

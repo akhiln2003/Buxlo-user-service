@@ -1,4 +1,4 @@
-import { Adv } from "../../../domain/entities/adv";
+import { AdvResponseDto } from "../../../domain/zodSchemaDto/output/adbResponse.dto";
 
 export interface IQueryData {
   title?: string;
@@ -9,5 +9,5 @@ export interface IQueryData {
 }
 
 export interface IEditAdvUseCase {
-  execute(data: IQueryData, file: any): Promise<Adv | any>;
+  execute(data: IQueryData, file: any): Promise<AdvResponseDto>;
 }

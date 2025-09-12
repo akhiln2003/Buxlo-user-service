@@ -31,6 +31,7 @@ export class MentorRepository implements IMentorRepository {
         isGoogle,
         avatar,
         yearsOfExperience,
+        verified: "applicationPending",
       });
       return await newUser.save();
     } catch (error: any) {

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Mentor } from "../../entities/mentor";
 
 export const MentorResponseDto = z.object({
   id: z.string(),
@@ -15,16 +16,16 @@ export const MentorResponseDto = z.object({
   aadhaarBackImage: z.string().optional(),
   aadhaarName: z.string().optional(),
   aadhaarNumber: z.string().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
 });
 
 export type MentorResponseDto = z.infer<typeof MentorResponseDto>;
-
+interface IMentor extends Mentor{
+  _id?:string
+}
 export class MentorMapper {
-  static toDto(mentor: any): MentorResponseDto {
+  static toDto(mentor: IMentor): MentorResponseDto {
     return MentorResponseDto.parse({
-      id: mentor.id ? mentor.id : mentor._id,
+      id: mentor.id ? mentor.id : mentor._id?.toString(),
       name: mentor.name,
       email: mentor.email,
       avatar: mentor.avatar,
@@ -38,8 +39,6 @@ export class MentorMapper {
       aadhaarBackImage: mentor.aadhaarBackImage,
       aadhaarName: mentor.aadhaarName,
       aadhaarNumber: mentor.aadhaarNumber,
-      createdAt: mentor.createdAt,
-      updatedAt: mentor.updatedAt,
     });
   }
 }

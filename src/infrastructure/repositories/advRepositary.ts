@@ -40,9 +40,13 @@ export class AdvRepository implements IAdvRepository {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<string> {
     try {
-      await AdvSchema.findByIdAndDelete(id);
+      const data = await AdvSchema.findByIdAndDelete(id);
+      console.log("======data===== ", data);
+      return data
+        ? "Successfully deleted ADV image"
+        : "Faild to deleted ADV image";
     } catch (error: any) {
       console.error(error);
 
@@ -52,13 +56,15 @@ export class AdvRepository implements IAdvRepository {
   async update(
     id: string,
     data: { title?: string; description?: string; image?: string }
-  ): Promise<Adv | any> {
+  ): Promise<Adv> {
     try {
       const updatedData = await AdvSchema.findByIdAndUpdate(
         id,
         { $set: data },
         { new: true }
       );
+      if (!updatedData)
+        throw new BadRequest("Faild to update tryagainb laiter ");
       return updatedData;
     } catch (error: any) {
       console.error(error);
