@@ -9,7 +9,7 @@ import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
 import {
   AdvMapper,
   AdvResponseDto,
-} from "../../../domain/zodSchemaDto/output/adbResponse.dto";
+} from "../../dto/adbResponse.dto";
 
 export class CreateAdvUsecase implements ICreateAdvUsecase {
   constructor(

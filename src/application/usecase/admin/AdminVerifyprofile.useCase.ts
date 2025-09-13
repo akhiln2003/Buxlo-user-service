@@ -5,7 +5,7 @@ import { IAdminVerifyprofileUseCase } from "../../interface/admin/IAdminVerifypr
 import {
   MentorMapper,
   MentorResponseDto,
-} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+} from "../../dto/mentorResponse.dto";
 
 export class AdminVerifyprofileUseCase implements IAdminVerifyprofileUseCase {
   constructor(

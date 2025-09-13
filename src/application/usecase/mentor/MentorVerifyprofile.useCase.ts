@@ -6,7 +6,7 @@ import { IS3Service } from "../../../infrastructure/@types/IS3Service";
 import {
   MentorMapper,
   MentorResponseDto,
-} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+} from "../../dto/mentorResponse.dto";
 
 export class MentorVerifyprofileUseCase implements IMentorVerifyprofileUseCase {
   constructor(

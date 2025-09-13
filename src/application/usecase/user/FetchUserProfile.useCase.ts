@@ -2,7 +2,7 @@ import { IUserRepository } from "../../../domain/interfaces/IUserrepository";
 import {
   UserMapper,
   UserResponseDto,
-} from "../../../domain/zodSchemaDto/output/userResponse.dto";
+} from "../../dto/userResponse.dto";
 import { IFetchUserProfileUseCase } from "../../interface/user/IFetchUserProfileUseCase";
 
 export class FetchUserProfileUseCase implements IFetchUserProfileUseCase {

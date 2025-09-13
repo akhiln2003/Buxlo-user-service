@@ -1,6 +1,6 @@
 import { BadRequest } from "@buxlo/common";
 import { z } from "zod";
-import { Adv } from "../../entities/adv.entites";
+import { Adv } from "../../domain/entities/adv.entites";
 
 export const AdvResponseDto = z.object({
   id: z.string(),

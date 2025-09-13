@@ -9,7 +9,7 @@ import sharp from "sharp";
 import {
   AdvMapper,
   AdvResponseDto,
-} from "../../../domain/zodSchemaDto/output/adbResponse.dto";
+} from "../../dto/adbResponse.dto";
 
 export class EditAdvUseCase implements IEditAdvUseCase {
   constructor(

@@ -2,7 +2,7 @@ import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository"
 import {
   MentorMapper,
   MentorResponseDto,
-} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+} from "../../dto/mentorResponse.dto";
 import { IFetchMentorsUseCase } from "../../interface/user/IFetchMentorsUseCase";
 export class FetchMentorsUseCase implements IFetchMentorsUseCase {
   constructor(private _mentorRepository: IMentorRepository) {}

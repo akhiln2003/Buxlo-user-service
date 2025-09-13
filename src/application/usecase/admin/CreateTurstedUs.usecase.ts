@@ -6,7 +6,7 @@ import sharp from "sharp";
 import {
   TrustedUsMapper,
   TrustedUsResponseDto,
-} from "../../../domain/zodSchemaDto/output/trustedUsResponse.dto";
+} from "../../dto/trustedUsResponse.dto";
 
 export class CreateTurstedUsUsecase implements ICreateTurstedUsUsecase {
   constructor(

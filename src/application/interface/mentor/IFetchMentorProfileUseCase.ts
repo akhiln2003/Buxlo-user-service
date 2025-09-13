@@ -1,4 +1,4 @@
-import { MentorResponseDto } from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+import { MentorResponseDto } from "../../dto/mentorResponse.dto";
 
 export interface IFetchMentorProfileUseCase {
   execute(id: string): Promise<MentorResponseDto>;

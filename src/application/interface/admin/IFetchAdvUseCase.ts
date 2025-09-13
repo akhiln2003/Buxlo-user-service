@@ -1,4 +1,4 @@
-import { AdvResponseDto } from "../../../domain/zodSchemaDto/output/adbResponse.dto";
+import { AdvResponseDto } from "../../dto/adbResponse.dto";
 
 export interface IFetchAdvUseCase{
     execute(page:number): Promise< {advs: AdvResponseDto[]; totalPages: number } | null>;

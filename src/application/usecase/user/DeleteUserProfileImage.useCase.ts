@@ -5,7 +5,7 @@ import { IUserRepository } from "../../../domain/interfaces/IUserrepository";
 import {
   UserMapper,
   UserResponseDto,
-} from "../../../domain/zodSchemaDto/output/userResponse.dto";
+} from "../../dto/userResponse.dto";
 
 export class DeleteUserProfileImageUseCase
   implements IDeleteUserProfileImageUseCase

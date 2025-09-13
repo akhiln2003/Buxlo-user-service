@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Mentor } from "../../entities/mentor.entity";
+import { Mentor } from "../../domain/entities/mentor.entity";
 
 export const MentorResponseDto = z.object({
   id: z.string(),

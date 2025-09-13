@@ -2,7 +2,7 @@ import { IAdvRepository } from "../../../domain/interfaces/IAdvRepository";
 import {
   AdvMapper,
   AdvResponseDto,
-} from "../../../domain/zodSchemaDto/output/adbResponse.dto";
+} from "../../dto/adbResponse.dto";
 import { IFetchAdvUseCase } from "../../interface/admin/IFetchAdvUseCase";
 
 export class FetchAdvUseCase implements IFetchAdvUseCase {

@@ -2,7 +2,7 @@ import { ITrustedUsRepository } from "../../../domain/interfaces/ITrustedUsRepos
 import {
   TrustedUsMapper,
   TrustedUsResponseDto,
-} from "../../../domain/zodSchemaDto/output/trustedUsResponse.dto";
+} from "../../dto/trustedUsResponse.dto";
 import { IFetchtrustedUsUseCase } from "../../interface/admin/IFetchtrustedUsUseCase";
 
 export class FetchtrustedUsUseCase implements IFetchtrustedUsUseCase {

@@ -1,4 +1,4 @@
-import { TrustedUsResponseDto } from "../../../domain/zodSchemaDto/output/trustedUsResponse.dto";
+import { TrustedUsResponseDto } from "../../dto/trustedUsResponse.dto";
 
 export interface IFetchtrustedUsUseCase {
   execute(

@@ -10,7 +10,7 @@ import { UserUpdatedProducer } from "../../../infrastructure/MessageBroker/kafka
 import {
   MentorMapper,
   MentorResponseDto,
-} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+} from "../../dto/mentorResponse.dto";
 
 export class UpdateMentorProfileUseCase implements IUpdateMentorProfileUseCase {
   constructor(

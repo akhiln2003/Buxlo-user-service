@@ -5,7 +5,7 @@ import { IMentorRepository } from "../../../domain/interfaces/IMentorRepository"
 import {
   MentorMapper,
   MentorResponseDto,
-} from "../../../domain/zodSchemaDto/output/mentorResponse.dto";
+} from "../../dto/mentorResponse.dto";
 
 export class DeleteMentorProfileImageUseCase
   implements IDeleteMentorProfileImageUseCase

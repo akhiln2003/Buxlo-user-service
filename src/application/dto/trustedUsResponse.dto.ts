@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { BadRequest } from "@buxlo/common";
-import { TrustedUs } from "../../entities/trustedUs.entity";
+import { TrustedUs } from "../../domain/entities/trustedUs.entity";
 
 export const TrustedUsResponseDto = z.object({
   id: z.string(),
