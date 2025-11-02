@@ -62,10 +62,28 @@ class SubscriptionServiceGrpc {
             );
           }
 
+          const currentEndDate = existingUser.premiumEndDate
+            ? new Date(existingUser.premiumEndDate)
+            : new Date();
+          const newEndDate = new Date(premiumEndDate);
+
+          const now = new Date();
+          let finalEndDate: Date;
+
+          if (currentEndDate > now) {
+            finalEndDate = new Date(
+              currentEndDate.getTime() + (newEndDate.getTime() - now.getTime())
+            );
+          } else {
+            finalEndDate = newEndDate;
+          }
+
           const updatedUser = await userRepo.updateUserProfileData(userId, {
             premiumId,
-            premiumEndDate,
+            premiumEndDate: finalEndDate.toISOString(),
           });
+
+         
 
           return callback(null, {
             userId: updatedUser!.id,

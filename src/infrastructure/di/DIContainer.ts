@@ -31,6 +31,13 @@ import { UserUpdatedProducer } from "../MessageBroker/kafka/producer/userUpdateP
 import { messageBroker } from "../MessageBroker/config";
 import { IFetchMentorsUseCase } from "../../application/interface/user/IFetchMentorsUseCase";
 import { FetchMentorsUseCase } from "../../application/usecase/user/fetchMentors.useCase";
+import { FeedbackRepository } from "../repositories/feedbackRepositary";
+import { ISendFeedbackUseCase } from "../../application/interface/user/ISendFeedbackUseCase";
+import { SendFeedbackUseCase } from "../../application/usecase/user/sendFeedback.useCase";
+import { IFetchFeedbackUseCase } from "../../application/interface/common/IFetchFeedbackUseCase";
+import { FetchFeedbackUseCase } from "../../application/usecase/common/fetchFeedback.useCase";
+import { IDisLikeAndLikeUseCase } from "../../application/interface/user/IDisLikeAndLikeUseCase";
+import { DisLikeAndLikeUseCase } from "../../application/usecase/user/DisLikeAndLikeUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
@@ -40,6 +47,7 @@ export class DIContainer {
   private _advRepository: AdvRepository;
   private _trustedUsRepository: TrustedUsRepository;
   private _userUpdatedProducer: UserUpdatedProducer;
+  private _feedbackRepository: FeedbackRepository;
 
   constructor() {
     this._userRepository = new UserRepository();
@@ -48,6 +56,7 @@ export class DIContainer {
     this._nodeMailerService = new NodeMailerService();
     this._advRepository = new AdvRepository();
     this._trustedUsRepository = new TrustedUsRepository();
+    this._feedbackRepository = new FeedbackRepository();
     this._userUpdatedProducer = new UserUpdatedProducer(
       messageBroker.getKafkaClient().producer
     );
@@ -146,5 +155,17 @@ export class DIContainer {
 
   fetchMentorsUseCase(): IFetchMentorsUseCase {
     return new FetchMentorsUseCase(this._mentorRepository);
+  }
+
+  sendFeedbackUseCase(): ISendFeedbackUseCase {
+    return new SendFeedbackUseCase(this._feedbackRepository);
+  }
+
+  fetchFeedbackUseCase(): IFetchFeedbackUseCase {
+    return new FetchFeedbackUseCase(this._feedbackRepository);
+  }
+
+  disLikeAndLikeUseCase(): IDisLikeAndLikeUseCase {
+    return new DisLikeAndLikeUseCase(this._feedbackRepository);
   }
 }

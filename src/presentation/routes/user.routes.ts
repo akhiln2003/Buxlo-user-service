@@ -8,17 +8,22 @@ import { DeleteUserProfileImageController } from "../controllers/user/deleteUser
 import { FetchMentorsController } from "../controllers/user/fetchMentors.controller";
 import { validateReqBody } from "@buxlo/common";
 import { fetchProfileImageDto } from "../dto/common/fetchprofileimage.dto";
+import { SendFeedbackController } from "../controllers/user/sendFeedback.controller";
+import { sendFeedbackDto } from "../dto/user/sendfeedback.dto";
+import { disLikeAndLikeDto } from "../dto/user/dislikeAndLikedto";
+import { DisLikeAndLikeController } from "../controllers/user/disLikeAndLike.controller";
 
 export class UserRouter {
   private _router: Router;
   private _diContainer: DIContainer;
   private _upload = multer({ storage: multer.memoryStorage() });
-
   private _fetchprofileController!: FetchUserProfileController;
   private _updateprofileController!: UpdateUserProfileController;
   private _fetchProfileImageController!: FetchUserProfileImageController;
   private _deleteProfileImageController!: DeleteUserProfileImageController;
   private _fetchMentors!: FetchMentorsController;
+  private _sendFeedbackController!: SendFeedbackController;
+  private _disLikeAndLikeController!: DisLikeAndLikeController;
 
   constructor() {
     this._router = Router();
@@ -43,6 +48,13 @@ export class UserRouter {
     this._fetchMentors = new FetchMentorsController(
       this._diContainer.fetchMentorsUseCase()
     );
+    this._sendFeedbackController = new SendFeedbackController(
+      this._diContainer.sendFeedbackUseCase()
+    );
+
+    this._disLikeAndLikeController = new DisLikeAndLikeController(
+      this._diContainer.disLikeAndLikeUseCase()
+    );
   }
 
   private _initializeRoutes(): void {
@@ -65,6 +77,17 @@ export class UserRouter {
       this._deleteProfileImageController.deleteImage
     );
     this._router.get("/fetchmentors", this._fetchMentors.fetchData);
+    this._router.post(
+      "/sendfeedback",
+      validateReqBody(sendFeedbackDto),
+      this._sendFeedbackController.create
+    );
+
+    this._router.patch(
+      "/dislikeandlike",
+      validateReqBody(disLikeAndLikeDto),
+      this._disLikeAndLikeController.update
+    );
   }
 
   public getRouter(): Router {
