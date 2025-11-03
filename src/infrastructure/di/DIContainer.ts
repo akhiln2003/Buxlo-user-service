@@ -11,16 +11,7 @@ import { DeleteUserProfileImageUseCase } from "../../application/usecase/user/De
 import { NodeMailerService } from "../external-services/nodeMailerService";
 import { SendContactUsEmailUseCase } from "../../application/usecase/common/constactUsEmail.useCase";
 import { ISendContactUsEmailUseCase } from "../../application/interface/common/IEmailService";
-import { CreateTurstedUsUsecase } from "../../application/usecase/admin/CreateTurstedUs.usecase";
-import { CreateAdvUsecase } from "../../application/usecase/admin/CreateAdv.usecase";
-import { AdvRepository } from "../repositories/advRepositary";
-import { TrustedUsRepository } from "../repositories/trustedUsRepositary";
-import { FetchtrustedUsUseCase } from "../../application/usecase/admin/fetchtrustedUs.useCase";
 import { FetchS3ImageUseCase } from "../../application/usecase/common/fetchS3Image.useCase";
-import { DeleteTrustedUsUseCase } from "../../application/usecase/admin/DeleteTrustedUs.useCase";
-import { FetchAdvUseCase } from "../../application/usecase/admin/fetchAdv.useCase";
-import { DeleteAdvUseCase } from "../../application/usecase/admin/DeleteAdv.useCase";
-import { EditAdvUseCase } from "../../application/usecase/admin/EditAdv.useCase";
 import { IMentorVerifyprofileUseCase } from "../../application/interface/mentor/IMentorVerifyprofileUseCase";
 import { MentorVerifyprofileUseCase } from "../../application/usecase/mentor/MentorVerifyprofile.useCase";
 import { IAdminVerifyprofileUseCase } from "../../application/interface/admin/IAdminVerifyprofileUseCase";
@@ -38,14 +29,16 @@ import { IFetchFeedbackUseCase } from "../../application/interface/common/IFetch
 import { FetchFeedbackUseCase } from "../../application/usecase/common/fetchFeedback.useCase";
 import { IDisLikeAndLikeUseCase } from "../../application/interface/user/IDisLikeAndLikeUseCase";
 import { DisLikeAndLikeUseCase } from "../../application/usecase/user/DisLikeAndLikeUseCase";
+import { FetchUserSummeryUseCase } from "../../application/usecase/admin/FetchUserSummeryUseCase";
+import { IFetchUserSummeryUseCase } from "../../application/interface/admin/IFetchUserSummeryUseCase";
+import { FetchMentorSummeryUseCase } from "../../application/usecase/admin/FetchMentorSummeryUseCase";
+import { IFetchMentorSummeryUseCase } from "../../application/interface/admin/IFetchMentorSummeryUseCase";
 
 export class DIContainer {
   private _userRepository: UserRepository;
   private _mentorRepository: MentorRepository;
   private _s3Service: IS3Service;
   private _nodeMailerService: NodeMailerService;
-  private _advRepository: AdvRepository;
-  private _trustedUsRepository: TrustedUsRepository;
   private _userUpdatedProducer: UserUpdatedProducer;
   private _feedbackRepository: FeedbackRepository;
 
@@ -54,8 +47,6 @@ export class DIContainer {
     this._mentorRepository = new MentorRepository();
     this._s3Service = new S3Service();
     this._nodeMailerService = new NodeMailerService();
-    this._advRepository = new AdvRepository();
-    this._trustedUsRepository = new TrustedUsRepository();
     this._feedbackRepository = new FeedbackRepository();
     this._userUpdatedProducer = new UserUpdatedProducer(
       messageBroker.getKafkaClient().producer
@@ -64,12 +55,6 @@ export class DIContainer {
 
   fetchUserProfileUseCase() {
     return new FetchUserProfileUseCase(this._userRepository);
-  }
-  fetchtrustedUsUseCase() {
-    return new FetchtrustedUsUseCase(this._trustedUsRepository);
-  }
-  fetchAdvUseCase() {
-    return new FetchAdvUseCase(this._advRepository);
   }
   fetchMentorProfileUseCase() {
     return new FetchMentorProfileUseCase(this._mentorRepository);
@@ -105,30 +90,6 @@ export class DIContainer {
       this._userRepository,
       this._s3Service
     );
-  }
-
-  deleteAdvUseCase() {
-    return new DeleteAdvUseCase(this._advRepository, this._s3Service);
-  }
-  editAdvUseCase() {
-    return new EditAdvUseCase(this._advRepository, this._s3Service);
-  }
-
-  deleteTrustedUsUseCase() {
-    return new DeleteTrustedUsUseCase(
-      this._trustedUsRepository,
-      this._s3Service
-    );
-  }
-
-  createTurstedUsUsecase() {
-    return new CreateTurstedUsUsecase(
-      this._s3Service,
-      this._trustedUsRepository
-    );
-  }
-  createAdvUsecase() {
-    return new CreateAdvUsecase(this._s3Service, this._advRepository);
   }
 
   sendContactUsEmailUseCase(): ISendContactUsEmailUseCase {
@@ -167,5 +128,13 @@ export class DIContainer {
 
   disLikeAndLikeUseCase(): IDisLikeAndLikeUseCase {
     return new DisLikeAndLikeUseCase(this._feedbackRepository);
+  }
+
+  fetchUserSummeryUseCase(): IFetchUserSummeryUseCase {
+    return new FetchUserSummeryUseCase(this._userRepository);
+  }
+
+   fetchMentorSummeryUseCase(): IFetchMentorSummeryUseCase {
+    return new FetchMentorSummeryUseCase(this._mentorRepository);
   }
 }

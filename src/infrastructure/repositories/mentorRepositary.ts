@@ -240,4 +240,59 @@ export class MentorRepository implements IMentorRepository {
       throw new InternalServerError();
     }
   }
+
+  async getMentorSummery(): Promise<{
+    totalMentors: number;
+    mentorGrowth: { month: string; count: number }[];
+  }> {
+    try {
+      const totalMentors = await MentorProfile.countDocuments();
+
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const currentYear = new Date().getFullYear();
+
+      const monthlyCounts = await MentorProfile.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: new Date(`${currentYear}-01-01T00:00:00Z`),
+              $lte: new Date(`${currentYear}-12-31T23:59:59Z`),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+
+      const mentorGrowth = months.map((month, index) => {
+        const found = monthlyCounts.find((m) => m._id === index + 1);
+        return {
+          month,
+          count: found ? found.count : 0,
+        };
+      });
+      return { totalMentors, mentorGrowth };
+    } catch (error: any) {
+      throw new BadRequest(`Failed to fetch mentor summary: ${error.message}`);
+    }
+  }
 }

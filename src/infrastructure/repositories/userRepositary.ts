@@ -133,4 +133,59 @@ export class UserRepository implements IUserRepository {
       );
     }
   }
+  async getUserSummery(): Promise<{
+    totalUsers: number;
+    userGrowth: { month: string; count: number }[];
+  }> {
+    try {
+      const totalUsers = await UserProfile.countDocuments();
+
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const currentYear = new Date().getFullYear();
+
+      // 4️⃣ Aggregate user registrations per month
+      const monthlyCounts = await UserProfile.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: new Date(`${currentYear}-01-01T00:00:00Z`),
+              $lte: new Date(`${currentYear}-12-31T23:59:59Z`),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" },
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { _id: 1 } },
+      ]);
+
+      const userGrowth = months.map((month, index) => {
+        const found = monthlyCounts.find((m) => m._id === index + 1);
+        return {
+          month,
+          count: found ? found.count : 0,
+        };
+      });      
+      return { totalUsers, userGrowth };
+    } catch (error: any) {
+      throw new BadRequest(`Failed to fetch user summary: ${error.message}`);
+    }
+  }
 }

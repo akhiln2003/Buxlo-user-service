@@ -45,4 +45,8 @@ export interface IMentorRepository {
     rating: string,
     searchData: string
   ): Promise<{ datas: Mentor[]; totalPages: number } | null>;
+  getMentorSummery(): Promise<{
+    totalMentors: number;
+    mentorGrowth: { month: string; count: number }[];
+  }>;
 }

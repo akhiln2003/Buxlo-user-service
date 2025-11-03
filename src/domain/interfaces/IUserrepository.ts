@@ -20,4 +20,5 @@ export interface IUserRepository {
   ): Promise<User>;
   findExpiredPremiumUsers(date: Date): Promise<User[]>;
   updatePremiumStatus(userId: string): Promise<User>;
+  getUserSummery():Promise<{ totalUsers: number; userGrowth:{ month: string; count: number }[]  }>
 }

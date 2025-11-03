@@ -1,47 +1,24 @@
 import { Router } from "express";
 import { DIContainer } from "../../infrastructure/di/DIContainer";
-import multer from "multer";
-import { CreateTrustedUsUsController } from "../controllers/admin/createTrustedUsUs.controller";
-import { FetchtrustedusController } from "../controllers/admin/fetchtrustedus.controller";
-import { FetchtrustedusImageController } from "../controllers/admin/fetchtrustedusImage.controller";
-import { DeleteTrustedUsImageController } from "../controllers/admin/deleteTrustedUsImage.controller";
-import { DdeleteAdvImageController } from "../controllers/admin/deleteAdvImage.controller";
-import { CreateAdvController } from "../controllers/admin/createAdv.controller";
-import { FetchAdvController } from "../controllers/admin/fetchAdv.controller";
-import { FetchAdvImageController } from "../controllers/admin/fetchAdvImage.controller";
-import { EditAdvController } from "../controllers/admin/editAdv.controller";
-import {
-  validateReqBody,
-  validateReqParams,
-  validateReqQueryParams,
-} from "@buxlo/common";
-import { fetchTrustedUsAndAdvImageDto } from "../dto/admin/fetchadvimage.dto";
-import { fetchtrustedusAndAdvDto } from "../dto/admin/fetchtrustedusAndAdv.dto";
+import { validateReqBody, validateReqQueryParams } from "@buxlo/common";
 import { verifyProfileDto } from "../dto/admin/verifyProfile.dto";
-import { deleteAdvAndTrustedUsimageDto } from "../dto/admin/deleteAdvAndTrustedUsimage.dto";
 import { VerifyprofileController } from "../controllers/admin/verifyprofile.controller";
 import { fetchverifyprofileDto } from "../dto/admin/listverifyprofile.dto";
 import { FetchVerifyProfileController } from "../controllers/admin/fetchVerifyProfile.controller";
 import { FethAadhaarImagesController } from "../controllers/admin/fethAadhaarImages.controller";
 import { fetchAadhaarImagesDto } from "../dto/admin/fethAadhaarImages.dto";
+import { FetchUserSummeryController } from "../controllers/admin/fetchUserSummery.controller";
+import { FetchMentorSummeryController } from "../controllers/admin/fetchMentorSummery.controller";
 
 export class AdminRouter {
   private _router: Router;
   private _diContainer: DIContainer;
-  private _upload = multer({ storage: multer.memoryStorage() });
 
-  private _createAdvController!: CreateAdvController;
-  private _fetchAdvController!: FetchAdvController;
-  private _fetchAdvImageController!: FetchAdvImageController;
-  private _createTrustedUsUsController!: CreateTrustedUsUsController;
-  private _fetchtrustedusController!: FetchtrustedusController;
-  private _fetchtrustedusImageController!: FetchtrustedusImageController;
-  private _deleteTrustedUsImageController!: DeleteTrustedUsImageController;
-  private _deleteAdvImageController!: DdeleteAdvImageController;
-  private _editAdvController!: EditAdvController;
   private _fetchVerifyProfileController!: FetchVerifyProfileController;
   private _verifyprofileController!: VerifyprofileController;
   private _fethAadhaarImagesController!: FethAadhaarImagesController;
+  private _fetchUserSummeryController!: FetchUserSummeryController;
+  private _fetchMentorSummeryController!: FetchMentorSummeryController;
 
   constructor() {
     this._router = Router();
@@ -51,33 +28,6 @@ export class AdminRouter {
   }
 
   private _initializeControllers(): void {
-    this._createAdvController = new CreateAdvController(
-      this._diContainer.createAdvUsecase()
-    );
-    this._fetchAdvController = new FetchAdvController(
-      this._diContainer.fetchAdvUseCase()
-    );
-    this._fetchAdvImageController = new FetchAdvImageController(
-      this._diContainer.fetchS3ImageUseCase()
-    );
-    this._createTrustedUsUsController = new CreateTrustedUsUsController(
-      this._diContainer.createTurstedUsUsecase()
-    );
-    this._fetchtrustedusController = new FetchtrustedusController(
-      this._diContainer.fetchtrustedUsUseCase()
-    );
-    this._fetchtrustedusImageController = new FetchtrustedusImageController(
-      this._diContainer.fetchS3ImageUseCase()
-    );
-    this._deleteTrustedUsImageController = new DeleteTrustedUsImageController(
-      this._diContainer.deleteTrustedUsUseCase()
-    );
-    this._deleteAdvImageController = new DdeleteAdvImageController(
-      this._diContainer.deleteAdvUseCase()
-    );
-    this._editAdvController = new EditAdvController(
-      this._diContainer.editAdvUseCase()
-    );
     this._fetchVerifyProfileController = new FetchVerifyProfileController(
       this._diContainer.adminFetchVerifyProfilesUseCase()
     );
@@ -87,55 +37,17 @@ export class AdminRouter {
     this._fethAadhaarImagesController = new FethAadhaarImagesController(
       this._diContainer.fetchS3ImageUseCase()
     );
+    this._fetchUserSummeryController = new FetchUserSummeryController(
+      this._diContainer.fetchUserSummeryUseCase()
+    );
+    this._fetchMentorSummeryController = new FetchMentorSummeryController(
+      this._diContainer.fetchMentorSummeryUseCase()
+    );
+  
   }
 
+
   private _initializeRoutes(): void {
-    this._router.post(
-      "/createadv",
-      // validateReqBody(createadvDto),
-      this._upload.single("image"),
-      this._createAdvController.create
-    );
-    this._router.get(
-      "/fetchadv",
-      validateReqQueryParams(fetchtrustedusAndAdvDto),
-      this._fetchAdvController.fetchData
-    );
-    this._router.post(
-      "/fetchadvimage",
-      validateReqBody(fetchTrustedUsAndAdvImageDto),
-      this._fetchAdvImageController.fetchImages
-    );
-    this._router.delete(
-      "/deleteadvimage/:id/:key",
-      validateReqParams(deleteAdvAndTrustedUsimageDto),
-      this._deleteAdvImageController.deleteImage
-    );
-    this._router.post(
-      "/createtrustedus",
-      this._upload.single("image"),
-      this._createTrustedUsUsController.create
-    );
-    this._router.get(
-      "/fetchtrustedus",
-      validateReqQueryParams(fetchtrustedusAndAdvDto),
-      this._fetchtrustedusController.fetchData
-    );
-    this._router.post(
-      "/fetchtrustedusimage",
-      validateReqBody(fetchTrustedUsAndAdvImageDto),
-      this._fetchtrustedusImageController.fetchImages
-    );
-    this._router.delete(
-      "/deletetrustedusimage/:id/:key",
-      validateReqParams(deleteAdvAndTrustedUsimageDto),
-      this._deleteTrustedUsImageController.deleteImage
-    );
-    this._router.post(
-      "/editadv",
-      this._upload.single("image"),
-      this._editAdvController.edit
-    );
     this._router.get(
       "/fetchverifyprofiledata",
       validateReqQueryParams(fetchverifyprofileDto),
@@ -151,6 +63,18 @@ export class AdminRouter {
       validateReqBody(verifyProfileDto),
       this._verifyprofileController.verify
     );
+    this._router.get(
+      "/fetchusersummery",
+      this._fetchUserSummeryController.fetch
+    );
+    this._router.get(
+      "/fetchmentorsummery",
+      this._fetchMentorSummeryController.fetch
+    );
+    // this._router.get(
+    //   "/fetchincomsummery",
+    //   this._fetchIncomSummeryController.fetch
+    // );
   }
 
   public getRouter(): Router {
