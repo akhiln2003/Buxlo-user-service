@@ -9,7 +9,7 @@ export const MentorResponseDto = z.object({
   isGoogle: z.boolean(),
   role: z.enum(["mentor", "admin"]),
   bio: z.string().optional(),
-  expertise: z.array(z.string()).optional(),
+  expertise: z.string().optional(),
   yearsOfExperience: z.number().optional(),
   verified: z.enum(["verified", "applicationPending", "verificationPending"]),
   aadhaarFrontImage: z.string().optional(),
@@ -19,8 +19,8 @@ export const MentorResponseDto = z.object({
 });
 
 export type MentorResponseDto = z.infer<typeof MentorResponseDto>;
-interface IMentor extends Mentor{
-  _id?:string
+interface IMentor extends Mentor {
+  _id?: string;
 }
 export class MentorMapper {
   static toDto(mentor: IMentor): MentorResponseDto {

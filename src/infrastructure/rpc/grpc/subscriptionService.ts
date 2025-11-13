@@ -45,7 +45,7 @@ class SubscriptionServiceGrpc {
         callback: grpc.sendUnaryData<UpdateSubscriptionResponse>
       ) => {
         const { userId, premiumId, premiumEndDate } = call.request;
-
+        
         const userRepo = new UserRepository();
         try {
           if (!userId) throw new BadRequest("Id is required");
