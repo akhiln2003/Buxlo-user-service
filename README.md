@@ -1,107 +1,72 @@
-# User Service
+# BUXLO User Service
 
-This service manages user-related data and actions for the BUXLO application. It handles user profiles, settings, and other user-specific information. It uses MongoDB for data storage and communicates with other services via Kafka and gRPC.
+The **BUXLO User Service** manages user accounts, mentor profiles, mentorship matches, client-mentor feedback, ratings, and profile media (using AWS S3 + Sharp). It exposes gRPC endpoints to verify user scopes and sync levels with the auth/payment microservices.
 
-## Table of Contents
+---
 
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Environment Variables](#environment-variables)
-- [API Endpoints](#api-endpoints)
-- [gRPC Services](#grpc-services)
-- [Kafka Integration](#kafka-integration)
-- [Running Tests](#running-tests)
-- [Deployment](#deployment)
+## 🛠️ Technology Stack
 
-## Getting Started
+- **Runtime**: [Node.js](https://nodejs.org/) (TypeScript)
+- **Web Framework**: [Express](https://expressjs.com/)
+- **Data Persistence**: [MongoDB](https://www.mongodb.com/) via [Mongoose](https://mongoosejs.com/)
+- **Image Processing**: [Sharp](https://sharp.pixelplumbing.com/) (resizing profiles) & [Multer](https://github.com/expressjs/multer) (upload middleware)
+- **Shared Package**: `@buxlo/common`
+- **RPC Framework**: [gRPC Node](https://grpc.io/docs/languages/node/) (runs servers on ports `50051` and `50053`)
+- **Message Broker**: [Apache Kafka](https://kafka.apache.org/) (synchronizes profile events)
+- **Scheduler**: [node-cron](https://github.com/node-cron/node-cron) (background cleanups)
 
-### Prerequisites
+---
 
-- Node.js (v18)
-- npm
-- MongoDB
-- Redis
-- Kafka
-- AWS S3 Bucket
+## ⚙️ Environment Variables
 
-### Installation
+Create a `.env` file in the `user/` directory:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/akhiln2003/Buxlo-user-service.git
-   ```
-2. Navigate to the `user` directory:
-   ```bash
-   cd Microservices/user
-   ```
-3. Install the dependencies:
-   ```bash
-   npm install
-   ```
+| Variable | Required | Default Value | Description |
+| :--- | :---: | :--- | :--- |
+| `PORT` | Yes | `4002` | Express server running port. |
+| `REDIS_URL` | Yes | `redis://redis:6379` | Cache configuration endpoint. |
+| `GRPC_PORT` | Yes | `50051` | gRPC server port for authentication queries. |
+| `GRPC_PAYMENT_PORT` | Yes | `50053` | gRPC server port for subscription and payment validations. |
+| `MONGODB_URI` | Yes | `mongodb+srv://...` | MongoDB database connection string for `User` namespace. |
+| `AWS_S3_BUCKET_NAME` | Yes | `s3-buxlo` | AWS S3 Bucket Name for media files. |
+| `AWS_S3_BUCKET_REGION` | Yes | `ap-southeast-2` | S3 bucket region. |
+| `AWS_S3_BUCKET_ACCESS_KEY` | Yes | `AKIAR52NK44...` | IAM access key. |
+| `AWS_S3_BUCKET_SECRET_ACCESS_KEY` | Yes | `rEN5RuIp8hA1z...` | IAM secret key. |
+| `EMAIL_USER` | Yes | `buxlofinance@gmail.com` | Notification email client user. |
+| `EMAIL_PASS` | Yes | `uptn ediv twos xtta` | Notification email app password. |
+| `KAFKA_BROKER` | Yes | `kafka:9092` | Network host and port for Kafka. |
+| `KAFKA_CLIENT_ID` | Yes | `user-service` | Kafka client name. |
+| `KAFKA_GROUP_ID` | Yes | `user-group` | Kafka consumer group name. |
 
-## Usage
+---
 
-To start the service in development mode, run:
+## 📡 Port & RPC Configurations
 
-```bash
-npm start
-```
+### REST Routes
+- `GET /api/user/profile` — Retrieves active user info.
+- `PUT /api/user/profile` — Updates profile info and uploads picture to S3.
+- `GET /api/user/mentors` — Lists public mentors.
+- `POST /api/user/mentors/rate` — Submits a rating/review for a mentor.
 
-This will start the server using `tsx`.
+### gRPC Interfaces
+- **Auth Endpoint (`:50051`)**: Exposes methods for checking user profiles and logins.
+- **Payment/Subscription Sync (`:50053`)**: Updates user status (e.g. basic to premium mentor / subscriber level) upon payment completion.
 
-## Environment Variables
+---
 
-This service requires the following environment variables to be set. You can create a `.env` file in the root of the `user` directory and add the following:
+## 🏃 Local Setup & Running
 
-| Variable                          | Description                               | Example / Default                                                                         |
-| --------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `PORT`                            | The port the service will run on.         | `4002`                                                                                    |
-| `REDIS_URL`                       | The connection URL for Redis.             | `redis://redis:6379`                                                                      |
-| `GRPC_PORT`                       | The port for the gRPC server.             | `50051`                                                                                   |
-| `GRPC_PAYMENT_PORT`               | The port for the payment gRPC service.    | `50053`                                                                                   |
-| `KAFKA_CLIENT_ID`                 | The client ID for Kafka.                  | `user-service`                                                                            |
-| `KAFKA_BROKER`                    | The Kafka broker address.                 | `kafka:9092`                                                                              |
-| `KAFKA_GROUP_ID`                  | The Kafka group ID.                       | `user-group`                                                                              |
-| `MONGODB_URI`                     | The connection URI for the MongoDB database. | `mongodb+srv://<user>:<password>@buxlo.../User`                                          |
-| `AWS_S3_BUCKET_NAME`              | The name of the AWS S3 bucket.            | `buxlo-bucket`                                                                            |
-| `AWS_S3_BUCKET_REGION`            | The region of the AWS S3 bucket.          | `eu-north-1`                                                                              |
-| `AWS_S3_BUCKET_ACCESS_KEY`        | The access key for the AWS S3 bucket.     | `REDACTED — set in .env`                                                                  |
-| `AWS_S3_BUCKET_SECRET_ACCESS_KEY` | The secret access key for the AWS S3 bucket. | `REDACTED — set in .env`                                                               |
-| `EMAIL_USER`                      | The username for the email service.       | `buxlofinance@gmail.com`                                                                  |
-| `EMAIL_PASS`                      | The password for the email service.       | `REDACTED — set in .env`                                                                  |
-
-
-<!-- ## API Endpoints
-
-This service exposes RESTful endpoints for managing users.
-*(Detailed documentation of the API endpoints should be added here)* -->
-
-## gRPC Services
-
-This service exposes a gRPC server and consumes the payment gRPC service.
-
-## Kafka Integration
-
-This service uses Kafka for asynchronous communication. It acts as a producer and consumer.
-
-<!-- ## Running Tests
-
-There are no test scripts configured for this service yet. -->
-
-## Deployment
-
-This service can be containerized using Docker. A `Dockerfile` is provided in the root of the `user` directory.
-
-To build the Docker image:
+From the `user/` directory:
 
 ```bash
-docker build -t user-service .
-```
+# 1. Install dependencies
+npm install
 
-To run the Docker container:
-
-```bash
-docker run -p 4002:4002 user-service
+# 2. Run the server using tsx watch
+npm run start
 ```
+Starts `tsx watch src/server.ts` for live TypeScript updates.
+
+---
+
+Developed for **BUXLO Personal Finance & Mentorship Platform**.
